@@ -1,14 +1,17 @@
 import { GameController } from "../application/GameController";
 import { browserRecord } from "../infrastructure/browser";
 import {
+  availableGate,
   bestAim,
+  canOpenGate,
   objectiveReady,
   type Controls,
   type Phase,
+  type Weapon,
 } from "../domain/rules";
-import { MAX_ZONE } from "../domain/map";
+import { MAX_ZONE, type Point } from "../domain/map";
 import { installFullscreen } from "./fullscreen";
-import { geometry, renderArena } from "./renderer";
+import { mapPointer, renderArena, renderMap, screenToWorld } from "./renderer";
 import "./style.css";
 
 function required<T extends HTMLElement>(selector: string): T {
@@ -17,9 +20,12 @@ function required<T extends HTMLElement>(selector: string): T {
   return element;
 }
 
-const controller = new GameController(browserRecord);
+const game = new GameController(browserRecord);
 const canvas = required<HTMLCanvasElement>("#board");
-const overlay = required<HTMLDivElement>("#overlay");
+const minimap = required<HTMLCanvasElement>("#minimap");
+const planMap = required<HTMLCanvasElement>("#plan-map");
+const overlay = required<HTMLElement>("#overlay");
+const planning = required<HTMLElement>("#planning");
 const title = required<HTMLElement>("#overlay-title");
 const copy = required<HTMLElement>("#overlay-copy");
 const hint = required<HTMLElement>("#overlay-hint");
@@ -27,322 +33,409 @@ const seedBox = required<HTMLElement>("#seed-box");
 const seedInput = required<HTMLInputElement>("#seed-input");
 const primary = required<HTMLButtonElement>("#primary");
 const pause = required<HTMLButtonElement>("#pause");
+const plan = required<HTMLButtonElement>("#plan");
 const health = required<HTMLElement>("#health");
+const armor = required<HTMLElement>("#armor");
 const relays = required<HTMLElement>("#relays");
 const enemies = required<HTMLElement>("#enemies");
 const sector = required<HTMLElement>("#sector");
+const weapon = required<HTMLElement>("#weapon");
 const score = required<HTMLElement>("#score");
-const heatBar = required<HTMLDivElement>("#heat-bar");
-const dashBar = required<HTMLDivElement>("#dash-bar");
+const heatBar = required<HTMLElement>("#heat-bar");
+const dashBar = required<HTMLElement>("#dash-bar");
 const heatValue = required<HTMLElement>("#heat-value");
 const dashValue = required<HTMLElement>("#dash-value");
 const seedLabel = required<HTMLElement>("#seed-label");
 const objective = required<HTMLElement>("#objective");
+const keysLabel = required<HTMLElement>("#keys");
+const radarLabel = required<HTMLElement>("#scan-charges");
 const announce = required<HTMLElement>("#announce");
 const fire = required<HTMLButtonElement>("#fire");
 const dash = required<HTMLButtonElement>("#dash");
+const scan = required<HTMLButtonElement>("#scan");
+const interact = required<HTMLButtonElement>("#interact");
+const moveZone = required<HTMLElement>("#move-zone");
+const fireZone = required<HTMLElement>("#fire-zone");
+const moveDisc = required<HTMLElement>("#move-stick");
 
 installFullscreen();
-seedInput.value = String(controller.best.lastSeed);
+seedInput.value = String(game.best.lastSeed);
 
 const keys = new Set<string>();
-const moves = new Set<string>();
-let fireHeld = false;
-let aimFromPointer = false;
-let pointerAim = { x: 1, y: 0 };
+let pointerFire = false;
+let pointerAim: Point | null = null;
+let joystickAim: Point | null = null;
+let moveAxis: Point = { x: 0, y: 0 };
 let dashRequested = false;
-let previousPhase: Phase | null = null;
+let interactRequested = false;
+let scanRequested = false;
+let lastPhase: Phase | null = null;
 
 function clearControls(): void {
   keys.clear();
-  moves.clear();
-  fireHeld = false;
+  pointerFire = false;
+  pointerAim = null;
+  joystickAim = null;
+  moveAxis = { x: 0, y: 0 };
   dashRequested = false;
-  fire.classList.remove("held");
+  interactRequested = false;
+  scanRequested = false;
+  moveDisc.classList.remove("active");
+  fire.classList.remove("active");
 }
 
-function labels(phase: Phase): {
-  heading: string;
-  description: string;
-  action: string;
-} {
-  if (phase === "paused") {
-    return {
-      heading: "Le temps suspendu.",
-      description: "La mission est en pause. Reprends quand tu le souhaites.",
-      action: "REPRENDRE →",
-    };
-  }
-  if (phase === "lost") {
-    return {
-      heading: "Signal interrompu.",
-      description:
-        "Le blindage a cédé. La même graine te donnera exactement la même arène : change de tactique.",
-      action: "RÉESSAYER CETTE CARTE ↻",
-    };
-  }
-  if (phase === "cleared") {
-    return {
-      heading: "Secteur sécurisé.",
-      description:
-        "Les relais sont synchronisés et la voie d'extraction est ouverte. Un nouveau secteur t'attend.",
-      action: "SECTEUR SUIVANT →",
-    };
-  }
-  if (phase === "won") {
-    return {
-      heading: "Lumière rétablie.",
-      description:
-        "Quatre secteurs pacifiés. La ville reprend ses couleurs. Rejoue avec une autre graine pour relever le défi.",
-      action: "NOUVEL ASSAUT ↻",
-    };
-  }
-  return {
-    heading: "La couleur est une arme.",
-    description:
-      "Trois relais à rallumer. Des sentinelles à désactiver. Une extraction à atteindre. Chaque graine invente un nouveau terrain.",
-    action: "DÉMARRER L'ASSAUT →",
-  };
-}
-
-function updatePhase(phase: Phase): void {
-  if (previousPhase === phase) return;
-  previousPhase = phase;
+function displayPhase(phase: Phase): void {
+  if (phase === lastPhase) return;
+  lastPhase = phase;
   clearControls();
-  overlay.hidden = phase === "playing";
+  const active = phase === "playing";
+  overlay.hidden = active || phase === "planning";
+  planning.hidden = phase !== "planning";
   seedBox.hidden = phase !== "ready" && phase !== "won";
-  const panel = labels(phase);
-  title.textContent = panel.heading;
-  copy.textContent = panel.description;
-  primary.textContent = panel.action;
   hint.hidden = phase !== "ready";
-  pause.disabled = phase !== "playing" && phase !== "paused";
+  pause.disabled = !active && phase !== "paused";
+  plan.disabled = !active && phase !== "planning";
+  plan.textContent = phase === "planning" ? "◈ Reprendre" : "◈ Plan";
   pause.textContent = phase === "paused" ? "▶ Reprendre" : "Ⅱ Pause";
-  if (phase === "cleared" || phase === "lost" || phase === "won") {
-    announce.textContent = panel.heading + " " + panel.description;
-    primary.focus();
+  const messages: Record<Exclude<Phase, "playing" | "planning">, [string, string, string]> = {
+    ready: [
+      "La couleur est une arme.",
+      "Explore 16 salles sur une carte à seed. Récupère deux badges, ouvre les portes, capture les relais et atteins le noyau. L'exploration et l'armement comptent autant que les réflexes.",
+      "DÉMARRER L'EXPÉDITION →",
+    ],
+    paused: [
+      "Opération en pause.",
+      "Ton monde, ta seed et ton exploration sont conservés pendant cette pause.",
+      "REPRENDRE →",
+    ],
+    lost: [
+      "Signal interrompu.",
+      "Tu peux rejouer le même terrain, apprendre les positions des portes et choisir un autre parcours.",
+      "RÉESSAYER CETTE CARTE ↻",
+    ],
+    cleared: [
+      "District pacifié.",
+      "Les trois relais sont actifs et toutes les menaces sont neutralisées. Prêt à changer de carte ?",
+      "SECTEUR SUIVANT →",
+    ],
+    won: [
+      "Couleurs restaurées.",
+      "Quatre expéditions terminées. Une autre seed révélera une nouvelle disposition de salles, de couvertures et de bonus.",
+      "NOUVELLE EXPÉDITION ↻",
+    ],
+  };
+  if (phase !== "playing" && phase !== "planning") {
+    const [heading, description, action] = messages[phase];
+    title.textContent = heading;
+    copy.textContent = description;
+    primary.textContent = action;
+    if (phase === "won" || phase === "lost" || phase === "cleared") {
+      announce.textContent = heading + " " + description;
+      primary.focus();
+    }
+  }
+  if (phase === "planning") {
+    renderMap(planMap, game.state, true);
+    required<HTMLButtonElement>("#close-plan").focus();
   }
 }
 
-controller.subscribe((state) => {
-  updatePhase(state.phase);
-  health.textContent =
-    "♥ ".repeat(state.player.hp) + "♡ ".repeat(6 - state.player.hp);
-  relays.textContent =
-    state.relays.filter((relay) => relay.charge >= 100).length + " / 3";
+const labels: Record<Weapon, string> = {
+  pulse: "IMPULSION",
+  scatter: "TRIANGLE ×3",
+  rail: "LANCE ⚡",
+};
+
+game.subscribe((state) => {
+  displayPhase(state.phase);
+  health.textContent = "♥".repeat(Math.max(0, state.player.hp)) +
+    "♡".repeat(Math.max(0, 6 - state.player.hp));
+  armor.textContent = state.player.armor > 0 ? "◈" + state.player.armor : "";
+  sector.textContent = String(state.zone).padStart(2, "0") +
+    " / " + String(MAX_ZONE).padStart(2, "0");
+  relays.textContent = state.relays.filter((relay) => relay.charge === 100).length + " / 3";
   enemies.textContent = String(state.enemies.length).padStart(2, "0");
-  sector.textContent =
-    String(state.zone).padStart(2, "0") +
-    " / " +
-    String(MAX_ZONE).padStart(2, "0");
+  weapon.textContent = labels[state.player.weapon];
   score.textContent = String(state.score).padStart(5, "0");
   heatBar.style.width = state.player.heat + "%";
   heatValue.textContent = Math.round(state.player.heat) + "%";
-  dashBar.style.width = (100 * (120 - state.player.dashCooldown)) / 120 + "%";
-  dashValue.textContent =
-    state.player.dashCooldown === 0
-      ? "PRÊTE"
-      : Math.ceil(state.player.dashCooldown / 60) + " s";
-  seedLabel.textContent = "SEED " + state.seed + " · ZONE " + state.zone;
-  const pending = state.relays.filter((relay) => relay.charge < 100).length;
-  objective.textContent =
-    state.phase === "ready"
-      ? "PRÊT POUR LA MISSION"
-      : state.phase === "lost"
-        ? "SIGNAL PERDU"
-        : objectiveReady(state)
-          ? "✦ EXTRACTION DISPONIBLE — REJOINS LE PORTAIL VERT"
-          : "✦ " +
-            pending +
-            " RELAIS À ACTIVER · " +
-            state.enemies.length +
-            " SENTINELLES";
+  dashBar.style.width = ((120 - state.player.dashCooldown) / 120) * 100 + "%";
+  dashValue.textContent = state.player.dashCooldown === 0
+    ? "PRÊTE"
+    : Math.ceil(state.player.dashCooldown / 60) + "s";
+  seedLabel.textContent = "SEED " + state.seed + " • " + state.zone;
+  keysLabel.textContent = "BADGES : " + (
+    state.keys.length === 0 ? "—" : state.keys.map((key) => key.toUpperCase()).join(" · ")
+  );
+  radarLabel.textContent = "RADAR : " + state.player.scanCharges;
+  scan.disabled = state.phase !== "playing" || state.player.scanCharges === 0;
+  const gate = availableGate(state);
+  interact.disabled = state.phase !== "playing";
+  interact.setAttribute("aria-label", gate
+    ? (canOpenGate(state, gate) ? "Ouvrir porte " : "Porte verrouillée ") + gate
+    : "Ouvrir une porte à proximité");
+  interact.style.borderColor = gate ? "#ffef8f" : "";
+  const remaining = state.relays.filter((relay) => relay.charge < 100).length;
+  let message: string;
+  if (state.phase === "ready") message = "PRÊT POUR LA MISSION";
+  else if (state.notice && state.tick < state.noticeUntil) message = state.notice;
+  else if (objectiveReady(state)) message = "✦ EXTRACTION OUVERTE — REJOINS LE NOYAU";
+  else if (!state.keys.includes("rose") || !state.keys.includes("cyan")) {
+    message = "◆ EXPLORE L'ATELIER ET RÉCUPÈRE LES BADGES";
+  } else if (!state.opened.includes("rose") || !state.opened.includes("cyan")) {
+    message = "◇ OUVRE LES PORTES COLORÉES : TOUCHE E / PORTE";
+  } else if (remaining === 3) {
+    message = "✦ CAPTURE LES RELAIS À L'EST ET AU SUD";
+  } else {
+    message = "✦ " + remaining + " RELAIS · " + state.enemies.length + " MENACES • M POUR PLANIFIER";
+  }
+  objective.textContent = message;
 });
 
 primary.addEventListener("click", () => {
-  const phase = controller.state.phase;
-  if (phase === "paused") controller.togglePause();
-  else if (phase === "cleared") controller.nextZone();
-  else if (phase === "lost") controller.restart();
+  const phase = game.state.phase;
+  if (phase === "paused") game.togglePause();
+  else if (phase === "cleared") game.nextZone();
+  else if (phase === "lost") game.restart();
   else {
     const seed = Number(seedInput.value);
-    if (!controller.start(seed)) {
-      seedInput.setCustomValidity("Choisis un nombre entier de 1 à 999999999.");
+    if (!game.start(seed)) {
+      seedInput.setCustomValidity("Nombre entier de 1 à 999999999 requis.");
       seedInput.reportValidity();
       return;
     }
     seedInput.setCustomValidity("");
   }
-  if (controller.state.phase === "playing") canvas.focus();
+  if (game.state.phase === "playing") canvas.focus();
 });
 
-seedInput.addEventListener("input", () => {
-  seedInput.setCustomValidity("");
+seedInput.addEventListener("input", () => seedInput.setCustomValidity(""));
+
+function togglePlan(): void {
+  if (game.state.phase !== "playing" && game.state.phase !== "planning") return;
+  clearControls();
+  game.togglePlan();
+  if (game.state.phase === "playing") canvas.focus();
+}
+plan.addEventListener("click", togglePlan);
+required<HTMLButtonElement>("#minimap-button").addEventListener("click", togglePlan);
+required<HTMLButtonElement>("#close-plan").addEventListener("click", togglePlan);
+
+planMap.addEventListener("click", (event) => {
+  const cell = mapPointer(planMap, event.clientX, event.clientY);
+  if (game.setWaypoint(cell)) {
+    announce.textContent = "Repère placé. Reprends la mission pour suivre ton itinéraire.";
+    renderMap(planMap, game.state, true);
+  }
 });
 
 pause.addEventListener("click", () => {
   clearControls();
-  controller.togglePause();
-  if (controller.state.phase === "playing") canvas.focus();
+  game.togglePause();
+  if (game.state.phase === "playing") canvas.focus();
 });
 
-function pointerDirection(event: PointerEvent): void {
-  const rect = canvas.getBoundingClientRect();
-  const coords = geometry(canvas);
-  const x = (event.clientX - rect.left - coords.offsetX) / coords.step - 0.5;
-  const y = (event.clientY - rect.top - coords.offsetY) / coords.step - 0.5;
-  const player = controller.state.player;
-  pointerAim = { x: x - player.x, y: y - player.y };
-  aimFromPointer = true;
-}
-
-canvas.addEventListener("pointermove", (event) => {
-  if (event.pointerType === "mouse" || event.buttons) pointerDirection(event);
-});
-canvas.addEventListener("pointerdown", (event) => {
-  if (controller.state.phase !== "playing") return;
-  pointerDirection(event);
-  fireHeld = true;
-  canvas.setPointerCapture(event.pointerId);
-  event.preventDefault();
-});
-canvas.addEventListener("pointerup", () => {
-  fireHeld = false;
-});
-canvas.addEventListener("pointercancel", () => {
-  fireHeld = false;
-});
-
-const keyMap: Record<string, string> = {
-  ArrowUp: "up",
-  KeyW: "up",
-  KeyZ: "up",
-  ArrowDown: "down",
-  KeyS: "down",
-  ArrowLeft: "left",
-  KeyA: "left",
-  KeyQ: "left",
-  ArrowRight: "right",
-  KeyD: "right",
+const movement: Record<string, Point> = {
+  ArrowUp: { x: 0, y: -1 },
+  KeyW: { x: 0, y: -1 },
+  KeyZ: { x: 0, y: -1 },
+  ArrowDown: { x: 0, y: 1 },
+  KeyS: { x: 0, y: 1 },
+  ArrowLeft: { x: -1, y: 0 },
+  KeyA: { x: -1, y: 0 },
+  KeyQ: { x: -1, y: 0 },
+  ArrowRight: { x: 1, y: 0 },
+  KeyD: { x: 1, y: 0 },
 };
 
 document.addEventListener("keydown", (event) => {
   if (event.target === seedInput) return;
-  if (event.code === "KeyP" && !event.repeat) {
-    controller.togglePause();
+  const code = event.code;
+  if (!event.repeat && code === "KeyM") {
     event.preventDefault();
+    togglePlan();
+    return;
   }
-  if (
-    event.code in keyMap ||
-    event.code === "Space" ||
-    event.code === "ShiftLeft" ||
-    event.code === "ShiftRight"
-  ) {
+  if (!event.repeat && code === "KeyP") {
     event.preventDefault();
-    keys.add(event.code);
-    if (event.code.startsWith("Shift") && !event.repeat) dashRequested = true;
+    game.togglePause();
+    return;
+  }
+  if (code === "Escape" && game.state.phase === "planning" && !document.fullscreenElement) {
+    event.preventDefault();
+    togglePlan();
+    return;
+  }
+  if (code in movement || ["Space", "ShiftLeft", "ShiftRight", "KeyE", "KeyR"].includes(code)) {
+    event.preventDefault();
+    keys.add(code);
+    if (!event.repeat && code.startsWith("Shift")) dashRequested = true;
+    if (!event.repeat && code === "KeyE") interactRequested = true;
+    if (!event.repeat && code === "KeyR") scanRequested = true;
   }
 });
 document.addEventListener("keyup", (event) => keys.delete(event.code));
+dash.addEventListener("click", () => { dashRequested = true; });
+scan.addEventListener("click", () => { scanRequested = true; });
+interact.addEventListener("click", () => { interactRequested = true; });
 
-for (const button of document.querySelectorAll<HTMLButtonElement>(
-  "[data-move]",
-)) {
-  const direction = button.dataset.move;
-  if (!direction) continue;
-  button.addEventListener("pointerdown", (event) => {
-    event.preventDefault();
-    button.setPointerCapture(event.pointerId);
-    moves.add(direction);
-    button.classList.add("held");
-  });
-  const release = (): void => {
-    moves.delete(direction);
-    button.classList.remove("held");
-  };
-  button.addEventListener("pointerup", release);
-  button.addEventListener("pointercancel", release);
-  button.addEventListener("lostpointercapture", release);
-}
-fire.addEventListener("pointerdown", (event) => {
+canvas.addEventListener("pointermove", (event) => {
+  if (event.pointerType !== "mouse") return;
+  const point = screenToWorld(canvas, game.state, event.clientX, event.clientY);
+  pointerAim = { x: point.x - game.state.player.x, y: point.y - game.state.player.y };
+});
+canvas.addEventListener("pointerdown", (event) => {
+  if (event.pointerType !== "mouse" || game.state.phase !== "playing") return;
+  canvas.setPointerCapture(event.pointerId);
+  const point = screenToWorld(canvas, game.state, event.clientX, event.clientY);
+  pointerAim = { x: point.x - game.state.player.x, y: point.y - game.state.player.y };
+  pointerFire = true;
   event.preventDefault();
-  fire.setPointerCapture(event.pointerId);
-  fireHeld = true;
-  aimFromPointer = false;
-  fire.classList.add("held");
 });
-for (const name of ["pointerup", "pointercancel", "lostpointercapture"]) {
-  fire.addEventListener(name, () => {
-    fireHeld = false;
-    fire.classList.remove("held");
-  });
-}
-dash.addEventListener("click", () => {
-  dashRequested = true;
-});
+canvas.addEventListener("pointerup", () => { pointerFire = false; });
+canvas.addEventListener("pointercancel", () => { pointerFire = false; });
 
-function input(): Controls {
-  const moving = (direction: string): boolean =>
-    moves.has(direction) || [...keys].some((key) => keyMap[key] === direction);
-  const useAutomaticAim =
-    !aimFromPointer ||
-    (fireHeld && fire.classList.contains("held")) ||
-    keys.has("Space");
-  const aim = useAutomaticAim ? bestAim(controller.state) : pointerAim;
-  const result: Controls = {
-    moveX: Number(moving("right")) - Number(moving("left")),
-    moveY: Number(moving("down")) - Number(moving("up")),
+interface Stick {
+  zone: HTMLElement;
+  disc: HTMLElement;
+  radius: number;
+  activePointer: number | null;
+  origin: Point;
+  value: Point;
+}
+function createStick(zone: HTMLElement, disc: HTMLElement, radius: number): Stick {
+  const stick: Stick = {
+    zone, disc, radius, activePointer: null,
+    origin: { x: 0, y: 0 },
+    value: { x: 0, y: 0 },
+  };
+  function reset(): void {
+    stick.activePointer = null;
+    stick.value = { x: 0, y: 0 };
+    disc.style.left = "50%";
+    disc.style.top = "55%";
+    disc.classList.remove("active");
+    if (zone === moveZone) moveAxis = { x: 0, y: 0 };
+    else {
+      joystickAim = null;
+      pointerFire = false;
+    }
+  }
+  zone.addEventListener("pointerdown", (event) => {
+    if (game.state.phase !== "playing" || stick.activePointer !== null) return;
+    event.preventDefault();
+    zone.setPointerCapture(event.pointerId);
+    stick.activePointer = event.pointerId;
+    const rect = zone.getBoundingClientRect();
+    stick.origin = {
+      x: Math.max(45, Math.min(rect.width - 45, event.clientX - rect.left)),
+      y: Math.max(45, Math.min(rect.height - 45, event.clientY - rect.top)),
+    };
+    disc.style.left = stick.origin.x + "px";
+    disc.style.top = stick.origin.y + "px";
+    disc.classList.add("active");
+    if (zone === fireZone) {
+      pointerFire = true;
+      joystickAim = null;
+    }
+  });
+  zone.addEventListener("pointermove", (event) => {
+    if (stick.activePointer !== event.pointerId) return;
+    const rect = zone.getBoundingClientRect();
+    const dx = event.clientX - rect.left - stick.origin.x;
+    const dy = event.clientY - rect.top - stick.origin.y;
+    const length = Math.hypot(dx, dy);
+    const amount = Math.min(1, length / radius);
+    const dead = amount < 0.15;
+    stick.value = dead ? { x: 0, y: 0 } : {
+      x: (dx / length) * amount,
+      y: (dy / length) * amount,
+    };
+    const nub = disc.querySelector<HTMLElement>(".stick-nub");
+    if (nub) nub.style.transform = "translate(" +
+      stick.value.x * (radius * 0.47) + "px, " +
+      stick.value.y * (radius * 0.47) + "px)";
+    if (zone === moveZone) moveAxis = stick.value;
+    else joystickAim = dead ? null : stick.value;
+  });
+  for (const eventName of ["pointerup", "pointercancel", "lostpointercapture"]) {
+    zone.addEventListener(eventName, (event) => {
+      if (event instanceof PointerEvent && stick.activePointer !== event.pointerId) return;
+      const nub = disc.querySelector<HTMLElement>(".stick-nub");
+      if (nub) nub.style.transform = "";
+      reset();
+    });
+  }
+  return stick;
+}
+createStick(moveZone, moveDisc, 50);
+createStick(fireZone, fire, 50);
+
+function currentInput(): Controls {
+  let moveX = moveAxis.x;
+  let moveY = moveAxis.y;
+  for (const code of keys) {
+    const vector = movement[code];
+    if (vector) {
+      moveX += vector.x;
+      moveY += vector.y;
+    }
+  }
+  const aim = joystickAim ?? (
+    keys.has("Space") || !pointerAim ? bestAim(game.state) : pointerAim
+  );
+  const controls: Controls = {
+    moveX,
+    moveY,
     aimX: aim.x,
     aimY: aim.y,
-    shoot: fireHeld || keys.has("Space"),
+    shoot: pointerFire || keys.has("Space"),
     dash: dashRequested,
+    interact: interactRequested,
+    scan: scanRequested,
   };
   dashRequested = false;
-  return result;
+  interactRequested = false;
+  scanRequested = false;
+  return controls;
 }
 
 function onInactive(): void {
   clearControls();
-  controller.pause();
+  game.pause();
 }
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) onInactive();
 });
 window.addEventListener("blur", onInactive);
-
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+let request = 0;
 let previousTime = 0;
-let accumulated = 0;
+let accumulator = 0;
 let frame = 0;
-let frameRequest = 0;
-
-function loop(now: number): void {
+function render(now: number): void {
   const elapsed = previousTime === 0 ? 0 : Math.min(100, now - previousTime);
   previousTime = now;
-  accumulated = Math.min(100, accumulated + elapsed);
+  accumulator = Math.min(100, accumulator + elapsed);
   let steps = 0;
-  while (accumulated >= 1000 / 60 && steps < 5) {
-    controller.tick(input());
-    accumulated -= 1000 / 60;
+  while (accumulator >= 1000 / 60 && steps < 5) {
+    if (game.state.phase === "playing") game.tick(currentInput());
+    accumulator -= 1000 / 60;
     steps++;
   }
   frame++;
   renderArena(
-    canvas,
-    controller.state,
-    reducedMotion.matches ? 0 : frame,
-    aimFromPointer ? pointerAim : undefined,
+    canvas, game.state, reducedMotion.matches ? 0 : frame,
+    joystickAim ?? pointerAim ?? undefined,
   );
-  frameRequest = requestAnimationFrame(loop);
+  if (frame % 6 === 0) renderMap(minimap, game.state);
+  if (game.state.phase === "planning" && frame % 12 === 0)
+    renderMap(planMap, game.state, true);
+  request = requestAnimationFrame(render);
 }
-
-frameRequest = requestAnimationFrame(loop);
-window.addEventListener(
-  "pagehide",
-  () => {
-    cancelAnimationFrame(frameRequest);
-    onInactive();
-    controller.dispose();
-  },
-  { once: true },
-);
+request = requestAnimationFrame(render);
+window.addEventListener("pagehide", () => {
+  cancelAnimationFrame(request);
+  onInactive();
+  game.dispose();
+}, { once: true });
