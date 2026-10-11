@@ -1,4 +1,4 @@
-# __TITLE__
+# **TITLE**
 
 Squelette compilable avec domaine, application, infrastructure, présentation et test unitaire. Le prototype est caché du portail jusqu'à ce que `published` soit vrai dans `game.json`.
 

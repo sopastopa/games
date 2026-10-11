@@ -1,6 +1,7 @@
 # Critères d'acceptation d'un jeu
 
 ## Obligatoires
+
 - Jeu autonome dans `games/<slug>` avec package, README, game.json, configuration Vite et TypeScript strict.
 - Clean Architecture adaptée à la taille du jeu ; invariants testés par des fonctions pures ; pas de références au DOM dans `domain/`.
 - Entrées clavier et tactiles si pertinents ; pas de scroll intempestif pendant les contrôles ; focus clavier visible.
@@ -12,6 +13,7 @@
 - Données de catalogue valides ; `published` utilisé pour masquer les prototypes.
 
 ## Évolutions encouragées
+
 - Critères de performance (chargement, FPS et gestion des ressources) adaptés au jeu.
 - Accessibilité améliorée, contrôles paramétrables, son désactivable, absence d'animations gênantes.
 - Tests exploratoires sur mobile et navigateur secondaire avant publication majeure.
