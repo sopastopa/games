@@ -93,11 +93,13 @@ describe("REBOND — deterministic physics", () => {
   it("detects a genuine physical collision, without counting a near miss", () => {
     const bumper: Bumper = { id: "b1", x: 450, y: 300, radius: 28 };
     const colliding = stepWithContacts(
-      { x: 410, y: 300, vx: 950, vy: 0, elapsed: 0 }, [bumper],
+      { x: 410, y: 300, vx: 950, vy: 0, elapsed: 0 },
+      [bumper],
     );
     expect(colliding.contacts).toContain("b1");
     const missed = stepWithContacts(
-      { x: 410, y: 200, vx: 950, vy: 0, elapsed: 0 }, [bumper],
+      { x: 410, y: 200, vx: 950, vy: 0, elapsed: 0 },
+      [bumper],
     );
     expect(missed.contacts).toEqual([]);
     expect(stepWithContacts(colliding.ball, [bumper], 0).contacts).toEqual([]);

@@ -6,7 +6,11 @@ import type { Bumper, Level, Vec2 } from "./types";
  * the goal. Distances and collisions are simulated by the same domain engine
  * used by real gameplay; tests replay all 18 reference launches.
  */
-type MarkerSpec = readonly [atSeconds: number, side: -1 | 1, contactRatio: number];
+type MarkerSpec = readonly [
+  atSeconds: number,
+  side: -1 | 1,
+  contactRatio: number,
+];
 type StoneSpec = readonly [x: number, y: number, radius: number];
 type Design = readonly [
   title: string,
@@ -27,14 +31,8 @@ const designs: readonly Design[] = [
     36,
     740,
     0.84,
-    [
-      [
-        0.45,
-        -1,
-        0.66
-      ]
-    ],
-    []
+    [[0.45, -1, 0.66]],
+    [],
   ],
   [
     "Le bon contact",
@@ -42,14 +40,8 @@ const designs: readonly Design[] = [
     67,
     540,
     0.66,
-    [
-      [
-        0.31,
-        -1,
-        0.69
-      ]
-    ],
-    []
+    [[0.31, -1, 0.69]],
+    [],
   ],
   [
     "Angle d'attaque",
@@ -57,14 +49,8 @@ const designs: readonly Design[] = [
     69,
     650,
     0.71,
-    [
-      [
-        0.33,
-        -1,
-        0.58
-      ]
-    ],
-    []
+    [[0.33, -1, 0.58]],
+    [],
   ],
   [
     "Le chemin courbe",
@@ -72,14 +58,8 @@ const designs: readonly Design[] = [
     33,
     680,
     0.76,
-    [
-      [
-        0.4,
-        -1,
-        0.53
-      ]
-    ],
-    []
+    [[0.4, -1, 0.53]],
+    [],
   ],
   [
     "Premier obstacle",
@@ -87,20 +67,8 @@ const designs: readonly Design[] = [
     41,
     660,
     1.22,
-    [
-      [
-        0.57,
-        1,
-        0.55
-      ]
-    ],
-    [
-      [
-        172.9,
-        307.4,
-        22
-      ]
-    ]
+    [[0.57, 1, 0.55]],
+    [[172.9, 307.4, 22]],
   ],
   [
     "La séquence",
@@ -109,24 +77,10 @@ const designs: readonly Design[] = [
     630,
     1.49,
     [
-      [
-        0.39,
-        -1,
-        0.55
-      ],
-      [
-        0.84,
-        -1,
-        0.76
-      ]
+      [0.39, -1, 0.55],
+      [0.84, -1, 0.76],
     ],
-    [
-      [
-        422.1,
-        436,
-        22
-      ]
-    ]
+    [[422.1, 436, 22]],
   ],
   [
     "Double détour",
@@ -135,24 +89,10 @@ const designs: readonly Design[] = [
     660,
     1.44,
     [
-      [
-        0.54,
-        1,
-        0.62
-      ],
-      [
-        0.95,
-        -1,
-        0.47
-      ]
+      [0.54, 1, 0.62],
+      [0.95, -1, 0.47],
     ],
-    [
-      [
-        348.4,
-        425.8,
-        22
-      ]
-    ]
+    [[348.4, 425.8, 22]],
   ],
   [
     "La bifurcation",
@@ -161,24 +101,10 @@ const designs: readonly Design[] = [
     710,
     1.48,
     [
-      [
-        0.31,
-        1,
-        0.64
-      ],
-      [
-        0.82,
-        -1,
-        0.62
-      ]
+      [0.31, 1, 0.64],
+      [0.82, -1, 0.62],
     ],
-    [
-      [
-        214.6,
-        323.6,
-        22
-      ]
-    ]
+    [[214.6, 323.6, 22]],
   ],
   [
     "Effet miroir",
@@ -187,18 +113,10 @@ const designs: readonly Design[] = [
     510,
     1.34,
     [
-      [
-        0.36,
-        1,
-        0.56
-      ],
-      [
-        0.91,
-        1,
-        0.49
-      ]
+      [0.36, 1, 0.56],
+      [0.91, 1, 0.49],
     ],
-    []
+    [],
   ],
   [
     "Le piège central",
@@ -207,24 +125,10 @@ const designs: readonly Design[] = [
     570,
     1.21,
     [
-      [
-        0.54,
-        1,
-        0.69
-      ],
-      [
-        0.88,
-        -1,
-        0.64
-      ]
+      [0.54, 1, 0.69],
+      [0.88, -1, 0.64],
     ],
-    [
-      [
-        248.7,
-        285,
-        22
-      ]
-    ]
+    [[248.7, 285, 22]],
   ],
   [
     "Évitement",
@@ -233,29 +137,13 @@ const designs: readonly Design[] = [
     750,
     1.51,
     [
-      [
-        0.52,
-        1,
-        0.44
-      ],
-      [
-        1.06,
-        -1,
-        0.69
-      ]
+      [0.52, 1, 0.44],
+      [1.06, -1, 0.69],
     ],
     [
-      [
-        261.3,
-        348.3,
-        22
-      ],
-      [
-        317,
-        304.4,
-        24
-      ]
-    ]
+      [261.3, 348.3, 22],
+      [317, 304.4, 24],
+    ],
   ],
   [
     "La chaîne",
@@ -264,29 +152,11 @@ const designs: readonly Design[] = [
     530,
     2.11,
     [
-      [
-        0.53,
-        -1,
-        0.57
-      ],
-      [
-        1.01,
-        1,
-        0.78
-      ],
-      [
-        1.57,
-        1,
-        0.52
-      ]
+      [0.53, -1, 0.57],
+      [1.01, 1, 0.78],
+      [1.57, 1, 0.52],
     ],
-    [
-      [
-        248.9,
-        472.9,
-        22
-      ]
-    ]
+    [[248.9, 472.9, 22]],
   ],
   [
     "Contretemps",
@@ -295,29 +165,11 @@ const designs: readonly Design[] = [
     680,
     2.15,
     [
-      [
-        0.49,
-        -1,
-        0.49
-      ],
-      [
-        0.93,
-        -1,
-        0.69
-      ],
-      [
-        1.46,
-        1,
-        0.74
-      ]
+      [0.49, -1, 0.49],
+      [0.93, -1, 0.69],
+      [1.46, 1, 0.74],
     ],
-    [
-      [
-        367.7,
-        330,
-        22
-      ]
-    ]
+    [[367.7, 330, 22]],
   ],
   [
     "Le labyrinthe",
@@ -326,34 +178,14 @@ const designs: readonly Design[] = [
     790,
     2.03,
     [
-      [
-        0.32,
-        1,
-        0.62
-      ],
-      [
-        0.82,
-        1,
-        0.52
-      ],
-      [
-        1.35,
-        -1,
-        0.56
-      ]
+      [0.32, 1, 0.62],
+      [0.82, 1, 0.52],
+      [1.35, -1, 0.56],
     ],
     [
-      [
-        296.7,
-        405.2,
-        22
-      ],
-      [
-        493,
-        440.5,
-        24
-      ]
-    ]
+      [296.7, 405.2, 22],
+      [493, 440.5, 24],
+    ],
   ],
   [
     "Triple réflexion",
@@ -362,34 +194,14 @@ const designs: readonly Design[] = [
     570,
     1.85,
     [
-      [
-        0.52,
-        -1,
-        0.48
-      ],
-      [
-        1.06,
-        -1,
-        0.54
-      ],
-      [
-        1.53,
-        1,
-        0.67
-      ]
+      [0.52, -1, 0.48],
+      [1.06, -1, 0.54],
+      [1.53, 1, 0.67],
     ],
     [
-      [
-        351.5,
-        397.9,
-        22
-      ],
-      [
-        433.1,
-        381.3,
-        24
-      ]
-    ]
+      [351.5, 397.9, 22],
+      [433.1, 381.3, 24],
+    ],
   ],
   [
     "Le grand écart",
@@ -398,23 +210,11 @@ const designs: readonly Design[] = [
     700,
     2.1,
     [
-      [
-        0.39,
-        -1,
-        0.47
-      ],
-      [
-        0.87,
-        1,
-        0.64
-      ],
-      [
-        1.41,
-        -1,
-        0.57
-      ]
+      [0.39, -1, 0.47],
+      [0.87, 1, 0.64],
+      [1.41, -1, 0.57],
     ],
-    []
+    [],
   ],
   [
     "Quatre impulsions",
@@ -423,44 +223,16 @@ const designs: readonly Design[] = [
     540,
     2.5,
     [
-      [
-        0.38,
-        -1,
-        0.48
-      ],
-      [
-        0.88,
-        -1,
-        0.68
-      ],
-      [
-        1.31,
-        -1,
-        0.73
-      ],
-      [
-        1.81,
-        1,
-        0.63
-      ]
+      [0.38, -1, 0.48],
+      [0.88, -1, 0.68],
+      [1.31, -1, 0.73],
+      [1.81, 1, 0.63],
     ],
     [
-      [
-        325.5,
-        417.3,
-        22
-      ],
-      [
-        439.1,
-        460.1,
-        24
-      ],
-      [
-        444.2,
-        385.3,
-        26
-      ]
-    ]
+      [325.5, 417.3, 22],
+      [439.1, 460.1, 24],
+      [444.2, 385.3, 26],
+    ],
   ],
   [
     "La trajectoire impossible",
@@ -469,40 +241,16 @@ const designs: readonly Design[] = [
     780,
     2.17,
     [
-      [
-        0.34,
-        -1,
-        0.66
-      ],
-      [
-        0.78,
-        -1,
-        0.61
-      ],
-      [
-        1.35,
-        1,
-        0.51
-      ],
-      [
-        1.8,
-        1,
-        0.76
-      ]
+      [0.34, -1, 0.66],
+      [0.78, -1, 0.61],
+      [1.35, 1, 0.51],
+      [1.8, 1, 0.76],
     ],
     [
-      [
-        322.4,
-        466.3,
-        22
-      ],
-      [
-        453.3,
-        379.6,
-        24
-      ]
-    ]
-  ]
+      [322.4, 466.3, 22],
+      [453.3, 379.6, 24],
+    ],
+  ],
 ];
 
 const chapters = [
@@ -541,11 +289,18 @@ export const levels: readonly Level[] = designs.map((design, index) => {
   for (const [at, side, ratio] of relays) {
     const id = `b${required.length + 1}`;
     const radius = [26, 24, 24, 22][Math.min(required.length, 3)]!;
-    bumpers.push(placeRelay(angle, speed, bumpers, at, side, ratio, radius, id));
+    bumpers.push(
+      placeRelay(angle, speed, bumpers, at, side, ratio, radius, id),
+    );
     required.push(id);
   }
   for (const [x, y, radius] of stones) {
-    bumpers.push({ id: `s${bumpers.length - required.length + 1}`, x, y, radius });
+    bumpers.push({
+      id: `s${bumpers.length - required.length + 1}`,
+      x,
+      y,
+      radius,
+    });
   }
   const position = project(source, angle, speed, bumpers, goalTime);
   return {

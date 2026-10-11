@@ -153,14 +153,32 @@ function draw(snapshotValue: Snapshot): void {
     const activated = index < snapshotValue.activated.length;
     const active = index === snapshotValue.activated.length;
     const outer = bumper.radius + 9;
-    circle(bumper.x, bumper.y, outer + 8, activated ? "#69d5b526" : active ? "#e99b602c" : "#a1bbb51a", 18);
-    circle(bumper.x, bumper.y, bumper.radius + 2,
-      activated ? "#3aa58a" : active ? "#e4a267" : "#91aca7");
-    circle(bumper.x, bumper.y, bumper.radius - 6,
-      activated ? "#8fe5c1" : active ? "#ffdab0" : "#e0e7db");
+    circle(
+      bumper.x,
+      bumper.y,
+      outer + 8,
+      activated ? "#69d5b526" : active ? "#e99b602c" : "#a1bbb51a",
+      18,
+    );
+    circle(
+      bumper.x,
+      bumper.y,
+      bumper.radius + 2,
+      activated ? "#3aa58a" : active ? "#e4a267" : "#91aca7",
+    );
+    circle(
+      bumper.x,
+      bumper.y,
+      bumper.radius - 6,
+      activated ? "#8fe5c1" : active ? "#ffdab0" : "#e0e7db",
+    );
     context.beginPath();
     context.arc(bumper.x, bumper.y, outer, 0, Math.PI * 2);
-    context.strokeStyle = activated ? "#3baa90" : active ? "#d47752" : "#819d9a";
+    context.strokeStyle = activated
+      ? "#3baa90"
+      : active
+        ? "#d47752"
+        : "#819d9a";
     context.lineWidth = active ? 3.5 : 2;
     context.setLineDash(activated ? [] : [4, 5]);
     context.stroke();
@@ -169,7 +187,11 @@ function draw(snapshotValue: Snapshot): void {
     context.font = "900 22px system-ui";
     context.textAlign = "center";
     context.textBaseline = "middle";
-    context.fillText(activated ? "✓" : String(index + 1), bumper.x, bumper.y + 1);
+    context.fillText(
+      activated ? "✓" : String(index + 1),
+      bumper.x,
+      bumper.y + 1,
+    );
     context.textAlign = "start";
     context.textBaseline = "alphabetic";
   }
@@ -177,8 +199,13 @@ function draw(snapshotValue: Snapshot): void {
   const { goal } = level;
   const open = snapshotValue.goalUnlocked;
   const breathe = 1 + Math.sin(t * 2.2) * 0.06;
-  circle(goal.x, goal.y, level.goalRadius * 1.15 * breathe,
-    open ? "#85d8a42c" : "#819da32c", 27);
+  circle(
+    goal.x,
+    goal.y,
+    level.goalRadius * 1.15 * breathe,
+    open ? "#85d8a42c" : "#819da32c",
+    27,
+  );
   context.beginPath();
   context.arc(goal.x, goal.y, level.goalRadius * breathe, 0, Math.PI * 2);
   context.strokeStyle = open ? "#268f7e" : "#718e99";
@@ -312,7 +339,8 @@ function render(value: Snapshot): void {
     lastLevelId = value.level.id;
     trail.length = 0;
     dragging = false;
-    feedbackLabel.textContent = "Vise les relais numérotés : impossible de gagner avec un tir direct.";
+    feedbackLabel.textContent =
+      "Vise les relais numérotés : impossible de gagner avec un tir direct.";
   }
   if (lastPhase !== value.phase) {
     if (value.phase === "ready") trail.length = 0;
@@ -337,7 +365,10 @@ function render(value: Snapshot): void {
   ricochetsLabel.textContent = `${value.activated.length} / ${value.level.required.length}`;
   relayNextLabel.textContent = value.goalUnlocked
     ? "CIBLE DÉVERROUILLÉE"
-    : `REL AIS N°${value.activated.length + 1} À TOUCHER`.replace("REL AIS", "RELAIS");
+    : `REL AIS N°${value.activated.length + 1} À TOUCHER`.replace(
+        "REL AIS",
+        "RELAIS",
+      );
   angleInput.value = String(value.angle);
   powerInput.value = String(value.speed);
   angleValue.textContent = `${Math.round(value.angle)}°`;
@@ -363,8 +394,7 @@ function render(value: Snapshot): void {
   if (value.phase === "solved")
     feedbackLabel.textContent = "Superbe ricochet ! La cible est atteinte.";
   else if (value.phase === "missed")
-    feedbackLabel.textContent =
-      `Échec : ${value.activated.length}/${value.level.required.length} relais. Revois l’ordre des ricochets et ton angle.`;
+    feedbackLabel.textContent = `Échec : ${value.activated.length}/${value.level.required.length} relais. Revois l’ordre des ricochets et ton angle.`;
   else if (value.phase === "flying")
     feedbackLabel.textContent = value.goalUnlocked
       ? "Les relais sont activés ! Atteins maintenant la cible."

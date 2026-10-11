@@ -183,7 +183,11 @@ export class RebondController {
           this.activated.push(contact);
         }
       }
-      if (result.hitGoal && this.activated.length === this.current.required.length) this.finish();
+      if (
+        result.hitGoal &&
+        this.activated.length === this.current.required.length
+      )
+        this.finish();
       else if (result.expired) {
         this.stop();
         this.phase = "missed";

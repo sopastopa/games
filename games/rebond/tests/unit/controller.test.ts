@@ -100,7 +100,8 @@ describe("REBOND application controller", () => {
     expect(game.snapshot.goalUnlocked).toBe(false);
     expect(game.aim(8, 420)).toBe(true);
     game.shoot();
-    for (let i = 0; i < 900 && game.snapshot.phase === "flying"; i++) tick(1/60);
+    for (let i = 0; i < 900 && game.snapshot.phase === "flying"; i++)
+      tick(1 / 60);
     expect(game.snapshot.phase).not.toBe("solved");
     expect(game.snapshot.unlocked).toBe(0);
     expect(game.snapshot.activated).toEqual([]);
