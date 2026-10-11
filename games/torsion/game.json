@@ -1,0 +1,10 @@
+{
+  "id": "torsion",
+  "title": "TORSION",
+  "description": "Un quart de tour suffit. Replace les pièces, apprends les détours et maîtrise les 12 ateliers.",
+  "version": "1.0.0",
+  "category": "Réflexion",
+  "icon": "▣",
+  "accent": "#a7f3c1",
+  "published": true
+}
