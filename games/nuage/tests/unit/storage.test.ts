@@ -54,7 +54,11 @@ describe("NUAGE — local persistence", () => {
     expect(browserStore.read()?.collected).toEqual({ rose: 2 });
     expect(() =>
       browserStore.write({
-        selected: 0, unlocked: 0, finished: [], collected: {}, promenade: false,
+        selected: 0,
+        unlocked: 0,
+        finished: [],
+        collected: {},
+        promenade: false,
       }),
     ).not.toThrow();
   });

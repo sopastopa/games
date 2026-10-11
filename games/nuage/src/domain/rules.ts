@@ -114,21 +114,23 @@ export function step(
       glide = WORLD.glideSeconds;
     }
   }
-  const checkpoint = x >= chapter.checkpoint ? chapter.checkpoint : run.checkpoint;
+  const checkpoint =
+    x >= chapter.checkpoint ? chapter.checkpoint : run.checkpoint;
   const beat = x >= chapter.checkpoint ? "middle" : run.beat;
   const sparks = [...run.sparks];
   chapter.sparks.forEach((spark, index) => {
-    if (
-      !sparks.includes(index) &&
-      Math.hypot(x - spark.x, y - spark.y) < 43
-    )
+    if (!sparks.includes(index) && Math.hypot(x - spark.x, y - spark.y) < 43)
       sparks.push(index);
   });
-  if (!promenade && chapter.obstacles.some((obstacle) =>
-    x + WORLD.radius > obstacle.x &&
-    x - WORLD.radius < obstacle.x + obstacle.width &&
-    y + WORLD.radius > WORLD.ground - WORLD.obstacleHeight
-  )) {
+  if (
+    !promenade &&
+    chapter.obstacles.some(
+      (obstacle) =>
+        x + WORLD.radius > obstacle.x &&
+        x - WORLD.radius < obstacle.x + obstacle.width &&
+        y + WORLD.radius > WORLD.ground - WORLD.obstacleHeight,
+    )
+  ) {
     return {
       ...run,
       x: checkpoint,

@@ -20,8 +20,7 @@ body {
   background:
     radial-gradient(circle at 92% 7%, #ffd4ef 0, transparent 27rem),
     radial-gradient(circle at 0 47%, #b5f7e6 0, transparent 23rem),
-    radial-gradient(circle at 93% 81%, #f8c6fa 0, transparent 21rem),
-    #fff6ec;
+    radial-gradient(circle at 93% 81%, #f8c6fa 0, transparent 21rem), #fff6ec;
   overflow-x: hidden;
 }
 
@@ -187,7 +186,13 @@ footer a:hover {
 .travel-card h3 em,
 .how-card h3 em {
   font-style: normal;
-  background: linear-gradient(100deg, #fa69a3 6%, #ef9450 38%, #51bea3 63%, #9165e8 95%);
+  background: linear-gradient(
+    100deg,
+    #fa69a3 6%,
+    #ef9450 38%,
+    #51bea3 63%,
+    #9165e8 95%
+  );
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -215,7 +220,15 @@ footer a:hover {
   height: 14px;
   position: absolute;
   inset: 0 0 auto;
-  background: linear-gradient(90deg, #fe77a8 0 16%, #ffbd69 16% 33%, #ffe96f 33% 50%, #73dea6 50% 67%, #66b9ff 67% 83%, #a685f3 83%);
+  background: linear-gradient(
+    90deg,
+    #fe77a8 0 16%,
+    #ffbd69 16% 33%,
+    #ffe96f 33% 50%,
+    #73dea6 50% 67%,
+    #66b9ff 67% 83%,
+    #a685f3 83%
+  );
 }
 
 .chapter-header {
@@ -384,8 +397,7 @@ footer a:hover {
   position: relative;
   padding: 26px 29px 20px 37px;
   border: 2px solid #f5e5bf;
-  background:
-    linear-gradient(115deg, #fff7d7, #fffdf3);
+  background: linear-gradient(115deg, #fff7d7, #fffdf3);
   border-radius: 12px;
 }
 

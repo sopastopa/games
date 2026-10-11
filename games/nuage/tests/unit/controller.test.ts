@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { NuageController, normalizeProgress } from "../../src/application/NuageController";
+import {
+  NuageController,
+  normalizeProgress,
+} from "../../src/application/NuageController";
 import type { Ports } from "../../src/application/ports";
 import type { Progress } from "../../src/domain/types";
 

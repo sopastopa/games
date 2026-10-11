@@ -113,19 +113,22 @@ describe("NUAGE — simulation pure", () => {
     expect(start(run).phase).toBe("running");
   });
 
-  it.each(CHAPTERS)("chapter $id is valid and finishable in promenade mode", (scene) => {
-    validateChapter(scene);
-    let run = start(createRun(scene));
-    for (let i = 0; i < 450 && run.phase !== "complete"; i++) {
-      run = step(run, scene, 1 / 30, false, true);
-    }
-    expect(run.phase).toBe("complete");
-    expect(run.tries).toBe(0);
-    expect(narrative(run, scene)).toBe(scene.ending);
-    expect(scene.opening.length).toBeGreaterThan(35);
-    expect(scene.middle.length).toBeGreaterThan(35);
-    expect(scene.ending.length).toBeGreaterThan(35);
-  });
+  it.each(CHAPTERS)(
+    "chapter $id is valid and finishable in promenade mode",
+    (scene) => {
+      validateChapter(scene);
+      let run = start(createRun(scene));
+      for (let i = 0; i < 450 && run.phase !== "complete"; i++) {
+        run = step(run, scene, 1 / 30, false, true);
+      }
+      expect(run.phase).toBe("complete");
+      expect(run.tries).toBe(0);
+      expect(narrative(run, scene)).toBe(scene.ending);
+      expect(scene.opening.length).toBeGreaterThan(35);
+      expect(scene.middle.length).toBeGreaterThan(35);
+      expect(scene.ending.length).toBeGreaterThan(35);
+    },
+  );
 
   it("rejects malformed levels and blocked checkpoint positions", () => {
     expect(() =>

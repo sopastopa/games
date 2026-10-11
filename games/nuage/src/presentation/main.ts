@@ -16,7 +16,10 @@ const canvas = required<HTMLCanvasElement>("world");
 const ctx = canvas.getContext("2d");
 if (!ctx) throw new Error("Canvas 2D unavailable");
 const painting = ctx;
-const game = new NuageController({ store: browserStore, clock: animationClock });
+const game = new NuageController({
+  store: browserStore,
+  clock: animationClock,
+});
 const place = required<HTMLElement>("place");
 const chapterTitle = required<HTMLElement>("chapter-title");
 const chapterIndex = required<HTMLElement>("chapter-index");
@@ -79,8 +82,13 @@ function updateDots(view: View): void {
     }
   }
   const colors = [
-    "#f9669e", "#ffad4f", "#f6d75b", "#6bdb9e", "#6bc8f9",
-    "#aa80eb", "#ff8acc",
+    "#f9669e",
+    "#ffad4f",
+    "#f6d75b",
+    "#6bdb9e",
+    "#6bc8f9",
+    "#aa80eb",
+    "#ff8acc",
   ];
   [...chapterDots.children].forEach((dot, index) => {
     const element = dot as HTMLElement;
@@ -95,7 +103,10 @@ function updateDots(view: View): void {
 
 function render(view: View): void {
   const { run, chapter } = view;
-  document.documentElement.style.setProperty("--scene-accent", chapter.palette.sky);
+  document.documentElement.style.setProperty(
+    "--scene-accent",
+    chapter.palette.sky,
+  );
   text(place, chapter.place);
   text(chapterTitle, chapter.title);
   text(chapterIndex, chapter.number + " / 07");
@@ -115,7 +126,11 @@ function render(view: View): void {
   text(storyText, narrative(run, chapter));
   text(
     sparkLabel,
-    "✳ " + run.sparks.length + " / " + chapter.sparks.length + " souvenirs lumineux",
+    "✳ " +
+      run.sparks.length +
+      " / " +
+      chapter.sparks.length +
+      " souvenirs lumineux",
   );
   text(
     status,
@@ -155,7 +170,14 @@ function render(view: View): void {
   updateChapterMenu(view);
   updateDots(view);
   painting.save();
-  painting.setTransform(canvas.width / WORLD.width, 0, 0, canvas.height / WORLD.height, 0, 0);
+  painting.setTransform(
+    canvas.width / WORLD.width,
+    0,
+    0,
+    canvas.height / WORLD.height,
+    0,
+    0,
+  );
   drawWorld(painting, view, !reducedMotion.matches);
   painting.restore();
 }

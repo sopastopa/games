@@ -24,17 +24,14 @@ export function normalizeProgress(value: Progress | null): Progress {
     value.selected <= unlocked
       ? value.selected
       : 0;
-  const finished = CHAPTERS.filter((chapter) =>
-    Array.isArray(value.finished) && value.finished.includes(chapter.id),
+  const finished = CHAPTERS.filter(
+    (chapter) =>
+      Array.isArray(value.finished) && value.finished.includes(chapter.id),
   ).map((chapter) => chapter.id);
   const collected: Record<string, number> = {};
   for (const chapter of CHAPTERS) {
     const count = value.collected?.[chapter.id];
-    if (
-      typeof count === "number" &&
-      Number.isInteger(count) &&
-      count >= 0
-    )
+    if (typeof count === "number" && Number.isInteger(count) && count >= 0)
       collected[chapter.id] = Math.min(count, chapter.sparks.length);
   }
   return {
@@ -88,8 +85,7 @@ export class NuageController {
   }
 
   start(): void {
-    if (this.disposed || !["ready", "paused"].includes(this.run.phase))
-      return;
+    if (this.disposed || !["ready", "paused"].includes(this.run.phase)) return;
     this.run = start(this.run);
     this.beginClock();
     this.emit();

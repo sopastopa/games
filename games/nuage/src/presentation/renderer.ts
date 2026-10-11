@@ -84,14 +84,24 @@ function scenery(
       ctx.strokeStyle = palette.ink;
       ctx.beginPath();
       ctx.moveTo(x, WORLD.ground);
-      ctx.quadraticCurveTo(x - 14, WORLD.ground - 68, x + 7, WORLD.ground - 120 - altitude);
+      ctx.quadraticCurveTo(
+        x - 14,
+        WORLD.ground - 68,
+        x + 7,
+        WORLD.ground - 120 - altitude,
+      );
       ctx.stroke();
       if (motif === "forest") {
         circle(ctx, x + 7, WORLD.ground - 137 - altitude, 43, palette.hillFar);
         circle(ctx, x - 17, WORLD.ground - 112 - altitude, 30, palette.glow);
         circle(ctx, x + 30, WORLD.ground - 114 - altitude, 29, palette.hill);
       } else {
-        petals(ctx, x + 7, WORLD.ground - 120 - altitude, i % 2 ? "#ffe9f2" : palette.glow);
+        petals(
+          ctx,
+          x + 7,
+          WORLD.ground - 120 - altitude,
+          i % 2 ? "#ffe9f2" : palette.glow,
+        );
         ctx.fillStyle = palette.hill;
         ctx.beginPath();
         ctx.ellipse(x + 14, WORLD.ground - 52, 15, 7, -0.65, 0, TWO_PI);
@@ -104,7 +114,13 @@ function scenery(
       ctx.moveTo(x, WORLD.ground);
       ctx.lineTo(x + 4, WORLD.ground - 156 - altitude);
       ctx.stroke();
-      circle(ctx, x + 4, WORLD.ground - 163 - altitude, motif === "candy" ? 22 : 29, motif === "candy" ? "#ffe6ff" : palette.glow);
+      circle(
+        ctx,
+        x + 4,
+        WORLD.ground - 163 - altitude,
+        motif === "candy" ? 22 : 29,
+        motif === "candy" ? "#ffe6ff" : palette.glow,
+      );
       circle(ctx, x - 2, WORLD.ground - 171 - altitude, 8, palette.ground);
     } else if (motif === "sea") {
       ctx.strokeStyle = "#e9ffff";
@@ -119,10 +135,22 @@ function scenery(
       circle(ctx, x + 8, WORLD.ground - 120 - altitude, 24, palette.glow);
       circle(ctx, x + 19, WORLD.ground - 130 - altitude, 24, palette.hill);
       for (let star = 0; star < 3; star++)
-        circle(ctx, x - 35 + star * 23, WORLD.ground - 198 - altitude + star * 13, 3.5, "#fff8e1");
+        circle(
+          ctx,
+          x - 35 + star * 23,
+          WORLD.ground - 198 - altitude + star * 13,
+          3.5,
+          "#fff8e1",
+        );
     } else {
       for (let stripe = 0; stripe < 5; stripe++) {
-        ctx.strokeStyle = ["#ff8ba9", "#ffcf66", "#9ffbc0", "#83deff", "#ad8aff"][stripe]!;
+        ctx.strokeStyle = [
+          "#ff8ba9",
+          "#ffcf66",
+          "#9ffbc0",
+          "#83deff",
+          "#ad8aff",
+        ][stripe]!;
         ctx.lineWidth = 10;
         ctx.beginPath();
         ctx.arc(x, WORLD.ground + 11, 65 + stripe * 11, Math.PI, TWO_PI);
@@ -146,9 +174,24 @@ function paintHazards(
     ctx.fillStyle = "#302342";
     ctx.beginPath();
     ctx.moveTo(x, WORLD.ground + 2);
-    ctx.quadraticCurveTo(x + 6, WORLD.ground - 33, x + obstacle.width * 0.24, WORLD.ground - 23);
-    ctx.quadraticCurveTo(x + obstacle.width * 0.48, WORLD.ground - 58, x + obstacle.width * 0.7, WORLD.ground - 25);
-    ctx.quadraticCurveTo(x + obstacle.width, WORLD.ground - 49, x + obstacle.width, WORLD.ground);
+    ctx.quadraticCurveTo(
+      x + 6,
+      WORLD.ground - 33,
+      x + obstacle.width * 0.24,
+      WORLD.ground - 23,
+    );
+    ctx.quadraticCurveTo(
+      x + obstacle.width * 0.48,
+      WORLD.ground - 58,
+      x + obstacle.width * 0.7,
+      WORLD.ground - 25,
+    );
+    ctx.quadraticCurveTo(
+      x + obstacle.width,
+      WORLD.ground - 49,
+      x + obstacle.width,
+      WORLD.ground,
+    );
     ctx.closePath();
     ctx.fill();
     circle(ctx, x + obstacle.width * 0.5, WORLD.ground - 24, 4.5, "#fff1a0");
@@ -231,7 +274,7 @@ export function drawWorld(
   circle(ctx, sunX, 125, 85, palette.glow);
   circle(ctx, sunX, 125, 111, "#ffffff32");
   for (let i = 0; i < 12; i++) {
-    const x = ((i * 233 + 67 - camera * 0.19) % 1250 + 1250) % 1250 - 70;
+    const x = ((((i * 233 + 67 - camera * 0.19) % 1250) + 1250) % 1250) - 70;
     const y = 65 + (i % 5) * 52;
     if (i % 3 === 0) spark(ctx, x, y, "#fff9e4");
     else cloud(ctx, x, y, 28 + (i % 4) * 13, "#ffffff63");
@@ -248,7 +291,7 @@ export function drawWorld(
   ctx.lineTo(WORLD.width, WORLD.ground);
   ctx.stroke();
   for (let i = 0; i < 50; i++) {
-    const x = ((i * 119 - camera * 0.98) % 1100 + 1100) % 1100;
+    const x = (((i * 119 - camera * 0.98) % 1100) + 1100) % 1100;
     circle(ctx, x, 451 + (i % 4) * 21, i % 3 === 0 ? 4 : 2.5, "#ffffff5f");
   }
   paintHazards(ctx, chapter, camera, view.progress.promenade);
@@ -268,7 +311,9 @@ export function drawWorld(
   const doorX = chapter.endX - camera;
   if (doorX > -100 && doorX < WORLD.width + 100) {
     for (let i = 0; i < 5; i++) {
-      ctx.strokeStyle = ["#ff71a3", "#ffcf63", "#abf2a9", "#88dfff", "#b9a2ff"][i]!;
+      ctx.strokeStyle = ["#ff71a3", "#ffcf63", "#abf2a9", "#88dfff", "#b9a2ff"][
+        i
+      ]!;
       ctx.lineWidth = 10;
       ctx.beginPath();
       ctx.arc(doorX, WORLD.ground, 71 - 12 * i, Math.PI, TWO_PI);
@@ -280,7 +325,12 @@ export function drawWorld(
     if (run.sparks.includes(index)) return;
     const x = item.x - camera;
     if (x < -35 || x > WORLD.width + 35) return;
-    spark(ctx, x, item.y + (motion ? Math.sin(run.x * 0.035 + index) * 6 : 0), palette.glow);
+    spark(
+      ctx,
+      x,
+      item.y + (motion ? Math.sin(run.x * 0.035 + index) * 6 : 0),
+      palette.glow,
+    );
     circle(ctx, x, item.y, 25, "#ffffff24");
   });
   player(ctx, run.x - camera, run.y, view);

@@ -27,11 +27,7 @@ export const browserStore: ProgressStore = {
       const candidate = data.collected as Record<string, unknown>;
       for (const chapter of CHAPTERS) {
         const count = candidate[chapter.id];
-        if (
-          typeof count === "number" &&
-          Number.isInteger(count) &&
-          count >= 0
-        )
+        if (typeof count === "number" && Number.isInteger(count) && count >= 0)
           collected[chapter.id] = count;
       }
       return {

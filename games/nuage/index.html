@@ -14,14 +14,22 @@
     <div class="grain" aria-hidden="true"></div>
     <div class="shell">
       <header class="masthead">
-        <a class="back" href="../../" data-testid="back-home">← Tous les jeux</a>
-        <div class="brand">n<span>u</span>age<span class="brand-spark">✳</span></div>
+        <a class="back" href="../../" data-testid="back-home"
+          >← Tous les jeux</a
+        >
+        <div class="brand">
+          n<span>u</span>age<span class="brand-spark">✳</span>
+        </div>
         <span class="edition">UNE HISTOIRE À JOUER <span> / Nº 07</span></span>
       </header>
       <main>
         <section class="intro" aria-labelledby="intro-title">
-          <div class="kicker"><span class="kicker-dot"></span> UNE AVENTURE EN SEPT COULEURS</div>
-          <h1 id="intro-title">Et si le ciel <em>avait perdu ses couleurs ?</em></h1>
+          <div class="kicker">
+            <span class="kicker-dot"></span> UNE AVENTURE EN SEPT COULEURS
+          </div>
+          <h1 id="intro-title">
+            Et si le ciel <em>avait perdu ses couleurs ?</em>
+          </h1>
           <p>
             Accompagne Pip, une toute petite lumière, pour réparer l'aurore.
             Cours, saute, plane... et découvre pourquoi le monde s'est éteint.
@@ -35,12 +43,16 @@
             </div>
             <div class="chapter-count">
               <span>CHAPITRE</span>
-              <strong id="chapter-index" data-testid="chapter-index">01 / 07</strong>
+              <strong id="chapter-index" data-testid="chapter-index"
+                >01 / 07</strong
+              >
             </div>
           </div>
           <div class="stage-topline">
             <span><span class="live-dot"></span> LE MONDE DE PIP</span>
-            <span id="scene-progress" data-testid="scene-progress">0 % DU VOYAGE</span>
+            <span id="scene-progress" data-testid="scene-progress"
+              >0 % DU VOYAGE</span
+            >
           </div>
           <div class="world-frame">
             <canvas
@@ -54,58 +66,128 @@
             <div class="corner corner-tr"></div>
             <div class="corner corner-bl"></div>
             <div class="corner corner-br"></div>
-            <div class="world-caption"><span id="palette-label">ROSE</span><span>✦</span><span>TOUT COMMENCE ICI</span></div>
+            <div class="world-caption">
+              <span id="palette-label">ROSE</span><span>✦</span
+              ><span>TOUT COMMENCE ICI</span>
+            </div>
           </div>
           <div class="journey-track" aria-label="Avancement du chapitre">
             <span class="journey-start">DÉPART</span>
-            <div class="journey-bar"><div id="journey-fill"></div><i id="journey-dot"></i></div>
+            <div class="journey-bar">
+              <div id="journey-fill"></div>
+              <i id="journey-dot"></i>
+            </div>
             <span class="journey-end">AURORE ✳</span>
           </div>
           <div class="story-card" aria-live="polite" aria-atomic="true">
-            <div class="story-mark">✦ <span id="story-label">LE DÉBUT DE L'HISTOIRE</span></div>
+            <div class="story-mark">
+              ✦ <span id="story-label">LE DÉBUT DE L'HISTOIRE</span>
+            </div>
             <p id="story" data-testid="story"></p>
             <div class="story-foot">
               <span id="story-sparks">✳ 0 / 3 souvenirs lumineux</span>
-              <span id="story-status" data-testid="game-status">PRÊT À PARTIR</span>
+              <span id="story-status" data-testid="game-status"
+                >PRÊT À PARTIR</span
+              >
             </div>
           </div>
           <div class="controls">
-            <button type="button" id="jump" class="jump-button" data-testid="jump">✳ <span id="jump-label">Commencer l'aventure</span></button>
-            <button type="button" id="pause" class="control-button" disabled>Ⅱ Pause</button>
-            <button type="button" id="restart" class="control-button">↻ Rejouer</button>
+            <button
+              type="button"
+              id="jump"
+              class="jump-button"
+              data-testid="jump"
+            >
+              ✳ <span id="jump-label">Commencer l'aventure</span>
+            </button>
+            <button type="button" id="pause" class="control-button" disabled>
+              Ⅱ Pause
+            </button>
+            <button type="button" id="restart" class="control-button">
+              ↻ Rejouer
+            </button>
           </div>
           <div class="ending" id="ending" data-testid="ending" hidden>
             <span class="ending-kicker">✦ COULEUR RETROUVÉE</span>
             <h3 id="ending-title">La couleur renaît.</h3>
             <p id="ending-text"></p>
-            <button type="button" id="next" class="next-button">Découvrir le chapitre suivant →</button>
+            <button type="button" id="next" class="next-button">
+              Découvrir le chapitre suivant →
+            </button>
           </div>
-          <p class="controls-hint">CLAVIER : ESPACE / ↑ / W POUR SAUTER · MAINTIENS POUR PLANER · P POUR PAUSE · TOUCHER : BOUTON SAUTER</p>
+          <p class="controls-hint">
+            CLAVIER : ESPACE / ↑ / W POUR SAUTER · MAINTIENS POUR PLANER · P
+            POUR PAUSE · TOUCHER : BOUTON SAUTER
+          </p>
         </section>
         <section class="below">
           <div class="travel-card">
             <div class="card-kicker">LE CARNET DE PIP <span>✳</span></div>
             <h3>Une couleur,<br /><em>une histoire.</em></h3>
-            <div class="chapter-flowers" id="chapter-dots" aria-hidden="true"></div>
-            <div class="collected"><strong id="finished-count">00</strong><span>/ 07<br />CHAPITRES REVÉCUS</span></div>
+            <div
+              class="chapter-flowers"
+              id="chapter-dots"
+              aria-hidden="true"
+            ></div>
+            <div class="collected">
+              <strong id="finished-count">00</strong
+              ><span>/ 07<br />CHAPITRES REVÉCUS</span>
+            </div>
             <label for="chapter-select">REVOIR UN CHAPITRE DÉBLOQUÉ</label>
             <select id="chapter-select" data-testid="chapter-select"></select>
-            <p>Chaque monde raconte un morceau du mystère. Relis les dialogues, retrouve les souvenirs, revis les couleurs.</p>
+            <p>
+              Chaque monde raconte un morceau du mystère. Relis les dialogues,
+              retrouve les souvenirs, revis les couleurs.
+            </p>
           </div>
           <div class="how-card">
             <div class="card-kicker">LE GUIDE DE VOYAGE</div>
             <h3>Un geste suffit.<br /><em>Le reste, c'est l'aventure.</em></h3>
-            <div class="tip"><span>01</span><p><strong>Saute.</strong> Pip avance tout seul. Appuie pour franchir les taches d'encre.</p></div>
-            <div class="tip"><span>02</span><p><strong>Plane.</strong> Maintiens le bouton en l'air pour redescendre doucement.</p></div>
-            <div class="tip"><span>03</span><p><strong>Explore.</strong> Les petites étoiles sont des souvenirs facultatifs.</p></div>
-            <div class="tip"><span>04</span><p><strong>Continue.</strong> Les erreurs te ramènent à un point de contrôle, sans pénalité.</p></div>
+            <div class="tip">
+              <span>01</span>
+              <p>
+                <strong>Saute.</strong> Pip avance tout seul. Appuie pour
+                franchir les taches d'encre.
+              </p>
+            </div>
+            <div class="tip">
+              <span>02</span>
+              <p>
+                <strong>Plane.</strong> Maintiens le bouton en l'air pour
+                redescendre doucement.
+              </p>
+            </div>
+            <div class="tip">
+              <span>03</span>
+              <p>
+                <strong>Explore.</strong> Les petites étoiles sont des souvenirs
+                facultatifs.
+              </p>
+            </div>
+            <div class="tip">
+              <span>04</span>
+              <p>
+                <strong>Continue.</strong> Les erreurs te ramènent à un point de
+                contrôle, sans pénalité.
+              </p>
+            </div>
             <label class="promenade">
               <input type="checkbox" id="promenade" data-testid="promenade" />
-              <span><strong>Mode Promenade</strong><small>Traverse les obstacles sans collision pour profiter de l'histoire à ton rythme.</small></span>
+              <span
+                ><strong>Mode Promenade</strong
+                ><small
+                  >Traverse les obstacles sans collision pour profiter de
+                  l'histoire à ton rythme.</small
+                ></span
+              >
             </label>
           </div>
         </section>
-        <footer><span>NUAGE © LA FABRIQUE DES AURORES · 7 CHAPITRES · ZÉRO PRESSION</span><a href="../../">Tous les jeux ↗</a></footer>
+        <footer>
+          <span
+            >NUAGE © LA FABRIQUE DES AURORES · 7 CHAPITRES · ZÉRO PRESSION</span
+          ><a href="../../">Tous les jeux ↗</a>
+        </footer>
       </main>
     </div>
     <script type="module" src="/src/presentation/main.ts"></script>
