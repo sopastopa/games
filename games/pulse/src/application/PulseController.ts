@@ -20,7 +20,9 @@ export class PulseController {
   subscribe(listener: (snapshot: Snapshot) => void): () => void {
     this.listeners.add(listener);
     listener(this.snapshot);
-    return () => { this.listeners.delete(listener); };
+    return () => {
+      this.listeners.delete(listener);
+    };
   }
 
   action(): void {
@@ -45,7 +47,9 @@ export class PulseController {
     this.transition(next);
   }
 
-  togglePause(): void { this.transition(pause(this.state)); }
+  togglePause(): void {
+    this.transition(pause(this.state));
+  }
 
   suspend(): void {
     if (this.state.phase === "running") this.transition(pause(this.state));

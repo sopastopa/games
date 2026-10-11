@@ -103,7 +103,14 @@ function draw(snapshot: Snapshot): void {
   const targetEnd = snapshot.target + snapshot.halfWindow;
   arc(radius, targetStart, targetEnd, size * 0.035, "#e3a85d", 17);
   arc(radius, targetStart, targetEnd, size * 0.015, "#ffe3a1", 17);
-  arc(radius + size * 0.031, snapshot.target - 0.026, snapshot.target + 0.026, 2.2, "#fff3cf", 12);
+  arc(
+    radius + size * 0.031,
+    snapshot.target - 0.026,
+    snapshot.target + 0.026,
+    2.2,
+    "#fff3cf",
+    12,
+  );
   for (const boundary of [targetStart, targetEnd]) {
     const bx = Math.cos(boundary);
     const by = Math.sin(boundary);
@@ -120,7 +127,14 @@ function draw(snapshot: Snapshot): void {
   const pulse = 1 + (reducedMotion.matches ? 0 : 0.06 * Math.sin(time * 8));
   const active = snapshot.phase !== "lost";
   const markerColor = active ? "#ffebdb" : "#f784aa";
-  arc(radius, snapshot.angle - snapshot.direction * 0.25, snapshot.angle, size * 0.012, active ? "#fa90c0" : "#f26b91", 10);
+  arc(
+    radius,
+    snapshot.angle - snapshot.direction * 0.25,
+    snapshot.angle,
+    size * 0.012,
+    active ? "#fa90c0" : "#f26b91",
+    10,
+  );
   ctx.beginPath();
   ctx.moveTo(0, 0);
   ctx.lineTo(markerX * 0.85, markerY * 0.85);
@@ -150,7 +164,11 @@ function draw(snapshot: Snapshot): void {
   ctx.lineWidth = 1;
   ctx.stroke();
 
-  if (snapshot.phase === "ready" || snapshot.phase === "paused" || snapshot.phase === "lost") {
+  if (
+    snapshot.phase === "ready" ||
+    snapshot.phase === "paused" ||
+    snapshot.phase === "lost"
+  ) {
     ctx.fillStyle = snapshot.phase === "lost" ? "#1a102477" : "#130f2377";
     ctx.beginPath();
     ctx.arc(0, 0, size * 0.226, 0, TAU);
@@ -162,7 +180,8 @@ function draw(snapshot: Snapshot): void {
 function describe(snapshot: Snapshot): string {
   if (snapshot.phase === "ready") return "Une touche suffit pour commencer.";
   if (snapshot.phase === "paused") return "En pause. Reprends quand tu veux.";
-  if (snapshot.phase === "lost") return "Trop tôt ou trop tard. Rejoue pour battre ton record.";
+  if (snapshot.phase === "lost")
+    return "Trop tôt ou trop tard. Rejoue pour battre ton record.";
   if (snapshot.lastResult === "perfect") return "PARFAIT ! +2 points";
   if (snapshot.lastResult === "good") return "BIEN JOUÉ ! +1 point";
   return "Appuie quand la lumière entre dans l'arc.";
@@ -173,28 +192,37 @@ function render(snapshot: Snapshot): void {
   scoreLabel.textContent = String(snapshot.score);
   bestLabel.textContent = String(snapshot.bestScore);
   hitsLabel.textContent = String(snapshot.hits);
-  statusLabel.textContent = ({
-    ready: "PRÊT",
-    running: "EN JEU",
-    paused: "EN PAUSE",
-    lost: "TERMINÉ",
-  } as const)[snapshot.phase];
+  statusLabel.textContent = (
+    {
+      ready: "PRÊT",
+      running: "EN JEU",
+      paused: "EN PAUSE",
+      lost: "TERMINÉ",
+    } as const
+  )[snapshot.phase];
   feedbackLabel.textContent = describe(snapshot);
   actionButton.innerHTML = "";
-  const label = document.createTextNode(({
-    ready: "COMMENCER",
-    running: "FRAPPER",
-    paused: "REPRENDRE",
-    lost: "REJOUER",
-  } as const)[snapshot.phase] + " ");
+  const label = document.createTextNode(
+    (
+      {
+        ready: "COMMENCER",
+        running: "FRAPPER",
+        paused: "REPRENDRE",
+        lost: "REJOUER",
+      } as const
+    )[snapshot.phase] + " ",
+  );
   const arrow = document.createElement("span");
   arrow.textContent = snapshot.phase === "running" ? "◎" : "↗";
   actionButton.append(label, arrow);
-  pauseButton.disabled = snapshot.phase === "ready" || snapshot.phase === "lost";
-  pauseButton.textContent = snapshot.phase === "paused" ? "▶ Reprendre" : "⏸ Pause";
-  roundLabel.textContent = snapshot.phase === "lost"
-    ? "ESSAI TERMINÉ · REJOUEZ"
-    : `FENÊTRE ${Math.round((snapshot.halfWindow * 360) / Math.PI)}° · VITESSE ${snapshot.speed.toFixed(1)}`;
+  pauseButton.disabled =
+    snapshot.phase === "ready" || snapshot.phase === "lost";
+  pauseButton.textContent =
+    snapshot.phase === "paused" ? "▶ Reprendre" : "⏸ Pause";
+  roundLabel.textContent =
+    snapshot.phase === "lost"
+      ? "ESSAI TERMINÉ · REJOUEZ"
+      : `FENÊTRE ${Math.round((snapshot.halfWindow * 360) / Math.PI)}° · VITESSE ${snapshot.speed.toFixed(1)}`;
   canvas.setAttribute("aria-label", "Cadran PULSE. " + describe(snapshot));
   draw(snapshot);
 }
@@ -212,8 +240,12 @@ soundButton.addEventListener("click", () => {
 
 document.addEventListener("keydown", (event) => {
   const target = event.target;
-  if (target instanceof HTMLElement &&
-    (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT", "BUTTON", "A"].includes(target.tagName))) return;
+  if (
+    target instanceof HTMLElement &&
+    (target.isContentEditable ||
+      ["INPUT", "TEXTAREA", "SELECT", "BUTTON", "A"].includes(target.tagName))
+  )
+    return;
   if (event.code === "Space" || (event.code === "Enter" && target === canvas)) {
     event.preventDefault();
     game.action();

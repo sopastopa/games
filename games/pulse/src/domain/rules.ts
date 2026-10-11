@@ -53,7 +53,10 @@ export function advance(state: GameState, elapsedSeconds: number): GameState {
   };
 }
 
-export function difficulty(hits: number): { speed: number; halfWindow: number } {
+export function difficulty(hits: number): {
+  speed: number;
+  halfWindow: number;
+} {
   const value = Math.max(0, Number.isFinite(hits) ? hits : 0);
   return {
     speed: Math.min(2.75, 1.5 + value * 0.048),

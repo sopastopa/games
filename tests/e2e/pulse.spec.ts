@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 
-test("PULSE is automatically listed and returns to the catalog", async ({ page }) => {
+test("PULSE is automatically listed and returns to the catalog", async ({
+  page,
+}) => {
   await page.goto("/games/");
   const game = page.getByRole("link", { name: "Jouer à PULSE" });
   await expect(game).toBeVisible();
@@ -13,7 +15,9 @@ test("PULSE is automatically listed and returns to the catalog", async ({ page }
   await expect(game).toBeVisible();
 });
 
-test("one-tap gameplay, pause, immediate failure and quick retry", async ({ page }) => {
+test("one-tap gameplay, pause, immediate failure and quick retry", async ({
+  page,
+}) => {
   await page.goto("/games/play/pulse/");
   const action = page.getByTestId("action");
   const status = page.getByTestId("status");
@@ -34,13 +38,18 @@ test("one-tap gameplay, pause, immediate failure and quick retry", async ({ page
   await expect(status).toHaveText("PRÊT");
 });
 
-test("sound requires opt-in and a keyboard shortcut starts play", async ({ page }) => {
+test("sound requires opt-in and a keyboard shortcut starts play", async ({
+  page,
+}) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/games/play/pulse/");
   const sound = page.getByRole("button", { name: /Son : non/ });
   await expect(sound).toHaveAttribute("aria-pressed", "false");
   await sound.click();
-  await expect(page.getByRole("button", { name: /Son : oui/ })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: /Son : oui/ })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
   await page.getByTestId("dial").focus();
   await page.keyboard.press("Space");
   await expect(page.getByTestId("status")).toHaveText("EN JEU");
