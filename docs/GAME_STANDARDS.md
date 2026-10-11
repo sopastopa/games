@@ -6,6 +6,8 @@
 - Clean Architecture adaptée à la taille du jeu ; invariants testés par des fonctions pures ; pas de références au DOM dans `domain/`.
 - Entrées clavier et tactiles si pertinents ; pas de scroll intempestif pendant les contrôles ; focus clavier visible.
 - Affichage utilisable sur mobile et ordinateur ; texte accessible et commandes identifiables.
+- Mode plein écran obligatoire sur ordinateur et mobile, activable/désactivable par un bouton accessible, via l'API native ou un repli occupant le viewport. Plateau, contrôles et état doivent rester utilisables sans déformation ni débordement horizontal, en portrait comme en paysage ; gérer les redimensionnements et la sortie par Échap.
+- Tests unitaires dans chaque jeu des transitions plein écran, de l'absence de l'API et des refus de permission ; tests Playwright desktop et mobile vérifiant entrée, affichage jouable et sortie.
 - Démarrage et redémarrage prévisibles ; pause lorsque pertinente ; gestion d'état et erreurs d'exécution.
 - Lien de retour explicite au portail, sans perdre la possibilité de rejouer.
 - Ressources libres ou sous licence compatible, pas de secrets côté client, stockage cloisonné.

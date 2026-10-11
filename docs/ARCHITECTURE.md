@@ -9,7 +9,7 @@ Le repository est un monorepo pnpm. Chaque jeu est compilé en application web s
 - **Domaine** : états, invariants, physique et règles métier pures ; aucune dépendance au navigateur.
 - **Application** : cas d'usage, contrôleurs, ports de stockage/horloge/hasard, orchestration.
 - **Infrastructure** : implémentation des ports via les API du navigateur, clés préfixées par jeu.
-- **Présentation** : Canvas/DOM, événements, contrôles tactiles et accessibilité ; aucune logique métier.
+- **Présentation** : Canvas/DOM, événements, contrôles tactiles, plein écran et accessibilité ; aucune logique métier. Le plein écran est un contrôle de présentation, avec API navigateur et repli viewport, sans effet sur les règles.
 
 La direction des dépendances est présentation → application → domaine ; infrastructure satisfait des interfaces définies par les couches internes et est branchée au point d'entrée.
 
