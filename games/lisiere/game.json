@@ -1,0 +1,10 @@
+{
+  "id": "lisiere",
+  "title": "LISIÈRE",
+  "description": "Un duel stratégique à un seul geste : étends ton territoire, encercles tes rivaux et contrôle les sanctuaires.",
+  "version": "1.0.0",
+  "category": "Stratégie",
+  "icon": "◈",
+  "accent": "#cb9a62",
+  "published": true
+}
