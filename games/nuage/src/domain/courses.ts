@@ -1,0 +1,172 @@
+import type { Chapter } from "./types";
+
+export type Course = Pick<
+  Chapter,
+  | "endX"
+  | "checkpoint"
+  | "speed"
+  | "airJump"
+  | "lesson"
+  | "concept"
+  | "obstacles"
+  | "winds"
+>;
+
+// Every section introduces a concrete motor skill. Positions and timing are
+// deterministic; the player can learn the pattern rather than rely on luck.
+export const COURSES: readonly Course[] = [
+  {
+    endX: 1550,
+    checkpoint: 780,
+    speed: 238,
+    airJump: false,
+    lesson: "Une impulsion bien placée vaut mieux qu'un saut au hasard.",
+    concept: "01 · SAUT PRÉCIS",
+    obstacles: [
+      { kind: "ink", x: 500, width: 92 },
+      { kind: "ink", x: 1085, width: 104 },
+    ],
+    winds: [],
+  },
+  {
+    endX: 1800,
+    checkpoint: 1040,
+    speed: 246,
+    airJump: false,
+    lesson: "Au-dessus d'une fissure, maintiens le saut pour planer plus loin.",
+    concept: "02 · FOSSÉS & PLANÉ",
+    obstacles: [
+      { kind: "ink", x: 445, width: 86 },
+      { kind: "gap", x: 695, width: 270 },
+      { kind: "ink", x: 1190, width: 92 },
+      { kind: "gap", x: 1430, width: 250 },
+    ],
+    winds: [],
+  },
+  {
+    endX: 2030,
+    checkpoint: 1140,
+    speed: 252,
+    airJump: false,
+    lesson:
+      "Les arches sont sûres au sol : lâche le plané pour passer en dessous.",
+    concept: "03 · ARCHES BASSES",
+    obstacles: [
+      { kind: "ink", x: 410, width: 90 },
+      { kind: "arch", x: 665, width: 130, bottom: 350 },
+      { kind: "gap", x: 875, width: 200 },
+      { kind: "ink", x: 1245, width: 95 },
+      { kind: "arch", x: 1510, width: 123, bottom: 354 },
+      { kind: "gap", x: 1775, width: 140 },
+    ],
+    winds: [],
+  },
+  {
+    endX: 2310,
+    checkpoint: 1150,
+    speed: 261,
+    airJump: true,
+    lesson: "Une seconde pression dans les airs déclenche un nouveau saut.",
+    concept: "04 · DOUBLE SAUT",
+    obstacles: [
+      { kind: "ink", x: 390, width: 95 },
+      { kind: "arch", x: 665, width: 110, bottom: 356 },
+      { kind: "gap", x: 910, width: 140 },
+      { kind: "gap", x: 1330, width: 350 },
+      { kind: "ink", x: 1940, width: 98 },
+    ],
+    winds: [],
+  },
+  {
+    endX: 2580,
+    checkpoint: 1300,
+    speed: 270,
+    airJump: true,
+    lesson:
+      "Dans un courant coloré, maintiens le plané pour prendre de l'altitude ; relâche pour redescendre.",
+    concept: "05 · COURANTS ASCENDANTS",
+    obstacles: [
+      { kind: "ink", x: 365, width: 100 },
+      { kind: "gap", x: 665, width: 240 },
+      { kind: "arch", x: 1040, width: 136, bottom: 360 },
+      { kind: "ink", x: 1485, width: 95 },
+      { kind: "gap", x: 1840, width: 335 },
+      { kind: "arch", x: 2310, width: 124, bottom: 350 },
+    ],
+    winds: [
+      { x: 585, width: 230, lift: 780 },
+      { x: 1770, width: 300, lift: 830 },
+    ],
+  },
+  {
+    endX: 2810,
+    checkpoint: 1390,
+    speed: 279,
+    airJump: true,
+    lesson:
+      "Les lucioles d'encre oscillent : observe leur rythme avant d'agir.",
+    concept: "06 · DANGERS MOBILES",
+    obstacles: [
+      { kind: "ink", x: 350, width: 95 },
+      { kind: "arch", x: 630, width: 118, bottom: 349 },
+      {
+        kind: "orb",
+        x: 860,
+        width: 40,
+        centerY: 336,
+        amplitude: 56,
+        frequency: 3.2,
+      },
+      { kind: "gap", x: 1110, width: 215 },
+      { kind: "ink", x: 1580, width: 95 },
+      {
+        kind: "orb",
+        x: 1845,
+        width: 40,
+        centerY: 345,
+        amplitude: 54,
+        frequency: 2.8,
+        phase: 1.3,
+      },
+      { kind: "gap", x: 2110, width: 250 },
+      { kind: "arch", x: 2500, width: 127, bottom: 356 },
+    ],
+    winds: [{ x: 2020, width: 240, lift: 710 }],
+  },
+  {
+    endX: 3200,
+    checkpoint: 1650,
+    speed: 291,
+    airJump: true,
+    lesson:
+      "Enchaîne sauts, planés, secondes impulsions et descentes sous les arches : tu connais maintenant tous les gestes.",
+    concept: "07 · LA GRANDE AURORE",
+    obstacles: [
+      { kind: "ink", x: 350, width: 102 },
+      { kind: "arch", x: 595, width: 132, bottom: 353 },
+      { kind: "gap", x: 838, width: 242 },
+      {
+        kind: "orb",
+        x: 1260,
+        width: 40,
+        centerY: 350,
+        amplitude: 54,
+        frequency: 3.5,
+      },
+      { kind: "ink", x: 1490, width: 96 },
+      { kind: "gap", x: 1860, width: 355 },
+      { kind: "arch", x: 2365, width: 135, bottom: 354 },
+      {
+        kind: "orb",
+        x: 2665,
+        width: 40,
+        centerY: 346,
+        amplitude: 51,
+        frequency: 3.1,
+        phase: 0.6,
+      },
+      { kind: "ink", x: 2960, width: 110 },
+    ],
+    winds: [{ x: 1760, width: 350, lift: 880 }],
+  },
+];

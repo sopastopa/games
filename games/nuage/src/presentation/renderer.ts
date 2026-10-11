@@ -1,4 +1,4 @@
-import { WORLD } from "../domain/rules";
+import { WORLD, orbY } from "../domain/rules";
 import type { Chapter, View } from "../domain/types";
 
 const TWO_PI = Math.PI * 2;
@@ -160,41 +160,141 @@ function scenery(
   }
 }
 
+function paintWinds(
+  ctx: CanvasRenderingContext2D,
+  chapter: Chapter,
+  camera: number,
+): void {
+  for (const wind of chapter.winds) {
+    const x = wind.x - camera;
+    if (x > WORLD.width || x + wind.width < 0) continue;
+    ctx.save();
+    const gradient = ctx.createLinearGradient(x, WORLD.ground, x, 135);
+    gradient.addColorStop(0, "#72fce299");
+    gradient.addColorStop(1, "#ffffff00");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(x, 135, wind.width, WORLD.ground - 135);
+    ctx.strokeStyle = "#e8fff2b8";
+    ctx.lineWidth = 3;
+    for (let col = 0; col < 3; col++) {
+      const centerX = x + ((col + 0.5) * wind.width) / 3;
+      for (let row = 0; row < 3; row++) {
+        const y = WORLD.ground - 62 - row * 72;
+        ctx.beginPath();
+        ctx.moveTo(centerX - 11, y + 11);
+        ctx.lineTo(centerX, y - 2);
+        ctx.lineTo(centerX + 11, y + 11);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+}
+
 function paintHazards(
   ctx: CanvasRenderingContext2D,
   chapter: Chapter,
   camera: number,
   promenade: boolean,
+  elapsed: number,
 ): void {
   for (const obstacle of chapter.obstacles) {
     const x = obstacle.x - camera;
-    if (x < -130 || x > WORLD.width + 60) continue;
+    if (x < -410 || x > WORLD.width + 60) continue;
     ctx.save();
-    ctx.globalAlpha = promenade ? 0.35 : 1;
-    ctx.fillStyle = "#302342";
-    ctx.beginPath();
-    ctx.moveTo(x, WORLD.ground + 2);
-    ctx.quadraticCurveTo(
-      x + 6,
-      WORLD.ground - 33,
-      x + obstacle.width * 0.24,
-      WORLD.ground - 23,
-    );
-    ctx.quadraticCurveTo(
-      x + obstacle.width * 0.48,
-      WORLD.ground - 58,
-      x + obstacle.width * 0.7,
-      WORLD.ground - 25,
-    );
-    ctx.quadraticCurveTo(
-      x + obstacle.width,
-      WORLD.ground - 49,
-      x + obstacle.width,
-      WORLD.ground,
-    );
-    ctx.closePath();
-    ctx.fill();
-    circle(ctx, x + obstacle.width * 0.5, WORLD.ground - 24, 4.5, "#fff1a0");
+    ctx.globalAlpha = promenade ? 0.38 : 1;
+    if (obstacle.kind === "gap") {
+      const deep = ctx.createLinearGradient(0, WORLD.ground, 0, WORLD.height);
+      deep.addColorStop(0, "#241738");
+      deep.addColorStop(1, "#080c2a");
+      ctx.fillStyle = deep;
+      ctx.fillRect(
+        x,
+        WORLD.ground - 1,
+        obstacle.width,
+        WORLD.height - WORLD.ground + 3,
+      );
+      ctx.strokeStyle = "#fae4ff";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(x, WORLD.ground);
+      ctx.lineTo(x, WORLD.ground + 34);
+      ctx.moveTo(x + obstacle.width, WORLD.ground);
+      ctx.lineTo(x + obstacle.width, WORLD.ground + 34);
+      ctx.stroke();
+      for (let i = 0; i < Math.floor(obstacle.width / 26); i++) {
+        circle(
+          ctx,
+          x + 16 + i * 26,
+          WORLD.ground + 50 + (i % 2) * 18,
+          2.5,
+          "#f5cdff",
+        );
+      }
+      if (promenade) {
+        ctx.fillStyle = "#d1fff0b8";
+        ctx.fillRect(x, WORLD.ground - 2, obstacle.width, 6);
+      }
+    } else if (obstacle.kind === "arch") {
+      const bottom = obstacle.bottom ?? 350;
+      ctx.fillStyle = "#423050";
+      ctx.beginPath();
+      ctx.moveTo(x, 40);
+      ctx.lineTo(x + obstacle.width, 40);
+      ctx.lineTo(x + obstacle.width, bottom - 18);
+      ctx.quadraticCurveTo(x + obstacle.width / 2, bottom + 17, x, bottom - 18);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "#fdb8de";
+      ctx.fillRect(x + 10, 40, 6, bottom - 87);
+      ctx.fillRect(x + obstacle.width - 16, 40, 6, bottom - 87);
+      ctx.fillStyle = "#fff1a8";
+      circle(ctx, x + obstacle.width / 2, bottom - 20, 12, "#fff1a8");
+      ctx.fillStyle = "#413052";
+      ctx.font = "bold 18px sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("↓", x + obstacle.width / 2, bottom - 13);
+    } else if (obstacle.kind === "orb") {
+      const y = orbY(obstacle, elapsed);
+      const center = x + obstacle.width / 2;
+      ctx.shadowColor = "#ff45c0";
+      ctx.shadowBlur = 24;
+      circle(ctx, center, y, obstacle.width * 0.48 + 7, "#ff74c4aa");
+      ctx.shadowBlur = 0;
+      circle(ctx, center, y, obstacle.width * 0.45, "#402654");
+      circle(ctx, center + 5, y - 5, 7, "#fff18a");
+      circle(ctx, center - 9, y + 7, 4, "#ff9ede");
+      ctx.strokeStyle = "#ffffffbd";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(center, y, obstacle.width * 0.48 + 17, 0.3, 2.5);
+      ctx.stroke();
+    } else {
+      ctx.fillStyle = "#302342";
+      ctx.beginPath();
+      ctx.moveTo(x, WORLD.ground + 2);
+      ctx.quadraticCurveTo(
+        x + 6,
+        WORLD.ground - 33,
+        x + obstacle.width * 0.24,
+        WORLD.ground - 23,
+      );
+      ctx.quadraticCurveTo(
+        x + obstacle.width * 0.48,
+        WORLD.ground - 58,
+        x + obstacle.width * 0.7,
+        WORLD.ground - 25,
+      );
+      ctx.quadraticCurveTo(
+        x + obstacle.width,
+        WORLD.ground - 49,
+        x + obstacle.width,
+        WORLD.ground,
+      );
+      ctx.closePath();
+      ctx.fill();
+      circle(ctx, x + obstacle.width * 0.5, WORLD.ground - 24, 4.5, "#fff1a0");
+    }
     ctx.restore();
   }
 }
@@ -294,7 +394,8 @@ export function drawWorld(
     const x = (((i * 119 - camera * 0.98) % 1100) + 1100) % 1100;
     circle(ctx, x, 451 + (i % 4) * 21, i % 3 === 0 ? 4 : 2.5, "#ffffff5f");
   }
-  paintHazards(ctx, chapter, camera, view.progress.promenade);
+  paintWinds(ctx, chapter, camera);
+  paintHazards(ctx, chapter, camera, view.progress.promenade, run.elapsed);
   const flagX = chapter.checkpoint - camera;
   if (flagX > -50 && flagX < WORLD.width + 50) {
     ctx.fillStyle = palette.ink;

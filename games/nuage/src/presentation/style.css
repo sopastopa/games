@@ -876,3 +876,92 @@ footer a {
     animation: none !important;
   }
 }
+
+.challenge-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 17px;
+  margin: -7px 0 23px;
+  background: #f0e5ff;
+  border: 2px solid #c7a3ed;
+  border-radius: 12px;
+}
+
+.challenge-pill {
+  background: #493066;
+  color: #fff8da;
+  border-radius: 99px;
+  padding: 9px 13px;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+
+.challenge-banner p {
+  margin: 0;
+  flex: 1 1 200px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #423154;
+  font-weight: 700;
+}
+
+.challenge-meter {
+  padding: 7px 10px;
+  border-radius: 6px;
+  background: #d9fff2;
+  color: #326d60;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.obstacle-guide {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 20px;
+  margin-top: 22px;
+  font-size: 11px;
+  color: #5b4b70;
+  line-height: 1.6;
+}
+
+.obstacle-guide span {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.obstacle-guide b {
+  font-size: 18px;
+  color: #bd4d8b;
+}
+
+@media (max-width: 560px) {
+  .challenge-banner {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .challenge-pill {
+    font-size: 10px;
+  }
+
+  .obstacle-guide {
+    justify-content: flex-start;
+  }
+}
+
+.incident {
+  flex: 1 1 100%;
+  padding: 7px 11px;
+  border-radius: 7px;
+  background: #fff2d1;
+  color: #7e4f29;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+}

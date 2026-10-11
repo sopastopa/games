@@ -48,6 +48,24 @@
               >
             </div>
           </div>
+          <div class="challenge-banner" aria-label="Nouveau défi du chapitre">
+            <span
+              class="challenge-pill"
+              id="chapter-concept"
+              data-testid="chapter-concept"
+              >01 · SAUT PRÉCIS</span
+            >
+            <p id="chapter-lesson">Une impulsion au bon moment change tout.</p>
+            <span class="challenge-meter" id="ability" data-testid="ability"
+              >PLANÉ · DISPONIBLE</span
+            >
+            <span
+              class="incident"
+              id="incident"
+              data-testid="incident"
+              hidden
+            ></span>
+          </div>
           <div class="stage-topline">
             <span><span class="live-dot"></span> LE MONDE DE PIP</span>
             <span id="scene-progress" data-testid="scene-progress"
@@ -114,6 +132,13 @@
             <button type="button" id="next" class="next-button">
               Découvrir le chapitre suivant →
             </button>
+          </div>
+          <div class="obstacle-guide" aria-label="Légende des dangers">
+            <span><b>▰</b> Encre : saute</span>
+            <span><b>▱</b> Fossé : franchis en l'air</span>
+            <span><b>↓</b> Arche : reste bas</span>
+            <span><b>↟</b> Courant : plane</span>
+            <span><b>●</b> Luciole : anticipe son mouvement</span>
           </div>
           <p class="controls-hint">
             CLAVIER : ESPACE / ↑ / W POUR SAUTER · MAINTIENS POUR PLANER · P

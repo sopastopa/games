@@ -24,6 +24,10 @@ const place = required<HTMLElement>("place");
 const chapterTitle = required<HTMLElement>("chapter-title");
 const chapterIndex = required<HTMLElement>("chapter-index");
 const progress = required<HTMLElement>("scene-progress");
+const concept = required<HTMLElement>("chapter-concept");
+const lesson = required<HTMLElement>("chapter-lesson");
+const ability = required<HTMLElement>("ability");
+const incident = required<HTMLElement>("incident");
 const journeyFill = required<HTMLElement>("journey-fill");
 const journeyDot = required<HTMLElement>("journey-dot");
 const storyLabel = required<HTMLElement>("story-label");
@@ -111,6 +115,38 @@ function render(view: View): void {
   text(chapterTitle, chapter.title);
   text(chapterIndex, chapter.number + " / 07");
   text(paletteLabel, chapter.colorName.toUpperCase());
+  text(concept, chapter.concept);
+  text(lesson, chapter.lesson);
+  text(
+    ability,
+    run.grounded
+      ? (chapter.airJump ? "✦ DOUBLE SAUT PRÊT" : "✳ SAUT PRÊT") +
+          " · PLANÉ RECHARGÉ"
+      : (chapter.airJump
+          ? run.airJumps > 0
+            ? "✦ 2e SAUT DISPONIBLE"
+            : "✦ 2e SAUT UTILISÉ"
+          : "✳ EN VOL") +
+          " · PLANÉ " +
+          Math.round((run.glide / WORLD.glideSeconds) * 100) +
+          " %",
+  );
+  incident.hidden = run.lastHit === null;
+  const explanations = {
+    ink: "Encre touchée : saute un peu plus tôt.",
+    gap: "Fossé manqué : utilise le plané ou le second saut.",
+    arch: "Arche heurtée : laisse Pip redescendre avant de passer.",
+    orb: "Luciole touchée : adapte ton saut à son mouvement.",
+  };
+  text(incident, run.lastHit ? explanations[run.lastHit] : "");
+  canvas.setAttribute(
+    "aria-label",
+    "Plateau NUAGE : " +
+      chapter.concept +
+      ". " +
+      chapter.lesson +
+      " Utilise Espace, flèche haut ou le bouton Sauter.",
+  );
   const percentage = Math.round((run.x / chapter.endX) * 100);
   text(progress, percentage + " % DU VOYAGE");
   journeyFill.style.width = percentage + "%";
@@ -150,7 +186,9 @@ function render(view: View): void {
         ? "Reprendre l'aventure"
         : run.phase === "complete"
           ? "Chapitre terminé"
-          : "SAUTER · maintenir pour planer",
+          : !run.grounded && chapter.airJump && run.airJumps > 0
+            ? "✦ DEUXIÈME SAUT"
+            : "SAUTER · maintenir pour planer",
   );
   jumpButton.disabled = run.phase === "complete";
   pauseButton.disabled = run.phase === "ready" || run.phase === "complete";

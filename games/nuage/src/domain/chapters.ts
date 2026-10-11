@@ -1,6 +1,14 @@
 import type { Chapter } from "./types";
+import { COURSES } from "./courses";
 
-export const CHAPTERS: readonly Chapter[] = [
+type Story = Omit<
+  Chapter,
+  "speed" | "airJump" | "lesson" | "concept" | "winds" | "obstacles"
+> & {
+  obstacles: readonly { x: number; width: number }[];
+};
+
+const STORIES: readonly Story[] = [
   {
     id: "rose",
     number: "01",
@@ -267,3 +275,8 @@ export const CHAPTERS: readonly Chapter[] = [
     ],
   },
 ];
+
+export const CHAPTERS: readonly Chapter[] = STORIES.map((story, index) => ({
+  ...story,
+  ...COURSES[index]!,
+}));

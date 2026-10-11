@@ -1,16 +1,30 @@
 # NUAGE — La fabrique des aurores
 
-**Une aventure colorée en sept chapitres : un geste pour sauter, une histoire à vivre.**
+**Une aventure colorée en sept chapitres : une commande, six techniques à maîtriser et une histoire à vivre.**
 
 Pip, une petite créature lumineuse, traverse sept paysages dont les couleurs ont disparu. De Roselune à la fabrique des aurores, les lettres de Mima, ancienne gardienne du ciel, révèlent peu à peu ce qui a réellement provoqué la disparition de la lumière. L'histoire se développe dans le décor, dans les dialogues avant et pendant la course, et dans les dénouements des chapitres.
 
 ## Commandes
 
-- Pip avance automatiquement. **Espace, ↑, W** ou le bouton **Sauter** : saut ; maintien pendant la descente : plané temporaire.
+- Pip avance automatiquement. **Espace, ↑, W** ou le bouton **Sauter** : saut ; maintien pendant la descente : plané temporaire. À partir du chapitre 4, une seconde pression en l'air déclenche **un double saut** (une fois par saut).
 - **P ou Échap** : pause ou reprise ; « Rejouer » ramène au début du chapitre.
-- **Mode Promenade** désactive les collisions avec les taches d'encre : toute l'histoire est accessible sans exigence d'adresse.
+- **Mode Promenade** désactive toutes les collisions (encre, fossés, arches, lucioles mobiles) : toute l'histoire reste accessible sans exigence d'adresse.
 - Retour « Tous les jeux » vers le portail.
-- Chaque monde comporte un point de contrôle. Pas de limite de vies, de chronomètre ni de pénalité pour recommencer.
+- Chaque monde comporte un point de contrôle. L'erreur et son type sont indiqués à l'écran. Pas de limite de vies, de chronomètre ni de pénalité pour recommencer.
+
+## Apprentissage du gameplay
+
+| Chapitre   | Compétence introduite    | Défi                                                              |
+| ---------- | ------------------------ | ----------------------------------------------------------------- |
+| 1 — Rose   | Timing du saut           | Deux flaques élargies ; apprendre à décoller au bon endroit.      |
+| 2 — Orange | Plané contrôlé           | Fossés longs exigeant de gérer la descente.                       |
+| 3 — Jaune  | Alternance haute / basse | Passer au-dessus des fossés, puis sous des arches.                |
+| 4 — Vert   | Double saut              | Un seul second saut disponible en l'air ; long fossé à enchaîner. |
+| 5 — Bleu   | Courants ascendants      | Maintenir pour être porté, relâcher pour redescendre.             |
+| 6 — Violet | Dangers mobiles          | Lucioles qui oscillent ; rythme et lecture du décor.              |
+| 7 — Aurore | Combinaison              | Alternance de tous les types de défis à vitesse accrue.           |
+
+Les obstacles et leur rythme sont fixes : aucune difficulté aléatoire. La vitesse augmente de 238 à 291 unités/s, tandis que les courses deviennent plus longues et combinent des éléments appris. L'intégralité des sept chapitres est automatiquement traversée sans aucune collision par des traces d'actions normales dans `tests/unit/courses.test.ts` : ces tests empêchent de livrer un chapitre impossible.
 
 ## Campagne et narration
 

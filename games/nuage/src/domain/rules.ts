@@ -1,4 +1,4 @@
-import type { Chapter, Run } from "./types";
+import type { Chapter, Obstacle, Run } from "./types";
 
 export const WORLD = {
   width: 960,
@@ -13,6 +13,14 @@ export const WORLD = {
   obstacleHeight: 37,
 } as const;
 
+export function orbY(obstacle: Obstacle, elapsed: number): number {
+  return (
+    (obstacle.centerY ?? 340) +
+    Math.sin(elapsed * (obstacle.frequency ?? 3) + (obstacle.phase ?? 0)) *
+      (obstacle.amplitude ?? 0)
+  );
+}
+
 export function validateChapter(chapter: Chapter): void {
   if (
     !chapter.id ||
@@ -20,20 +28,50 @@ export function validateChapter(chapter: Chapter): void {
     chapter.endX <= 400 ||
     !Number.isFinite(chapter.checkpoint) ||
     chapter.checkpoint <= 100 ||
-    chapter.checkpoint >= chapter.endX
+    chapter.checkpoint >= chapter.endX ||
+    !Number.isFinite(chapter.speed) ||
+    chapter.speed < 150 ||
+    chapter.speed > 360
   )
     throw new Error("Invalid chapter: " + chapter.id);
+  let previousEnd = 160;
   for (const obstacle of chapter.obstacles) {
     if (
       !Number.isFinite(obstacle.x) ||
       !Number.isFinite(obstacle.width) ||
       obstacle.width <= 0 ||
-      obstacle.x <= 160 ||
-      obstacle.x + obstacle.width >= chapter.endX ||
-      (obstacle.x <= chapter.checkpoint &&
-        obstacle.x + obstacle.width >= chapter.checkpoint - 25)
+      obstacle.x <= previousEnd + 25 ||
+      obstacle.x + obstacle.width >= chapter.endX - 60 ||
+      Math.abs(chapter.checkpoint - obstacle.x) < WORLD.radius + 30 ||
+      (chapter.checkpoint >= obstacle.x &&
+        chapter.checkpoint <=
+          obstacle.x + obstacle.width + WORLD.radius + 30) ||
+      (obstacle.kind === "arch" &&
+        (!Number.isFinite(obstacle.bottom) ||
+          (obstacle.bottom ?? 0) < 310 ||
+          (obstacle.bottom ?? 0) >= WORLD.ground - WORLD.radius)) ||
+      (obstacle.kind === "orb" &&
+        (!Number.isFinite(obstacle.centerY) ||
+          !Number.isFinite(obstacle.amplitude) ||
+          !Number.isFinite(obstacle.frequency) ||
+          (obstacle.amplitude ?? 0) < 0 ||
+          (obstacle.frequency ?? 0) <= 0))
     )
       throw new Error("Invalid obstacle: " + chapter.id);
+    previousEnd = obstacle.x + obstacle.width;
+  }
+  for (const wind of chapter.winds) {
+    if (
+      !Number.isFinite(wind.x) ||
+      !Number.isFinite(wind.width) ||
+      !Number.isFinite(wind.lift) ||
+      wind.x < 100 ||
+      wind.x + wind.width >= chapter.endX ||
+      wind.width <= 0 ||
+      wind.lift < 100 ||
+      wind.lift > 1500
+    )
+      throw new Error("Invalid wind: " + chapter.id);
   }
   for (const spark of chapter.sparks) {
     if (
@@ -56,9 +94,13 @@ export function createRun(chapter: Chapter): Run {
     y: WORLD.ground - WORLD.radius,
     vy: 0,
     grounded: true,
+    grace: 0,
+    airJumps: chapter.airJump ? 1 : 0,
+    elapsed: 0,
     glide: WORLD.glideSeconds,
     checkpoint: 80,
     tries: 0,
+    lastHit: null,
     sparks: [],
     beat: "opening",
   };
@@ -75,12 +117,80 @@ export function pause(run: Run): Run {
 }
 
 export function jump(run: Run): Run {
-  if (run.phase !== "running" || !run.grounded) return run;
+  if (
+    run.phase !== "running" ||
+    (!run.grounded && run.grace <= 0 && run.airJumps <= 0)
+  )
+    return run;
+  const usingSecondJump = !run.grounded && run.grace <= 0;
   return {
     ...run,
     grounded: false,
+    grace: 0,
+    airJumps: run.airJumps - (usingSecondJump ? 1 : 0),
     vy: WORLD.jumpSpeed,
     glide: WORLD.glideSeconds,
+  };
+}
+
+function overGap(x: number, chapter: Chapter): boolean {
+  return chapter.obstacles.some(
+    (obstacle) =>
+      obstacle.kind === "gap" &&
+      x >= obstacle.x &&
+      x <= obstacle.x + obstacle.width,
+  );
+}
+
+function touchesObstacle(
+  x: number,
+  y: number,
+  elapsed: number,
+  obstacle: Obstacle,
+): boolean {
+  if (obstacle.kind === "gap") return false;
+  if (obstacle.kind === "orb") {
+    const orbX = obstacle.x + obstacle.width / 2;
+    return (
+      Math.hypot(x - orbX, y - orbY(obstacle, elapsed)) <
+      WORLD.radius + obstacle.width * 0.45
+    );
+  }
+  const overlapsX =
+    x + WORLD.radius > obstacle.x &&
+    x - WORLD.radius < obstacle.x + obstacle.width;
+  if (!overlapsX) return false;
+  if (obstacle.kind === "arch")
+    return (
+      y - WORLD.radius < (obstacle.bottom ?? 350) && y + WORLD.radius > 155
+    );
+  return y + WORLD.radius > WORLD.ground - WORLD.obstacleHeight;
+}
+
+function respawn(
+  run: Run,
+  chapter: Chapter,
+  elapsed: number,
+  checkpoint: number,
+  beat: Run["beat"],
+  sparks: readonly number[],
+  lastHit: Obstacle["kind"],
+): Run {
+  return {
+    ...run,
+    x: checkpoint,
+    y: WORLD.ground - WORLD.radius,
+    vy: 0,
+    grounded: true,
+    grace: 0,
+    airJumps: chapter.airJump ? 1 : 0,
+    glide: WORLD.glideSeconds,
+    elapsed,
+    checkpoint,
+    beat,
+    sparks,
+    tries: run.tries + 1,
+    lastHit,
   };
 }
 
@@ -96,21 +206,34 @@ export function step(
     ? Math.min(1 / 30, Math.max(0, elapsedSeconds))
     : 0;
   if (!dt) return run;
-  const x = Math.min(chapter.endX, run.x + WORLD.speed * dt);
-  let vy = run.vy;
-  let y = run.y;
-  let glide = run.glide;
-  let grounded = run.grounded;
+
+  const x = Math.min(chapter.endX, run.x + chapter.speed * dt);
+  const elapsed = run.elapsed + dt;
+  const gap = !promenade && overGap(x, chapter);
+  let { vy, y, glide, grounded, grace, airJumps } = run;
+
+  if (grounded && gap) {
+    grounded = false;
+    grace = 0.1;
+  }
   if (!grounded) {
-    const gliding = holding && vy > 0 && glide > 0;
+    const gliding = holding && glide > 0 && vy >= 0;
+    const currentLift =
+      holding && glide > 0
+        ? (chapter.winds.find((wind) => x >= wind.x && x <= wind.x + wind.width)
+            ?.lift ?? 0)
+        : 0;
     const gravity = gliding ? WORLD.glideGravity : WORLD.gravity;
-    vy = Math.min(830, vy + gravity * dt);
+    vy = Math.max(-680, Math.min(830, vy + (gravity - currentLift) * dt));
     y += vy * dt;
-    if (gliding) glide = Math.max(0, glide - dt);
-    if (y >= WORLD.ground - WORLD.radius) {
+    if (gliding || currentLift > 0) glide = Math.max(0, glide - dt);
+    grace = Math.max(0, grace - dt);
+    if (y >= WORLD.ground - WORLD.radius && !gap) {
       y = WORLD.ground - WORLD.radius;
       vy = 0;
       grounded = true;
+      grace = 0;
+      airJumps = chapter.airJump ? 1 : 0;
       glide = WORLD.glideSeconds;
     }
   }
@@ -122,28 +245,24 @@ export function step(
     if (!sparks.includes(index) && Math.hypot(x - spark.x, y - spark.y) < 43)
       sparks.push(index);
   });
-  if (
-    !promenade &&
-    chapter.obstacles.some(
-      (obstacle) =>
-        x + WORLD.radius > obstacle.x &&
-        x - WORLD.radius < obstacle.x + obstacle.width &&
-        y + WORLD.radius > WORLD.ground - WORLD.obstacleHeight,
-    )
-  ) {
-    return {
-      ...run,
-      x: checkpoint,
-      y: WORLD.ground - WORLD.radius,
-      vy: 0,
-      grounded: true,
-      glide: WORLD.glideSeconds,
+
+  const collision = !promenade
+    ? chapter.obstacles.find((obstacle) =>
+        touchesObstacle(x, y, elapsed, obstacle),
+      )
+    : undefined;
+  if (!promenade && (y > WORLD.ground + 43 || collision)) {
+    return respawn(
+      run,
+      chapter,
+      elapsed,
       checkpoint,
       beat,
       sparks,
-      tries: run.tries + 1,
-    };
+      collision?.kind ?? "gap",
+    );
   }
+
   return {
     ...run,
     phase: x >= chapter.endX ? "complete" : "running",
@@ -152,6 +271,9 @@ export function step(
     vy,
     glide,
     grounded,
+    grace,
+    airJumps,
+    elapsed,
     checkpoint,
     beat: x >= chapter.endX ? "ending" : beat,
     sparks,

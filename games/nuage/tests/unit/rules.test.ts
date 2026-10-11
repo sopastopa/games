@@ -56,7 +56,7 @@ describe("NUAGE — simulation pure", () => {
     expect(step(run, chapter, -4, false, true)).toBe(run);
     expect(step(run, chapter, Number.NaN, false, true)).toBe(run);
     expect(step(run, chapter, 8, false, true).x - run.x).toBeCloseTo(
-      WORLD.speed / 30,
+      chapter.speed / 30,
     );
   });
 
@@ -137,7 +137,7 @@ describe("NUAGE — simulation pure", () => {
     expect(() =>
       validateChapter({
         ...chapter,
-        obstacles: [{ x: chapter.checkpoint - 10, width: 40 }],
+        obstacles: [{ kind: "ink", x: chapter.checkpoint - 10, width: 40 }],
       }),
     ).toThrow("Invalid obstacle");
     expect(() =>
