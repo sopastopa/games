@@ -842,3 +842,154 @@ a[data-testid="back-home"]:focus-visible {
     transition: none;
   }
 }
+
+/* GAMES / visual identity — quiet outer frame shared across the collection. */
+:root {
+  --site-paper: #f7f8f5;
+  --site-ink: #263630;
+  --site-muted: #65746a;
+  --site-line: #dce4dc;
+  --site-accent: #316a5b;
+  font-family: "DM Sans", "Avenir Next", ui-sans-serif, system-ui, sans-serif;
+  color: var(--site-ink);
+  background: var(--site-paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  color: var(--site-ink);
+  background: var(--site-paper);
+}
+
+:is(.shell, .page, .page-shell) {
+  width: min(100% - 76px, 1280px);
+  padding-inline: 0;
+  margin-inline: auto;
+}
+
+:is(.topbar, .masthead) {
+  height: auto;
+  min-height: 86px;
+  border-bottom: 1px solid var(--site-line);
+  gap: 24px;
+}
+
+:is(.back, .back-link, .home-link) {
+  color: #405c50;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+:is(.back, .back-link, .home-link):hover {
+  color: #246452;
+}
+
+:is(button, input, select, a, canvas):focus-visible {
+  outline: 3px solid #3f8771;
+  outline-offset: 3px;
+}
+
+:is(button, select, input) {
+  font-family: inherit;
+}
+
+button:not(:disabled),
+select,
+input {
+  touch-action: manipulation;
+}
+
+button,
+select {
+  border-radius: 8px;
+}
+
+@media (max-width: 760px) {
+  :is(.shell, .page, .page-shell) {
+    width: min(100% - 36px, 1280px);
+  }
+
+  :is(.topbar, .masthead) {
+    min-height: 72px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.wordmark {
+  color: #346a59;
+}
+.wordmark small {
+  color: #788d7e;
+}
+.hero {
+  padding-block: 66px 46px;
+}
+.hero h1 {
+  color: #263630;
+  font-family: "Space Grotesk", "DM Sans", sans-serif;
+}
+.hero h1 em {
+  color: #3b7964;
+}
+.hero p {
+  color: #64796c;
+}
+.eyebrow {
+  color: #38715f;
+}
+.signal {
+  background: #4f9b79;
+  box-shadow: none;
+}
+.layout {
+  gap: 24px;
+}
+.game-panel {
+  color: #eaf2ee;
+  border: 1px solid #d7e0d8;
+  border-radius: 10px;
+  box-shadow: none;
+}
+.progress-card,
+.rule-card {
+  color: #eaf2ee;
+  border-radius: 10px;
+  border-color: #304f47;
+  background: #244339;
+}
+.game-panel .eyebrow {
+  color: #a7f3c1;
+}
+.game-panel .stage-tag strong {
+  color: #f0f5ed;
+}
+.game-panel button {
+  border-radius: 7px;
+}
+.sidebar .quiet-note {
+  color: #65786c;
+}
+footer {
+  color: #65786c;
+}
+footer a {
+  color: #316a5b;
+}
+@media (max-width: 760px) {
+  .hero {
+    padding-top: 45px;
+  }
+}

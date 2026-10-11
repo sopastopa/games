@@ -42,3 +42,15 @@ Les sept jeux sont des expériences **autonomes** avec leur propre direction art
 ## Vérification
 
 Les tests Playwright couvrent l'inventaire des jeux, les liens préservés, les catégories, la recherche (accents, casse, zéro résultat), la navigation clavier/retour, et la disposition sur téléphone. Les tests de gameplay de tous les jeux continuent de fonctionner indépendamment.
+
+## Cadre clair transversal — réconciliation des expériences
+
+La collection et les écrans des jeux emploient désormais un même **fond de papier clair** (`#f7f8f5`), une couleur d'encre (`#263630`), des séparateurs très légers et les mêmes polices. Les cadres suppriment les rayonnements décoratifs et les ombres excessives. À l'intérieur de chaque expérience, **les plateaux peuvent rester sombres** lorsqu'ils ont été conçus ainsi pour la lisibilité des pions, des cibles ou des dangers.
+
+Ce n'est pas un nouveau moteur visuel partagé : les feuilles de style restent dans chacun des sept jeux autonomes. Un petit groupe de tokens `--site-paper`, `--site-ink`, `--site-muted`, `--site-line` et `--site-accent` est reproduit localement. Le lien de retour harmonisé qui existait sur les sept jeux est conservé, tout comme les palettes et comportements interactifs propres à chaque titre.
+
+### Contrôles de non-régression
+
+Le test `tests/e2e/game-frames.spec.ts` parcourt les sept jeux et vérifie la navigation de retour, la teinte claire du fond de page et l'absence de défilement horizontal au format téléphone. Ce test complète `tests/e2e/portal-design.spec.ts` qui vérifie filtres, recherche, états vides et parcours du catalogue.
+
+Aucun changement n'est apporté au domaine, à la logique métier, à la persistance ou aux contrôles des jeux.
