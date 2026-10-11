@@ -1,0 +1,10 @@
+{
+  "id": "rebond",
+  "title": "REBOND",
+  "description": "Un geste, une bille et la trajectoire parfaite. Vise, lance et maîtrise les ricochets.",
+  "version": "1.0.0",
+  "category": "Adresse",
+  "icon": "◉",
+  "accent": "#ffb78b",
+  "published": true
+}
