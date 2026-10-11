@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { TorsionController } from "../../src/application/TorsionController";
-import type {
-  Progress,
-  ProgressStore,
-} from "../../src/application/ports";
+import type { Progress, ProgressStore } from "../../src/application/ports";
 
 function fakeStore(initial: Progress | null = null): {
   store: ProgressStore;

@@ -15,9 +15,7 @@ describe("TORSION — domain", () => {
     const stage = STAGES[0]!;
     const source = Array.from({ length: 16 }, (_, index) => index);
     const turned = rotate(source, stage, 0);
-    expect([turned[0], turned[1], turned[4], turned[5]]).toEqual([
-      4, 0, 5, 1,
-    ]);
+    expect([turned[0], turned[1], turned[4], turned[5]]).toEqual([4, 0, 5, 1]);
     expect(source[0]).toBe(0);
     expect(rotate(turned, stage, 0, true)).toEqual(source);
   });
@@ -81,14 +79,14 @@ describe("TORSION — domain", () => {
 
   it("rejects invalid terrain and duplicate targets", () => {
     const first = STAGES[0]!;
-    expect(() =>
-      validateStage({ ...first, goals: [5, 5] }),
-    ).toThrow("Invalid stage layout");
-    expect(() =>
-      validateStage({ ...first, rocks: [5] }),
-    ).toThrow("Invalid stage layout");
-    expect(() =>
-      validateStage({ ...first, scramble: [3] }),
-    ).toThrow("Invalid stage layout");
+    expect(() => validateStage({ ...first, goals: [5, 5] })).toThrow(
+      "Invalid stage layout",
+    );
+    expect(() => validateStage({ ...first, rocks: [5] })).toThrow(
+      "Invalid stage layout",
+    );
+    expect(() => validateStage({ ...first, scramble: [3] })).toThrow(
+      "Invalid stage layout",
+    );
   });
 });

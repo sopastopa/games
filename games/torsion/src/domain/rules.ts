@@ -52,7 +52,9 @@ export function validateStage(stage: Stage): void {
   const bounds = stage.size * stage.size;
   const positions = [...stage.goals, ...stage.rocks];
   if (
-    positions.some((cell) => !Number.isInteger(cell) || cell < 0 || cell >= bounds) ||
+    positions.some(
+      (cell) => !Number.isInteger(cell) || cell < 0 || cell >= bounds,
+    ) ||
     new Set(positions).size !== positions.length ||
     stage.scramble.some((anchor) => !canTurn(stage, anchor))
   )
@@ -68,8 +70,7 @@ export function initialPuzzle(stage: Stage): Puzzle {
   let scrambled: readonly number[] = tiles;
   for (const anchor of stage.scramble)
     scrambled = rotate(scrambled, stage, anchor, true);
-  if (solved(scrambled, stage))
-    throw new Error("Already solved: " + stage.id);
+  if (solved(scrambled, stage)) throw new Error("Already solved: " + stage.id);
   return { tiles: scrambled, moves: 0, phase: "playing" };
 }
 

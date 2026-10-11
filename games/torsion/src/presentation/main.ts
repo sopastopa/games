@@ -33,7 +33,7 @@ const solvedPanel = element<HTMLDivElement>("solved-panel");
 const game = new TorsionController(browserStore);
 
 function paintHover(anchor: number | null, size: number): void {
-  const selected = anchor === null ? [] : square(size, anchor) ?? [];
+  const selected = anchor === null ? [] : (square(size, anchor) ?? []);
   for (const cell of board.querySelectorAll<HTMLElement>("[data-cell]")) {
     cell.classList.toggle(
       "preview",
@@ -98,10 +98,7 @@ function renderBoard(view: GameView): void {
       button.setAttribute(
         "aria-label",
         legal
-          ? "Tourner le bloc ligne " +
-              (row + 1) +
-              ", colonne " +
-              (col + 1)
+          ? "Tourner le bloc ligne " + (row + 1) + ", colonne " + (col + 1)
           : "Rotation bloquée par un rocher",
       );
       if (!legal) button.classList.add("blocked");

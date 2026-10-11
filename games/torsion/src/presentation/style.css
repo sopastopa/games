@@ -18,8 +18,7 @@ body {
   min-width: 320px;
   background:
     radial-gradient(circle at 10% 0%, #1d3640 0, transparent 33rem),
-    radial-gradient(circle at 90% 65%, #1c2b32 0, transparent 37rem),
-    #101923;
+    radial-gradient(circle at 90% 65%, #1c2b32 0, transparent 37rem), #101923;
 }
 
 button,
@@ -295,7 +294,9 @@ h1 em,
   font-family: "Space Grotesk", sans-serif;
   font-size: clamp(17px, 3vw, 31px);
   font-weight: 700;
-  box-shadow: inset 0 -5px #11202922, 0 9px 15px #050e1677;
+  box-shadow:
+    inset 0 -5px #11202922,
+    0 9px 15px #050e1677;
 }
 
 .piece-0 {
@@ -341,7 +342,9 @@ h1 em,
   line-height: 1;
   pointer-events: auto;
   box-shadow: 0 3px 12px #0007;
-  transition: transform 140ms ease, background-color 140ms ease;
+  transition:
+    transform 140ms ease,
+    background-color 140ms ease;
 }
 
 .pivot:not(:disabled):hover,

@@ -16,7 +16,8 @@ export const STAGES: readonly Stage[] = [
     id: "deux-temps",
     title: "Deux temps",
     lesson: "Un détour peut préparer le déplacement suivant.",
-    insight: "Regarde où une rotation place la pièce avant de choisir la suivante.",
+    insight:
+      "Regarde où une rotation place la pièce avant de choisir la suivante.",
     chapter: "I · LE GESTE",
     size: 4,
     goals: [6],
@@ -27,7 +28,8 @@ export const STAGES: readonly Stage[] = [
     id: "compagnons",
     title: "Compagnons",
     lesson: "Une même rotation peut déplacer plusieurs pièces à la fois.",
-    insight: "Observe les deux numéros : certains mouvements rapprochent l'un et éloignent l'autre.",
+    insight:
+      "Observe les deux numéros : certains mouvements rapprochent l'un et éloignent l'autre.",
     chapter: "II · LES CONSÉQUENCES",
     size: 4,
     goals: [5, 10],
@@ -60,7 +62,8 @@ export const STAGES: readonly Stage[] = [
     id: "demi-tour",
     title: "Demi-tour",
     lesson: "Il faut parfois s'éloigner d'une cible pour mieux y revenir.",
-    insight: "Conserve plusieurs options de rotation au lieu de poursuivre une seule pièce.",
+    insight:
+      "Conserve plusieurs options de rotation au lieu de poursuivre une seule pièce.",
     chapter: "III · LES DÉTOURS",
     size: 5,
     goals: [7, 11, 18],
@@ -71,7 +74,8 @@ export const STAGES: readonly Stage[] = [
     id: "piece-scellee",
     title: "La pièce scellée",
     lesson: "Un rocher bloque tout carré qui le contient.",
-    insight: "Cherche les pivots encore disponibles autour des pierres sombres.",
+    insight:
+      "Cherche les pivots encore disponibles autour des pierres sombres.",
     chapter: "IV · LES CONTRAINTES",
     size: 5,
     goals: [6, 12, 18],
@@ -104,7 +108,8 @@ export const STAGES: readonly Stage[] = [
     id: "enclaves",
     title: "Enclaves",
     lesson: "Les bords bloqués rendent chaque passage précieux.",
-    insight: "Raisonner à rebours depuis une cible peut révéler une préparation.",
+    insight:
+      "Raisonner à rebours depuis une cible peut révéler une préparation.",
     chapter: "V · LA MAÎTRISE",
     size: 6,
     goals: [8, 15, 20, 27],
@@ -126,11 +131,14 @@ export const STAGES: readonly Stage[] = [
     id: "grand-pli",
     title: "Le grand pli",
     lesson: "Toutes les idées apprises se rencontrent ici.",
-    insight: "Anticipe les interactions, utilise le vide et accepte les détours.",
+    insight:
+      "Anticipe les interactions, utilise le vide et accepte les détours.",
     chapter: "VI · L'ATELIER",
     size: 6,
     goals: [8, 10, 19, 27, 28],
     rocks: [0, 5, 30, 35],
-    scramble: [10, 21, 15, 9, 21, 7, 21, 14, 8, 16, 2, 12, 6, 1, 3, 1, 22, 8, 7, 3],
+    scramble: [
+      10, 21, 15, 9, 21, 7, 21, 14, 8, 16, 2, 12, 6, 1, 3, 1, 22, 8, 7, 3,
+    ],
   },
 ];
