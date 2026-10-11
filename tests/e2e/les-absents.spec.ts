@@ -47,11 +47,11 @@ test("undo and redo alter the board without requiring a mouse", async ({
   const neutral = page.getByRole("button", { name: /Nœud 1 — retirer/ });
   await neutral.focus();
   await page.keyboard.press("Enter");
-  await expect(page.getByTestId("budget")).toHaveText("0 retrait disponible");
+  await expect(page.getByTestId("budget")).toHaveText("0 retraits disponibles");
   await page.getByRole("button", { name: /Annuler/ }).click();
   await expect(page.getByTestId("budget")).toHaveText("1 retrait disponible");
   await page.getByRole("button", { name: /Rétablir/ }).click();
-  await expect(page.getByTestId("budget")).toHaveText("0 retrait disponible");
+  await expect(page.getByTestId("budget")).toHaveText("0 retraits disponibles");
   await page.getByRole("button", { name: /Recommencer/ }).click();
   await expect(page.getByTestId("budget")).toHaveText("1 retrait disponible");
 });
