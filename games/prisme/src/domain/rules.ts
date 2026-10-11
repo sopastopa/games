@@ -1,5 +1,4 @@
 import {
-  cell,
   generateArena,
   hasSight,
   MAX_ZONE,
@@ -284,8 +283,7 @@ function damagePlayer(player: Pilot): void {
 }
 
 function spawnFriendly(state: GameState, aim: Point): Shot[] {
-  const { weapon, playerHeat: unused } = { weapon: state.player.weapon, playerHeat: 0 };
-  void unused;
+  const weapon = state.player.weapon;
   const player = state.player;
   const spread = weapon === "scatter" ? [-0.19, 0, 0.19] : [0];
   const velocity = weapon === "rail" ? 0.48 : weapon === "scatter" ? 0.25 : 0.31;
