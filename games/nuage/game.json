@@ -1,0 +1,10 @@
+{
+  "id": "nuage",
+  "title": "NUAGE",
+  "description": "Saute de couleur en couleur dans une aventure dessinée à la main : sept chapitres pour rallumer l'aurore.",
+  "version": "1.0.0",
+  "category": "Aventure",
+  "icon": "☁",
+  "accent": "#ff8cb9",
+  "published": true
+}
