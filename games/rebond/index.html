@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#f6f0e6"/>
+  <meta name="description" content="REBOND : un lancer, mille trajectoires. Vise, ajuste et fais ricocher une bille jusqu'à la cible."/>
+  <title>REBOND — Games</title>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <a class="back" data-testid="back-home" href="../../">← Tous les jeux</a>
+      <a class="wordmark" href="../../"><span class="logo-symbol">◒</span> GAMES LAB</a>
+      <span class="header-version">EXPÉRIENCE Nº04</span>
+    </header>
+    <main>
+      <section class="intro">
+        <div class="intro-copy">
+          <div class="eyebrow"><span></span> LA PHYSIQUE COMME TERRAIN DE JEU</div>
+          <h1>RE<span>B</span>OND<span class="dot">.</span></h1>
+          <p class="lede">Un lancer.<br/><em>Une infinité de trajectoires.</em></p>
+          <p class="sublead">Prends ton élan, trouve le bon angle et laisse la physique faire le reste. Chaque tentative révèle un nouveau chemin.</p>
+        </div>
+        <aside class="intro-right">
+          <span class="index-decoration">◉</span>
+          <span>Glisse pour viser.<br/>Relâche pour jouer.</span>
+        </aside>
+      </section>
+      <section class="arena-section" aria-label="Jeu REBOND">
+        <div class="arena-head">
+          <div>
+            <p class="section-kicker" id="chapter">01 · PRENDRE SON ÉLAN</p>
+            <h2 id="level-title">Premier élan</h2>
+            <p id="level-subtitle">Le voyage commence par un glissement.</p>
+          </div>
+          <div class="stage-progress">
+            <span>NIVEAU <strong id="level-index" data-testid="level-index">01 / 18</strong></span>
+            <span>MEILLEUR ESSAI <strong id="best" data-testid="best">—</strong></span>
+          </div>
+        </div>
+        <div class="arena-grid">
+          <div class="arena-left">
+            <div class="canvas-shell">
+              <div class="canvas-topline"><span><i></i> SIMULATION PHYSIQUE</span><span id="phase" data-testid="phase">PRÊT À LANCER</span></div>
+              <canvas id="board" width="900" height="600" tabindex="0" aria-label="Terrain REBOND : maintenir, glisser vers l'arrière et relâcher pour lancer la bille." data-testid="board"></canvas>
+              <div class="board-footer"><span>◉ BILLE</span><span>◎ CIBLE</span><span>● RICOCHET</span></div>
+            </div>
+            <div class="feedback" id="feedback" role="status" data-testid="feedback">Pour viser, fais glisser vers le bas-gauche. Puis relâche.</div>
+            <div class="completion" id="completion" data-testid="completion" hidden>
+              <span class="success-label">TRAJECTOIRE TROUVÉE</span>
+              <div class="success-line"><strong>Bien joué !</strong><span id="stars">★★★</span></div>
+              <p>Tu as atteint la cible. À toi la suite.</p>
+              <button id="next" type="button">Niveau suivant <span>→</span></button>
+            </div>
+          </div>
+          <aside class="control-panel" aria-label="Commandes">
+            <div class="control-heading"><span>LE POSTE DE PILOTAGE</span><span class="mini-orbit">◎</span></div>
+            <div class="attempts"><span>TENTATIVES</span><strong id="attempts" data-testid="attempts">00</strong></div>
+            <div class="control-rule"></div>
+            <label for="angle">ANGLE <output id="angle-value">42°</output></label>
+            <input id="angle" type="range" min="8" max="82" step="1" value="42" aria-label="Angle du lancer"/>
+            <div class="range-hints"><span>BAS</span><span>HAUT</span></div>
+            <label for="power">PUISSANCE <output id="power-value">580</output></label>
+            <input id="power" type="range" min="420" max="810" step="10" value="580" aria-label="Puissance du lancer"/>
+            <div class="range-hints"><span>DOUX</span><span>FORT</span></div>
+            <button id="shoot" class="shoot-button" data-testid="shoot" type="button">LANCER LA BILLE <span>↗</span></button>
+            <div class="secondary-buttons">
+              <button id="retry" type="button">↶ Nouveau tir</button>
+              <button id="reset" type="button">⟲ Recommencer</button>
+            </div>
+            <p class="instructions"><strong>Sur mobile</strong> — Tire la bille vers l'arrière avec le doigt.<br/><strong>Au clavier</strong> — Flèches pour ajuster, Espace pour lancer.</p>
+            <div class="level-picker">
+              <label for="level-select">CHOISIR UN NIVEAU</label>
+              <select id="level-select" data-testid="level-select"></select>
+            </div>
+          </aside>
+        </div>
+      </section>
+      <section class="philosophy"><span>01</span><p>Pas de compte. Pas de chronomètre. Pas de limite d'essais.<br/><strong>Juste le plaisir de trouver le bon mouvement.</strong></p><span class="philosophy-icon">✳</span></section>
+    </main>
+    <footer>REBOND <span>·</span> Fais confiance aux courbes. <a href="../../">Retour au catalogue ↗</a></footer>
+  </div>
+  <script type="module" src="/src/presentation/main.ts"></script>
+</body>
+</html>
