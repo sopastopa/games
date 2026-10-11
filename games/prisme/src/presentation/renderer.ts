@@ -1,34 +1,62 @@
-import { SIZE } from "../domain/map";
+import { SIZE, type Pickup, type Point } from "../domain/map";
 import {
   bestAim,
+  isEnemyVisible,
   objectiveReady,
   type GameState,
-  type Relay,
 } from "../domain/rules";
 
-const COLORS = ["#4ef6f3", "#fb6fad", "#ffd367"];
-const BACKGROUNDS = ["#0b122e", "#140e30", "#101b33", "#201029"];
+const COLORS = ["#58f3ef", "#fa71b0", "#ffcf69"];
+const DISTRICTS = ["#142b45", "#332346", "#153b3e", "#383321"];
 
-export interface Geometry {
-  step: number;
-  offsetX: number;
-  offsetY: number;
+export interface Camera {
+  scale: number;
+  x: number;
+  y: number;
 }
 
-export function geometry(canvas: HTMLCanvasElement): Geometry {
-  const step = Math.max(
-    1,
-    Math.min(canvas.clientWidth / SIZE, canvas.clientHeight / SIZE),
-  );
+export function cameraFor(width: number, height: number, player: Point): Camera {
+  const scale =
+    width < 850
+      ? Math.max(24, Math.min(48, Math.min(width / 11, height / 11)))
+      : Math.max(35, Math.min(70, Math.min(width / 18, height / 12)));
   return {
-    step,
-    offsetX: (canvas.clientWidth - SIZE * step) / 2,
-    offsetY: (canvas.clientHeight - SIZE * step) / 2,
+    scale,
+    x: Math.max(0, Math.min(SIZE - width / scale, player.x - width / scale / 2)),
+    y: Math.max(0, Math.min(SIZE - height / scale, player.y - height / scale / 2)),
   };
 }
 
-function pixel(value: number, offset: number, step: number): number {
-  return offset + (value + 0.5) * step;
+export function geometry(canvas: HTMLCanvasElement, state: GameState): Camera {
+  return cameraFor(canvas.clientWidth, canvas.clientHeight, state.player);
+}
+
+export function screenToWorld(
+  canvas: HTMLCanvasElement,
+  state: GameState,
+  clientX: number,
+  clientY: number,
+): Point {
+  const rect = canvas.getBoundingClientRect();
+  const camera = geometry(canvas, state);
+  return {
+    x: camera.x + (clientX - rect.left) / camera.scale - 0.5,
+    y: camera.y + (clientY - rect.top) / camera.scale - 0.5,
+  };
+}
+
+function context(canvas: HTMLCanvasElement): CanvasRenderingContext2D | null {
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  const width = Math.max(1, Math.round(canvas.clientWidth * dpr));
+  const height = Math.max(1, Math.round(canvas.clientHeight * dpr));
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width;
+    canvas.height = height;
+  }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return ctx;
 }
 
 function circle(
@@ -36,229 +64,298 @@ function circle(
   x: number,
   y: number,
   radius: number,
-  fill: string,
+  color: string,
 ): void {
   ctx.beginPath();
   ctx.arc(x, y, radius, 0, Math.PI * 2);
-  ctx.fillStyle = fill;
-  ctx.fill();
-}
-
-function diamond(
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  radius: number,
-): void {
-  ctx.beginPath();
-  ctx.moveTo(x, y - radius);
-  ctx.lineTo(x + radius, y);
-  ctx.lineTo(x, y + radius);
-  ctx.lineTo(x - radius, y);
-  ctx.closePath();
-}
-
-function relayRing(
-  ctx: CanvasRenderingContext2D,
-  relay: Relay,
-  index: number,
-  frame: number,
-  geometry: Geometry,
-): void {
-  const { step, offsetX, offsetY } = geometry;
-  const x = pixel(relay.x, offsetX, step);
-  const y = pixel(relay.y, offsetY, step);
-  const color = COLORS[index]!;
-  circle(ctx, x, y, step * 0.52, color + "18");
-  ctx.strokeStyle = color + "60";
-  ctx.lineWidth = Math.max(1, step * 0.04);
-  ctx.beginPath();
-  ctx.arc(
-    x,
-    y,
-    step * (0.4 + Math.sin(frame / 20 + index) * 0.03),
-    0,
-    Math.PI * 2,
-  );
-  ctx.stroke();
-  ctx.strokeStyle = color;
-  ctx.lineWidth = step * 0.095;
-  ctx.lineCap = "round";
-  ctx.beginPath();
-  ctx.arc(
-    x,
-    y,
-    step * 0.31,
-    -Math.PI / 2,
-    -Math.PI / 2 + (Math.PI * 2 * relay.charge) / 100,
-  );
-  ctx.stroke();
-  ctx.shadowBlur = step * 0.5;
-  ctx.shadowColor = color;
-  diamond(ctx, x, y, step * 0.17);
   ctx.fillStyle = color;
   ctx.fill();
-  ctx.shadowBlur = 0;
-  if (relay.charge >= 100) {
-    circle(ctx, x, y, step * 0.08, "#fff");
+}
+
+function worldX(camera: Camera, x: number): number {
+  return (x - camera.x + 0.5) * camera.scale;
+}
+function worldY(camera: Camera, y: number): number {
+  return (y - camera.y + 0.5) * camera.scale;
+}
+
+function coloredPickup(kind: Pickup["kind"]): [string, string] {
+  switch (kind) {
+    case "key-rose": return ["#ff84c1", "◆"];
+    case "key-cyan": return ["#58f3ef", "◆"];
+    case "scatter": return ["#f0a1ff", "⋈"];
+    case "rail": return ["#ffbb63", "⚡"];
+    case "armor": return ["#9ce1ff", "✚"];
+    case "radar": return ["#9afc8f", "◉"];
+    case "battery": return ["#ffee90", "↯"];
+  }
+}
+
+function renderWorld(ctx: CanvasRenderingContext2D, state: GameState, camera: Camera): void {
+  const { scale } = camera;
+  const fromX = Math.max(0, Math.floor(camera.x) - 1);
+  const fromY = Math.max(0, Math.floor(camera.y) - 1);
+  const toX = Math.min(SIZE - 1, Math.ceil(camera.x + ctx.canvas.clientWidth / scale) + 1);
+  const toY = Math.min(SIZE - 1, Math.ceil(camera.y + ctx.canvas.clientHeight / scale) + 1);
+  for (let y = fromY; y <= toY; y++) {
+    for (let x = fromX; x <= toX; x++) {
+      const index = y * SIZE + x;
+      const px = worldX(camera, x) - scale / 2;
+      const py = worldY(camera, y) - scale / 2;
+      if (!state.explored[index]) {
+        ctx.fillStyle = "#080d1d";
+        ctx.fillRect(px, py, scale + 0.5, scale + 0.5);
+        continue;
+      }
+      const district = Number(x >= 20) + 2 * Number(y >= 20);
+      ctx.fillStyle = DISTRICTS[district]!;
+      ctx.fillRect(px, py, scale + 0.5, scale + 0.5);
+      if (state.arena.walls[index]) {
+        ctx.fillStyle = "#385278";
+        ctx.fillRect(px + 1, py + 1, scale - 2, scale - 2);
+        ctx.fillStyle = COLORS[district % 3]! + "38";
+        ctx.fillRect(px + 2, py + 2, scale - 4, scale * 0.13);
+      } else {
+        ctx.strokeStyle = "#b8dcff19";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(px + 0.5, py + 0.5, scale - 1, scale - 1);
+        if ((x * 11 + y * 7 + state.seed) % 9 === 0) {
+          ctx.fillStyle = "#c4f5ff40";
+          ctx.fillRect(px + scale * 0.44, py + scale * 0.44, scale * 0.07, scale * 0.07);
+        }
+      }
+      if (!state.visible[index]) {
+        ctx.fillStyle = "#040818bf";
+        ctx.fillRect(px, py, scale + 0.5, scale + 0.5);
+      }
+    }
+  }
+}
+
+function decorations(ctx: CanvasRenderingContext2D, state: GameState, camera: Camera, frame: number): void {
+  const s = camera.scale;
+  const show = (point: Point): boolean => state.visible[Math.round(point.y) * SIZE + Math.round(point.x)] === true;
+  for (const door of state.arena.doors) {
+    if (!state.explored[Math.round(door.y) * SIZE + Math.round(door.x)]) continue;
+    const opened = state.opened.includes(door.id);
+    const color = door.id === "rose" ? "#ff86c4" : door.id === "cyan" ? "#62f3ee" : "#ffcc65";
+    const x = worldX(camera, door.x);
+    const y = worldY(camera, door.y);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = Math.max(2, s * 0.09);
+    ctx.strokeRect(x - s * 0.28, y - s * 0.4, s * 0.56, s * 0.8);
+    if (!opened) {
+      ctx.fillStyle = color + "9a";
+      ctx.fillRect(x - s * 0.24, y - s * 0.36, s * 0.48, s * 0.72);
+      circle(ctx, x, y, s * 0.09, "#10152e");
+    }
+  }
+  for (const [index, relay] of state.relays.entries()) {
+    if (!state.explored[Math.round(relay.y) * SIZE + Math.round(relay.x)]) continue;
+    const x = worldX(camera, relay.x);
+    const y = worldY(camera, relay.y);
+    const color = COLORS[index]!;
+    circle(ctx, x, y, s * 0.55, color + "20");
+    ctx.strokeStyle = color;
+    ctx.lineWidth = s * 0.075;
+    ctx.beginPath();
+    ctx.arc(x, y, s * 0.36, -Math.PI / 2, -Math.PI / 2 + relay.charge * Math.PI / 50);
+    ctx.stroke();
+    circle(ctx, x, y, s * 0.16, color);
+    if (relay.charge === 100) circle(ctx, x, y, s * 0.08, "#ffffff");
+  }
+  if (state.explored[Math.round(state.arena.exit.y) * SIZE + Math.round(state.arena.exit.x)]) {
+    const x = worldX(camera, state.arena.exit.x);
+    const y = worldY(camera, state.arena.exit.y);
+    const color = objectiveReady(state) ? "#b6ffa1" : "#778aa8";
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(Math.PI / 4);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = s * 0.1;
+    ctx.strokeRect(-s * 0.25, -s * 0.25, s * 0.5, s * 0.5);
+    ctx.restore();
+  }
+  for (const pickup of state.pickups) {
+    if (!show(pickup)) continue;
+    const x = worldX(camera, pickup.x);
+    const y = worldY(camera, pickup.y);
+    const [color, glyph] = coloredPickup(pickup.kind);
+    circle(ctx, x, y, s * (0.33 + Math.sin(frame / 20) * 0.02), color + "45");
+    circle(ctx, x, y, s * 0.23, color);
+    ctx.font = "bold " + Math.round(s * 0.32) + "px system-ui";
+    ctx.fillStyle = "#0d1830";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(glyph, x, y);
+  }
+}
+
+function actors(ctx: CanvasRenderingContext2D, state: GameState, camera: Camera, frame: number, aim?: Point): void {
+  const s = camera.scale;
+  for (const enemy of state.enemies) {
+    if (!isEnemyVisible(state, enemy)) continue;
+    const x = worldX(camera, enemy.x);
+    const y = worldY(camera, enemy.y);
+    const color = enemy.kind === "hunter" ? "#ff7193" : enemy.kind === "sniper" ? "#ffbb65" : "#bb92ff";
+    const radius = enemy.kind === "bulwark" ? 0.38 : 0.29;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = s * 0.3;
+    circle(ctx, x, y, s * radius, color);
+    ctx.shadowBlur = 0;
+    circle(ctx, x, y, s * 0.14, "#18203b");
+    ctx.font = "bold " + Math.round(s * 0.24) + "px system-ui";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#fff4fd";
+    ctx.fillText(enemy.kind === "hunter" ? "▲" : enemy.kind === "sniper" ? "✛" : "■", x, y);
+    const maxHp = enemy.kind === "bulwark" ? 5 + state.zone : enemy.kind === "sniper" ? 2 : 3;
+    ctx.fillStyle = "#3c1b35";
+    ctx.fillRect(x - s * 0.35, y - s * 0.48, s * 0.7, s * 0.065);
+    ctx.fillStyle = color;
+    ctx.fillRect(x - s * 0.35, y - s * 0.48, s * 0.7 * Math.max(0, enemy.hp / maxHp), s * 0.065);
+    if (enemy.timer < 29 && enemy.alert > 0) {
+      ctx.strokeStyle = color + "a0";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(worldX(camera, state.player.x), worldY(camera, state.player.y));
+      ctx.stroke();
+    }
+  }
+  for (const shot of state.shots) {
+    if (shot.hostile && !state.visible[Math.round(shot.y) * SIZE + Math.round(shot.x)]) continue;
+    const color = shot.hostile ? "#ffb987" : "#76ffee";
+    circle(ctx, worldX(camera, shot.x), worldY(camera, shot.y), s * (shot.hostile ? 0.13 : 0.1), color);
+  }
+  const { player } = state;
+  const x = worldX(camera, player.x);
+  const y = worldY(camera, player.y);
+  const heading = aim ?? bestAim(state);
+  const angle = Math.atan2(heading.y, heading.x) + Math.PI / 2;
+  circle(ctx, x, y, s * 0.57, "#75fbe72c");
+  if (player.armor > 0) {
+    ctx.strokeStyle = "#9cc8ff";
+    ctx.lineWidth = Math.max(2, s * 0.05);
+    ctx.beginPath();
+    ctx.arc(x, y, s * 0.48, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angle);
+  ctx.beginPath();
+  ctx.moveTo(0, -s * 0.43);
+  ctx.lineTo(s * 0.3, s * 0.3);
+  ctx.lineTo(0, s * 0.13);
+  ctx.lineTo(-s * 0.3, s * 0.3);
+  ctx.closePath();
+  ctx.shadowBlur = s * 0.38;
+  ctx.shadowColor = "#62f9e9";
+  ctx.fillStyle = player.invulnerable > 0 && frame % 8 < 4 ? "#ffffff" : "#64f3dc";
+  ctx.fill();
+  ctx.restore();
+  if (state.waypoint) {
+    const wx = worldX(camera, state.waypoint.x);
+    const wy = worldY(camera, state.waypoint.y);
+    ctx.strokeStyle = "#f6fb9e";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(wx, wy, s * 0.35, 0, Math.PI * 2);
+    ctx.stroke();
   }
 }
 
 export function renderArena(
   canvas: HTMLCanvasElement,
-  game: GameState,
+  state: GameState,
   frame: number,
-  aim?: { x: number; y: number },
+  aim?: Point,
 ): void {
-  const ctx = canvas.getContext("2d");
+  const ctx = context(canvas);
   if (!ctx) return;
-  const width = canvas.clientWidth;
-  const height = canvas.clientHeight;
-  const dpr = Math.min(2, window.devicePixelRatio || 1);
-  const physicalWidth = Math.max(1, Math.round(width * dpr));
-  const physicalHeight = Math.max(1, Math.round(height * dpr));
-  if (canvas.width !== physicalWidth || canvas.height !== physicalHeight) {
-    canvas.width = physicalWidth;
-    canvas.height = physicalHeight;
-  }
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  const { step, offsetX, offsetY } = geometry(canvas);
-  ctx.fillStyle = BACKGROUNDS[(game.zone - 1) % BACKGROUNDS.length]!;
-  ctx.fillRect(0, 0, width, height);
-  const ambient = ctx.createRadialGradient(
-    width * 0.5,
-    height * 0.48,
-    0,
-    width * 0.5,
-    height * 0.48,
-    Math.max(width, height) * 0.7,
-  );
-  ambient.addColorStop(0, "#39538b60");
-  ambient.addColorStop(1, "#01051200");
-  ctx.fillStyle = ambient;
-  ctx.fillRect(0, 0, width, height);
+  const camera = geometry(canvas, state);
+  ctx.fillStyle = "#050a1b";
+  ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+  renderWorld(ctx, state, camera);
+  decorations(ctx, state, camera, frame);
+  actors(ctx, state, camera, frame, aim);
+}
 
-  const side = step * SIZE;
-  ctx.fillStyle = "#071028";
-  ctx.fillRect(offsetX, offsetY, side, side);
+export function renderMap(
+  canvas: HTMLCanvasElement,
+  state: GameState,
+  showLabels = false,
+): void {
+  const ctx = context(canvas);
+  if (!ctx) return;
+  const s = Math.min(canvas.clientWidth, canvas.clientHeight) / SIZE;
+  const ox = (canvas.clientWidth - SIZE * s) / 2;
+  const oy = (canvas.clientHeight - SIZE * s) / 2;
+  ctx.fillStyle = "#080e20";
+  ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
   for (let y = 0; y < SIZE; y++) {
     for (let x = 0; x < SIZE; x++) {
-      const at = y * SIZE + x;
-      const left = offsetX + x * step;
-      const top = offsetY + y * step;
-      if (game.arena.walls[at]) {
-        const border = (x + y + game.seed) % 4;
-        const color = border === 0 ? "#184168" : "#172646";
-        ctx.fillStyle = color;
-        ctx.fillRect(left + 1, top + 1, step - 2, step - 2);
-        ctx.fillStyle = "#63cfff24";
-        ctx.fillRect(left + 2, top + 2, step - 4, step * 0.11);
-        ctx.fillStyle = "#01091880";
-        ctx.fillRect(left + 2, top + step * 0.77, step - 4, step * 0.17);
-      } else {
-        ctx.strokeStyle = "#8dcbfd12";
-        ctx.lineWidth = 1;
-        ctx.strokeRect(left + 0.5, top + 0.5, step - 1, step - 1);
-        if ((x * 9 + y * 13 + game.seed) % 7 === 0) {
-          ctx.fillStyle = "#adf6ff45";
-          ctx.fillRect(
-            left + step * 0.43,
-            top + step * 0.43,
-            step * 0.06,
-            step * 0.06,
-          );
-        }
+      const index = y * SIZE + x;
+      if (!state.explored[index]) continue;
+      const district = Number(x >= 20) + 2 * Number(y >= 20);
+      ctx.fillStyle = state.arena.walls[index] ? "#697891" : DISTRICTS[district]!;
+      ctx.fillRect(ox + x * s, oy + y * s, Math.ceil(s), Math.ceil(s));
+      if (state.visible[index] && !state.arena.walls[index]) {
+        ctx.fillStyle = "#56cfe836";
+        ctx.fillRect(ox + x * s, oy + y * s, Math.ceil(s), Math.ceil(s));
       }
     }
   }
-  ctx.strokeStyle = "#7daefa60";
-  ctx.lineWidth = 2;
-  ctx.strokeRect(offsetX + 1, offsetY + 1, side - 2, side - 2);
-
-  const finish = objectiveReady(game);
-  const exitX = pixel(game.arena.exit.x, offsetX, step);
-  const exitY = pixel(game.arena.exit.y, offsetY, step);
-  const exitColor = finish ? "#b9fb80" : "#596a90";
-  circle(ctx, exitX, exitY, step * 0.43, exitColor + "18");
-  ctx.lineWidth = step * 0.07;
-  ctx.strokeStyle = exitColor;
-  ctx.shadowBlur = finish ? step * 0.6 : 0;
-  ctx.shadowColor = exitColor;
-  diamond(ctx, exitX, exitY, step * 0.32);
-  ctx.stroke();
-  ctx.shadowBlur = 0;
-  for (let index = 0; index < game.relays.length; index++) {
-    relayRing(ctx, game.relays[index]!, index, frame, {
-      step,
-      offsetX,
-      offsetY,
-    });
+  for (const door of state.arena.doors) {
+    if (!state.explored[Math.round(door.y) * SIZE + Math.round(door.x)]) continue;
+    ctx.fillStyle = state.opened.includes(door.id) ? "#8bf4bd" : "#f6b46b";
+    ctx.fillRect(ox + door.x * s, oy + door.y * s, Math.max(2, s), Math.max(2, s));
   }
-
-  for (const enemy of game.enemies) {
-    const x = pixel(enemy.x, offsetX, step);
-    const y = pixel(enemy.y, offsetY, step);
-    ctx.shadowBlur = step * 0.35;
-    ctx.shadowColor = "#ff6c79";
-    circle(ctx, x, y, step * 0.31, "#f45a80");
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = "#321339";
-    diamond(ctx, x, y, step * 0.24);
-    ctx.fill();
-    circle(ctx, x, y, step * 0.09, "#ffdae5");
-    ctx.strokeStyle = "#ffc4d1";
-    ctx.lineWidth = step * 0.035;
-    ctx.beginPath();
-    ctx.moveTo(x - step * 0.26, y - step * 0.37);
-    ctx.lineTo(x - step * 0.26 + step * 0.17 * enemy.hp, y - step * 0.37);
-    ctx.stroke();
+  for (const [index, relay] of state.relays.entries()) {
+    if (!state.explored[cellIndex(relay)]) continue;
+    circle(ctx, ox + (relay.x + 0.5) * s, oy + (relay.y + 0.5) * s, Math.max(2, s * 1.5), COLORS[index]!);
   }
-
-  for (const shot of game.shots) {
-    const x = pixel(shot.x, offsetX, step);
-    const y = pixel(shot.y, offsetY, step);
-    const color = shot.hostile ? "#ffb37f" : "#6effe5";
-    ctx.shadowBlur = step * 0.33;
-    ctx.shadowColor = color;
-    circle(ctx, x, y, step * (shot.hostile ? 0.12 : 0.09), color);
-    ctx.shadowBlur = 0;
+  if (state.explored[cellIndex(state.arena.exit)]) {
+    circle(ctx, ox + (state.arena.exit.x + 0.5) * s, oy + (state.arena.exit.y + 0.5) * s, Math.max(2, s), "#e9ff9c");
   }
-
-  const { player } = game;
-  const px = pixel(player.x, offsetX, step);
-  const py = pixel(player.y, offsetY, step);
-  const pulse = 0.93 + Math.sin(frame / 10) * 0.08;
-  circle(ctx, px, py, step * 0.48 * pulse, "#3affda20");
-  const heading = aim ?? bestAim(game);
-  ctx.save();
-  ctx.translate(px, py);
-  ctx.rotate(Math.atan2(heading.y, heading.x) + Math.PI / 2);
-  ctx.shadowBlur = step * 0.48;
-  ctx.shadowColor = "#67f9e5";
-  ctx.beginPath();
-  ctx.moveTo(0, -step * 0.37);
-  ctx.lineTo(step * 0.25, step * 0.26);
-  ctx.lineTo(0, step * 0.14);
-  ctx.lineTo(-step * 0.25, step * 0.26);
-  ctx.closePath();
-  ctx.fillStyle =
-    player.invulnerable > 0 && frame % 8 < 4 ? "#ffffff" : "#67f9e5";
-  ctx.fill();
-  ctx.shadowBlur = 0;
-  circle(ctx, 0, 0, step * 0.1, "#0c1c3b");
-  ctx.restore();
-  if (player.dashTime > 0) {
-    ctx.strokeStyle = "#e4ffab";
+  if (state.waypoint) {
+    ctx.strokeStyle = "#eaff8f";
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(px, py, step * 0.49, 0, Math.PI * 2);
+    ctx.arc(ox + (state.waypoint.x + 0.5) * s, oy + (state.waypoint.y + 0.5) * s, Math.max(3, s * 1.8), 0, Math.PI * 2);
     ctx.stroke();
   }
-
-  if (game.phase === "playing" && finish) {
+  circle(ctx, ox + (state.player.x + 0.5) * s, oy + (state.player.y + 0.5) * s, Math.max(3, s * 1.7), "#ffffff");
+  if (showLabels) {
     ctx.textAlign = "center";
-    ctx.font = "700 " + Math.max(9, Math.round(step * 0.26)) + "px system-ui";
-    ctx.fillStyle = "#caff95";
-    ctx.fillText("EXTRACTION OUVERTE", exitX, exitY - step * 0.53);
+    ctx.textBaseline = "middle";
+    ctx.font = "bold " + Math.max(9, Math.round(s * 1.6)) + "px system-ui";
+    ctx.fillStyle = "#b0c5ed";
+    for (const [i, label] of ["ATELIER", "NÉON", "CRYPTE", "NOYAU"].entries()) {
+      const x = ox + ((i % 2) * 20 + 10) * s;
+      const y = oy + (Math.floor(i / 2) * 20 + 10) * s;
+      if (state.explored[Math.floor((y - oy) / s) * SIZE + Math.floor((x - ox) / s)])
+        ctx.fillText(label, x, y);
+    }
   }
+}
+
+function cellIndex(point: Point): number {
+  return Math.round(point.y) * SIZE + Math.round(point.x);
+}
+
+export function mapPointer(
+  canvas: HTMLCanvasElement,
+  clientX: number,
+  clientY: number,
+): Point {
+  const rect = canvas.getBoundingClientRect();
+  const s = Math.min(canvas.clientWidth, canvas.clientHeight) / SIZE;
+  const ox = (canvas.clientWidth - SIZE * s) / 2;
+  const oy = (canvas.clientHeight - SIZE * s) / 2;
+  return {
+    x: Math.floor((clientX - rect.left - ox) / s),
+    y: Math.floor((clientY - rect.top - oy) / s),
+  };
 }
