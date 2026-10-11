@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { chooseAiMove } from "../../src/domain/ai";
-import { createMatch, legalMoves, play, validateStage } from "../../src/domain/rules";
+import {
+  createMatch,
+  legalMoves,
+  play,
+  validateStage,
+} from "../../src/domain/rules";
 import { stages, TOTAL_CELLS } from "../../src/domain/stages";
 
 describe("LISIÈRE adversary and campaign", () => {
@@ -13,7 +18,8 @@ describe("LISIÈRE adversary and campaign", () => {
       validateStage(stage);
       for (const group of [stage.rocks, stage.sanctuaries]) {
         expect(group.length).toBeGreaterThanOrEqual(0);
-        for (const cell of group) expect(group).toContain(TOTAL_CELLS - 1 - cell);
+        for (const cell of group)
+          expect(group).toContain(TOTAL_CELLS - 1 - cell);
       }
       const first = createMatch(stage);
       expect(legalMoves(first, stage, "player").length).toBeGreaterThan(0);
@@ -42,9 +48,10 @@ describe("LISIÈRE adversary and campaign", () => {
     let game = createMatch(stage);
     let turns = 0;
     while (game.phase === "playing") {
-      const move = game.turn === "ai"
-        ? chooseAiMove(game, stage)
-        : legalMoves(game, stage, "player")[0] ?? null;
+      const move =
+        game.turn === "ai"
+          ? chooseAiMove(game, stage)
+          : (legalMoves(game, stage, "player")[0] ?? null);
       expect(move).not.toBeNull();
       const result = play(game, stage, move!)!;
       expect(result.moveCount).toBe(game.moveCount + 1);

@@ -76,7 +76,9 @@ export class LisiereController {
   subscribe(listener: (snapshot: Snapshot) => void): () => void {
     this.listeners.add(listener);
     listener(this.snapshot);
-    return () => { this.listeners.delete(listener); };
+    return () => {
+      this.listeners.delete(listener);
+    };
   }
 
   move(index: number): boolean {
@@ -112,7 +114,8 @@ export class LisiereController {
       index < 0 ||
       index > this.unlocked ||
       index >= this.stages.length
-    ) return false;
+    )
+      return false;
     this.stopAi();
     this.index = index;
     this.restart();
@@ -131,7 +134,11 @@ export class LisiereController {
   }
 
   resume(): void {
-    if (this.match.phase === "playing" && this.match.turn === "ai" && !this.cancelAi) {
+    if (
+      this.match.phase === "playing" &&
+      this.match.turn === "ai" &&
+      !this.cancelAi
+    ) {
       this.planAi();
       this.notify();
     }

@@ -13,12 +13,23 @@ import type { Match, Owner, Stage } from "../../src/domain/types";
 
 const stage = stages[0]!;
 
-function withOwners(positions: Readonly<Record<number, Owner>>, turn: "player" | "ai" = "player"): Match {
+function withOwners(
+  positions: Readonly<Record<number, Owner>>,
+  turn: "player" | "ai" = "player",
+): Match {
   const owners: Owner[] = Array(TOTAL_CELLS).fill(null);
   owners[HOMES.player] = "player";
   owners[HOMES.ai] = "ai";
-  for (const [index, owner] of Object.entries(positions)) owners[Number(index)] = owner;
-  return { owners, turn, phase: "playing", moveCount: 0, captured: [], lastMove: null };
+  for (const [index, owner] of Object.entries(positions))
+    owners[Number(index)] = owner;
+  return {
+    owners,
+    turn,
+    phase: "playing",
+    moveCount: 0,
+    captured: [],
+    lastMove: null,
+  };
 }
 
 describe("LISIÈRE domain", () => {
@@ -90,7 +101,12 @@ describe("LISIÈRE domain", () => {
     owners[18] = null;
     owners[24] = null;
     const before: Match = {
-      owners, phase: "playing", turn: "player", moveCount: 30, lastMove: null, captured: [],
+      owners,
+      phase: "playing",
+      turn: "player",
+      moveCount: 30,
+      lastMove: null,
+      captured: [],
     };
     const next = play(before, stage, 18)!;
     expect(next.turn).toBe("player");
@@ -105,11 +121,15 @@ describe("LISIÈRE domain", () => {
   it("validates terrain and blocks mountains", () => {
     for (const design of stages) validateStage(design);
     const blocked: Stage = { ...stage, rocks: [13] };
-    expect(legalMoves(createMatch(blocked), blocked, "player")).not.toContain(13);
+    expect(legalMoves(createMatch(blocked), blocked, "player")).not.toContain(
+      13,
+    );
     expect(() => validateStage({ ...stage, rocks: [HOMES.player] })).toThrow();
     expect(() => validateStage({ ...stage, rocks: [99] })).toThrow();
     expect(() => validateStage({ ...stage, sanctuaries: [8, 8] })).toThrow();
     expect(() => validateStage({ ...stage, depth: 8 })).toThrow();
-    expect(() => validateStage({ ...stage, rocks: [13], sanctuaries: [13] })).toThrow();
+    expect(() =>
+      validateStage({ ...stage, rocks: [13], sanctuaries: [13] }),
+    ).toThrow();
   });
 });

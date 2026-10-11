@@ -1,4 +1,9 @@
-import type { Ports, Progress, ProgressStore, Scheduler } from "../application/ports";
+import type {
+  Ports,
+  Progress,
+  ProgressStore,
+  Scheduler,
+} from "../application/ports";
 
 const storageKey = "games:lisiere:progress-v1";
 
@@ -15,7 +20,8 @@ export const progressStore: ProgressStore = {
         !Number.isInteger(value.selected) ||
         !Array.isArray(value.wins) ||
         !value.wins.every((item) => typeof item === "string")
-      ) return null;
+      )
+        return null;
       return {
         unlocked: value.unlocked as number,
         selected: value.selected as number,

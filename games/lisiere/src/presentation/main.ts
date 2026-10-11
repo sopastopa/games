@@ -52,15 +52,18 @@ function createBoard(): void {
 
 function nameFor(index: number, snapshot: Snapshot): string {
   const row = Math.floor(index / 6) + 1;
-  const column = index % 6 + 1;
+  const column = (index % 6) + 1;
   const coords = `ligne ${row}, colonne ${column}`;
-  if (snapshot.stage.rocks.includes(index)) return `Falaise inaccessible, ${coords}`;
+  if (snapshot.stage.rocks.includes(index))
+    return `Falaise inaccessible, ${coords}`;
   if (index === HOMES.player) return `Ta capitale, ${coords}`;
   if (index === HOMES.ai) return `Capitale adverse, ${coords}`;
   const owner = snapshot.match.owners[index];
   const sanctuary = snapshot.stage.sanctuaries.includes(index);
-  if (owner) return `${owner === "player" ? "Ton territoire" : "Territoire adverse"}${sanctuary ? ", sanctuaire" : ""}, ${coords}`;
-  if (snapshot.available.includes(index)) return `Conquérir ${sanctuary ? "le sanctuaire" : "la case"}, ${coords}`;
+  if (owner)
+    return `${owner === "player" ? "Ton territoire" : "Territoire adverse"}${sanctuary ? ", sanctuaire" : ""}, ${coords}`;
+  if (snapshot.available.includes(index))
+    return `Conquérir ${sanctuary ? "le sanctuaire" : "la case"}, ${coords}`;
   return `Case libre${sanctuary ? ", sanctuaire" : ""}, ${coords}`;
 }
 
@@ -85,7 +88,9 @@ function paintTiles(snapshot: Snapshot): void {
       isHome ? "tile-home" : "",
       snapshot.match.lastMove === index ? "tile-last" : "",
       captures.has(index) ? "tile-captured" : "",
-    ].filter(Boolean).join(" ");
+    ]
+      .filter(Boolean)
+      .join(" ");
     tile.disabled = !legal;
     tile.setAttribute("aria-label", nameFor(index, snapshot));
     tile.title = nameFor(index, snapshot);
@@ -93,7 +98,15 @@ function paintTiles(snapshot: Snapshot): void {
     const mark = document.createElement("span");
     mark.className = "tile-mark";
     mark.setAttribute("aria-hidden", "true");
-    mark.textContent = rock ? "▰" : owner === "player" ? "✳" : owner === "ai" ? "✦" : sanctuary ? "◇" : "";
+    mark.textContent = rock
+      ? "▰"
+      : owner === "player"
+        ? "✳"
+        : owner === "ai"
+          ? "✦"
+          : sanctuary
+            ? "◇"
+            : "";
     tile.append(mark);
     if (isHome) {
       const badge = document.createElement("span");
@@ -119,7 +132,11 @@ function updateSelection(snapshot: Snapshot): void {
       option.value = String(index);
       option.disabled = index > snapshot.unlocked;
       option.textContent = `${String(index + 1).padStart(2, "0")} — ${stage.title}${
-        snapshot.wins.includes(stage.id) ? " ✓" : index > snapshot.unlocked ? " · verrouillée" : ""
+        snapshot.wins.includes(stage.id)
+          ? " ✓"
+          : index > snapshot.unlocked
+            ? " · verrouillée"
+            : ""
       }`;
       return option;
     }),
@@ -141,14 +158,16 @@ function render(snapshot: Snapshot): void {
   playerScore.textContent = String(snapshot.scores.player);
   aiScore.textContent = String(snapshot.scores.ai);
   completedCount.textContent = String(snapshot.wins.length).padStart(2, "0");
-  campaignProgress.style.width = `${snapshot.wins.length * 100 / snapshot.count}%`;
+  campaignProgress.style.width = `${(snapshot.wins.length * 100) / snapshot.count}%`;
   undoButton.disabled = !snapshot.canUndo;
   updateSelection(snapshot);
 
   if (snapshot.match.phase === "playing") {
     outcome.hidden = true;
     statusIcon.textContent = snapshot.thinking ? "⌛" : "◎";
-    status.textContent = snapshot.thinking ? "L'ENCRE RÉFLÉCHIT…" : "À TOI DE JOUER";
+    status.textContent = snapshot.thinking
+      ? "L'ENCRE RÉFLÉCHIT…"
+      : "À TOI DE JOUER";
     statusDetail.textContent = snapshot.thinking
       ? "Observe la frontière. Le prochain mouvement peut tout changer."
       : snapshot.match.captured.length
@@ -158,10 +177,22 @@ function render(snapshot: Snapshot): void {
     outcome.hidden = false;
     const victory = snapshot.match.phase === "won";
     status.textContent = winnerLabel(snapshot.match.phase).toUpperCase();
-    statusIcon.textContent = victory ? "✳" : snapshot.match.phase === "draw" ? "◇" : "✦";
+    statusIcon.textContent = victory
+      ? "✳"
+      : snapshot.match.phase === "draw"
+        ? "◇"
+        : "✦";
     statusDetail.textContent = `Score final : ${snapshot.scores.player} contre ${snapshot.scores.ai}.`;
-    outcomeEyebrow.textContent = victory ? "TERRITOIRE CONQUIS" : snapshot.match.phase === "draw" ? "ÉQUILIBRE" : "L'ENCRE A GAGNÉ";
-    outcomeTitle.textContent = victory ? "La frontière t'appartient." : snapshot.match.phase === "draw" ? "Personne ne cède." : "Il reste d'autres stratégies.";
+    outcomeEyebrow.textContent = victory
+      ? "TERRITOIRE CONQUIS"
+      : snapshot.match.phase === "draw"
+        ? "ÉQUILIBRE"
+        : "L'ENCRE A GAGNÉ";
+    outcomeTitle.textContent = victory
+      ? "La frontière t'appartient."
+      : snapshot.match.phase === "draw"
+        ? "Personne ne cède."
+        : "Il reste d'autres stratégies.";
     outcomeDetail.textContent = victory
       ? "Tu contrôles plus de points. Une nouvelle région est ouverte."
       : "Rejoue cette carte et explore un autre chemin.";
@@ -174,7 +205,9 @@ controller.subscribe(render);
 undoButton.addEventListener("click", () => controller.undo());
 restartButton.addEventListener("click", () => controller.restart());
 nextButton.addEventListener("click", () => controller.next());
-select.addEventListener("change", () => controller.select(Number(select.value)));
+select.addEventListener("change", () =>
+  controller.select(Number(select.value)),
+);
 window.addEventListener("pagehide", () => controller.destroy(), { once: true });
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) controller.suspend();

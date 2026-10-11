@@ -4,9 +4,13 @@ import type { Ports, Progress } from "../../src/application/ports";
 import { HOMES, stages, TOTAL_CELLS } from "../../src/domain/stages";
 import type { Stage } from "../../src/domain/types";
 
-function fixture(saved: Progress | null = null, customStages: readonly Stage[] = stages) {
+function fixture(
+  saved: Progress | null = null,
+  customStages: readonly Stage[] = stages,
+) {
   const write = vi.fn();
-  const jobs: { callback: () => void; cancelled: boolean; done: boolean }[] = [];
+  const jobs: { callback: () => void; cancelled: boolean; done: boolean }[] =
+    [];
   const cancel = vi.fn();
   const ports: Ports = {
     store: { read: () => saved, write },
@@ -14,7 +18,10 @@ function fixture(saved: Progress | null = null, customStages: readonly Stage[] =
       schedule(callback) {
         const job = { callback, cancelled: false, done: false };
         jobs.push(job);
-        return () => { job.cancelled = true; cancel(); };
+        return () => {
+          job.cancelled = true;
+          cancel();
+        };
       },
     },
   };
@@ -65,7 +72,11 @@ describe("LISIÈRE controller", () => {
   });
 
   it("cancels AI when the player undoes, restarts or switches region", () => {
-    const { game, flush, cancel } = fixture({ unlocked: 3, selected: 1, wins: ["lisiere-01"] });
+    const { game, flush, cancel } = fixture({
+      unlocked: 3,
+      selected: 1,
+      wins: ["lisiere-01"],
+    });
     expect(game.snapshot.index).toBe(1);
     expect(game.snapshot.wins).toEqual(["lisiere-01"]);
     expect(game.move(6)).toBe(true);
@@ -89,11 +100,18 @@ describe("LISIÈRE controller", () => {
   });
 
   it("unlocks the next region after a real victory and persists progress", () => {
-    const allRocks = Array.from({ length: TOTAL_CELLS }, (_, index) => index)
-      .filter((index) => ![HOMES.player, HOMES.ai, 13].includes(index));
+    const allRocks = Array.from(
+      { length: TOTAL_CELLS },
+      (_, index) => index,
+    ).filter((index) => ![HOMES.player, HOMES.ai, 13].includes(index));
     const shortStage: Stage = {
-      id: "tiny-1", title: "Test", subtitle: "", chapter: "Test", depth: 1,
-      rocks: allRocks, sanctuaries: [],
+      id: "tiny-1",
+      title: "Test",
+      subtitle: "",
+      chapter: "Test",
+      depth: 1,
+      rocks: allRocks,
+      sanctuaries: [],
     };
     const second: Stage = { ...shortStage, id: "tiny-2" };
     const { game, write } = fixture(null, [shortStage, second]);
@@ -111,7 +129,11 @@ describe("LISIÈRE controller", () => {
   });
 
   it("rejects corrupted progress and missing stages", () => {
-    const { game } = fixture({ unlocked: 999, selected: 999, wins: ["fake", "lisiere-01"] });
+    const { game } = fixture({
+      unlocked: 999,
+      selected: 999,
+      wins: ["fake", "lisiere-01"],
+    });
     expect(game.snapshot.unlocked).toBe(9);
     expect(game.snapshot.index).toBe(9);
     expect(game.snapshot.wins).toEqual(["lisiere-01"]);

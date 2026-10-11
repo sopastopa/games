@@ -11,26 +11,35 @@ function evaluate(match: Match, stage: Stage): number {
         ? -100_000
         : 0;
   }
-  const mobility = legalMoves(match, stage, "ai").length -
+  const mobility =
+    legalMoves(match, stage, "ai").length -
     legalMoves(match, stage, "player").length;
   const hubs = stage.sanctuaries.reduce((sum, index) => {
     if (match.owners[index]) return sum;
     const adjacent = neighbors(index);
     const ai = adjacent.filter((cell) => match.owners[cell] === "ai").length;
-    const human = adjacent.filter((cell) => match.owners[cell] === "player").length;
+    const human = adjacent.filter(
+      (cell) => match.owners[cell] === "player",
+    ).length;
     return sum + (ai - human) * 1.8;
   }, 0);
   return (tally.ai - tally.player) * 14 + mobility * 1.1 + hubs;
 }
 
-function orderedMoves(match: Match, stage: Stage, maximizer: boolean): number[] {
-  return legalMoves(match, stage, match.turn).map((index) => ({
-    index,
-    score: evaluate(play(match, stage, index)!, stage),
-  }))
-    .sort((a, b) =>
-      (maximizer ? b.score - a.score : a.score - b.score) ||
-      a.index - b.index,
+function orderedMoves(
+  match: Match,
+  stage: Stage,
+  maximizer: boolean,
+): number[] {
+  return legalMoves(match, stage, match.turn)
+    .map((index) => ({
+      index,
+      score: evaluate(play(match, stage, index)!, stage),
+    }))
+    .sort(
+      (a, b) =>
+        (maximizer ? b.score - a.score : a.score - b.score) ||
+        a.index - b.index,
     )
     .map((move) => move.index);
 }
@@ -45,7 +54,10 @@ function search(
   if (!depth || match.phase !== "playing") return evaluate(match, stage);
   const maximize = match.turn === "ai";
   let best = maximize ? -Infinity : Infinity;
-  const moves = orderedMoves(match, stage, maximize).slice(0, depth > 1 ? 9 : 12);
+  const moves = orderedMoves(match, stage, maximize).slice(
+    0,
+    depth > 1 ? 9 : 12,
+  );
   if (!moves.length) return evaluate(match, stage);
   for (const index of moves) {
     const next = play(match, stage, index)!;

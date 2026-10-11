@@ -4,83 +4,193 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#111b1a" />
-    <meta name="description" content="LISIÈRE : un duel stratégique à un seul geste. Conquiers, encercles et contrôle les sanctuaires." />
+    <meta
+      name="description"
+      content="LISIÈRE : un duel stratégique à un seul geste. Conquiers, encercles et contrôle les sanctuaires."
+    />
     <title>LISIÈRE — Games</title>
   </head>
   <body>
     <div class="shell">
       <header class="masthead">
-        <a href="../../" class="home-link" data-testid="back-home">← Tous les jeux</a>
+        <a href="../../" class="home-link" data-testid="back-home"
+          >← Tous les jeux</a
+        >
         <div class="brand"><span aria-hidden="true">◈</span> LISIÈRE</div>
         <div class="masthead-label">UN JEU DE TERRITOIRE / GAMES Nº05</div>
       </header>
       <main>
         <section class="intro">
-          <div class="eyebrow"><span class="eyebrow-line"></span> UN DUEL AU TOUR PAR TOUR</div>
-          <h1>Tout se joue<br />à la <em>frontière<span>.</span></em></h1>
-          <p>Un territoire, un choix. Étends tes terres, prépare un encerclement et retourne les positions adverses. Simple à comprendre. Plus difficile à maîtriser.</p>
+          <div class="eyebrow">
+            <span class="eyebrow-line"></span> UN DUEL AU TOUR PAR TOUR
+          </div>
+          <h1>
+            Tout se joue<br />à la <em>frontière<span>.</span></em>
+          </h1>
+          <p>
+            Un territoire, un choix. Étends tes terres, prépare un encerclement
+            et retourne les positions adverses. Simple à comprendre. Plus
+            difficile à maîtriser.
+          </p>
         </section>
         <div class="play-layout">
           <section class="game" aria-label="Jeu de stratégie LISIÈRE">
             <div class="game-header">
               <div>
-                <span class="section-eyebrow" id="chapter">I · PREMIÈRES FRONTIÈRES</span>
+                <span class="section-eyebrow" id="chapter"
+                  >I · PREMIÈRES FRONTIÈRES</span
+                >
                 <h2 id="stage-title">La première rive</h2>
-                <p id="stage-subtitle">Deux territoires, une seule frontière.</p>
+                <p id="stage-subtitle">
+                  Deux territoires, une seule frontière.
+                </p>
               </div>
-              <div class="stage-number"><span>RÉGION</span><strong id="stage-index" data-testid="stage-index">01 / 10</strong></div>
+              <div class="stage-number">
+                <span>RÉGION</span
+                ><strong id="stage-index" data-testid="stage-index"
+                  >01 / 10</strong
+                >
+              </div>
             </div>
             <div class="battle-scores" aria-label="Score de la partie">
-              <div class="score-side score-player"><span class="player-icon">✳</span><div class="score-details"><small>TOI · CORAIL</small><strong id="player-score" data-testid="player-score">1</strong></div></div>
+              <div class="score-side score-player">
+                <span class="player-icon">✳</span>
+                <div class="score-details">
+                  <small>TOI · CORAIL</small
+                  ><strong id="player-score" data-testid="player-score"
+                    >1</strong
+                  >
+                </div>
+              </div>
               <div class="versus">VS</div>
-              <div class="score-side score-ai"><div class="score-details"><small>ADVERSAIRE · ENCRE</small><strong id="ai-score" data-testid="ai-score">1</strong></div><span class="ai-icon">✦</span></div>
+              <div class="score-side score-ai">
+                <div class="score-details">
+                  <small>ADVERSAIRE · ENCRE</small
+                  ><strong id="ai-score" data-testid="ai-score">1</strong>
+                </div>
+                <span class="ai-icon">✦</span>
+              </div>
             </div>
             <div class="board-surround">
-              <div class="board-label"><span><span class="live-dot"></span> CARTE TACTIQUE</span><span id="turn-count" data-testid="turn-count">TOUR 01</span></div>
-              <div class="board-frame">
-                <div id="board" class="board" aria-label="Grille stratégique de six colonnes et six lignes" data-testid="board"></div>
-                <span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+              <div class="board-label">
+                <span><span class="live-dot"></span> CARTE TACTIQUE</span
+                ><span id="turn-count" data-testid="turn-count">TOUR 01</span>
               </div>
-              <div class="board-footer"><span>◈ SANCTUAIRE · 3 PTS</span><span>▰ FALAISE</span><span>✳ CORAIL</span><span>✦ ENCRE</span></div>
+              <div class="board-frame">
+                <div
+                  id="board"
+                  class="board"
+                  aria-label="Grille stratégique de six colonnes et six lignes"
+                  data-testid="board"
+                ></div>
+                <span class="corner corner-tl"></span
+                ><span class="corner corner-tr"></span
+                ><span class="corner corner-bl"></span
+                ><span class="corner corner-br"></span>
+              </div>
+              <div class="board-footer">
+                <span>◈ SANCTUAIRE · 3 PTS</span><span>▰ FALAISE</span
+                ><span>✳ CORAIL</span><span>✦ ENCRE</span>
+              </div>
             </div>
             <div class="turn-status" role="status" aria-live="polite">
               <span class="status-symbol" id="status-icon">◎</span>
-              <div><span class="status-kicker">ÉTAT DU DUEL</span><strong id="game-status" data-testid="game-status">À TOI DE JOUER</strong><p id="status-detail">Choisis une case illuminée près de ton territoire.</p></div>
+              <div>
+                <span class="status-kicker">ÉTAT DU DUEL</span
+                ><strong id="game-status" data-testid="game-status"
+                  >À TOI DE JOUER</strong
+                >
+                <p id="status-detail">
+                  Choisis une case illuminée près de ton territoire.
+                </p>
+              </div>
             </div>
             <div id="outcome" class="outcome" data-testid="outcome" hidden>
               <span class="outcome-eyebrow" id="outcome-eyebrow">VICTOIRE</span>
               <h3 id="outcome-title">La frontière t'appartient.</h3>
-              <p id="outcome-detail">Tu contrôles plus de territoires. La prochaine région est ouverte.</p>
-              <button id="next" type="button" class="next-button">Explorer la région suivante →</button>
+              <p id="outcome-detail">
+                Tu contrôles plus de territoires. La prochaine région est
+                ouverte.
+              </p>
+              <button id="next" type="button" class="next-button">
+                Explorer la région suivante →
+              </button>
             </div>
             <div class="actions">
-              <button id="undo" type="button" title="Annuler le dernier tour">↶ <span>Annuler le tour</span></button>
-              <button id="restart" type="button">↻ <span>Recommencer</span></button>
+              <button id="undo" type="button" title="Annuler le dernier tour">
+                ↶ <span>Annuler le tour</span>
+              </button>
+              <button id="restart" type="button">
+                ↻ <span>Recommencer</span>
+              </button>
             </div>
           </section>
           <aside class="sidebar">
             <div class="campaign-card">
-              <div class="sidebar-topline"><span>LE GRAND ATLAS</span><span class="orbit-icon">✳</span></div>
-              <span class="campaign-count"><strong id="completed-count">00</strong> / 10</span>
+              <div class="sidebar-topline">
+                <span>LE GRAND ATLAS</span><span class="orbit-icon">✳</span>
+              </div>
+              <span class="campaign-count"
+                ><strong id="completed-count">00</strong> / 10</span
+              >
               <span class="campaign-caption">RÉGIONS CONQUISES</span>
-              <div class="campaign-progress"><span id="campaign-progress"></span></div>
+              <div class="campaign-progress">
+                <span id="campaign-progress"></span>
+              </div>
               <label for="stage-select">CHOISIR UNE RÉGION</label>
               <select id="stage-select" data-testid="stage-select"></select>
-              <p>Chaque victoire ouvre une nouvelle carte. Les falaises et les sanctuaires changent les priorités.</p>
+              <p>
+                Chaque victoire ouvre une nouvelle carte. Les falaises et les
+                sanctuaires changent les priorités.
+              </p>
             </div>
             <div class="rules-card">
               <span class="section-eyebrow">LA RÈGLE DU JEU</span>
-              <h3>Un geste.<br/><em>Plusieurs conséquences.</em></h3>
-              <div class="rule"><span class="rule-no">01</span><p><strong>Étends-toi.</strong> Clique une case libre voisine de tes terres.</p></div>
-              <div class="rule"><span class="rule-no">02</span><p><strong>Encercles.</strong> Deux terres alliées au contact d'une terre rivale la convertissent.</p></div>
-              <div class="rule"><span class="rule-no">03</span><p><strong>Contrôle les sanctuaires.</strong> Ils valent trois fois plus de points.</p></div>
-              <div class="rule"><span class="rule-no">04</span><p><strong>Anticipe.</strong> À la fin, la faction qui détient le plus de points gagne.</p></div>
-              <div class="rules-legend"><span><i class="legend-player"></i> Tes terres</span><span><i class="legend-ai"></i> Adversaire</span><span><i class="legend-open"></i> Coup possible</span></div>
+              <h3>Un geste.<br /><em>Plusieurs conséquences.</em></h3>
+              <div class="rule">
+                <span class="rule-no">01</span>
+                <p>
+                  <strong>Étends-toi.</strong> Clique une case libre voisine de
+                  tes terres.
+                </p>
+              </div>
+              <div class="rule">
+                <span class="rule-no">02</span>
+                <p>
+                  <strong>Encercles.</strong> Deux terres alliées au contact
+                  d'une terre rivale la convertissent.
+                </p>
+              </div>
+              <div class="rule">
+                <span class="rule-no">03</span>
+                <p>
+                  <strong>Contrôle les sanctuaires.</strong> Ils valent trois
+                  fois plus de points.
+                </p>
+              </div>
+              <div class="rule">
+                <span class="rule-no">04</span>
+                <p>
+                  <strong>Anticipe.</strong> À la fin, la faction qui détient le
+                  plus de points gagne.
+                </p>
+              </div>
+              <div class="rules-legend">
+                <span><i class="legend-player"></i> Tes terres</span
+                ><span><i class="legend-ai"></i> Adversaire</span
+                ><span><i class="legend-open"></i> Coup possible</span>
+              </div>
             </div>
-            <p class="fair-play">Pas de chronomètre. Pas de hasard. Une IA qui réfléchit, des décisions qui comptent.</p>
+            <p class="fair-play">
+              Pas de chronomètre. Pas de hasard. Une IA qui réfléchit, des
+              décisions qui comptent.
+            </p>
           </aside>
         </div>
-        <footer>✳ LISIÈRE <span>·</span> Le territoire est une question de choix. <a href="../../">Tous les jeux ↗</a></footer>
+        <footer>
+          ✳ LISIÈRE <span>·</span> Le territoire est une question de choix.
+          <a href="../../">Tous les jeux ↗</a>
+        </footer>
       </main>
     </div>
     <script type="module" src="/src/presentation/main.ts"></script>

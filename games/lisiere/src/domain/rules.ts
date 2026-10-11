@@ -49,7 +49,8 @@ export function validateStage(stage: Stage): void {
     !Number.isInteger(stage.depth) ||
     stage.depth < 1 ||
     stage.depth > 3
-  ) throw new Error(`Invalid terrain: ${stage.id}`);
+  )
+    throw new Error(`Invalid terrain: ${stage.id}`);
 }
 
 export function legalMoves(match: Match, stage: Stage, side: Side): number[] {
@@ -78,7 +79,11 @@ export function points(match: Match, stage: Stage): Scores {
 
 function terminal(match: Match, stage: Stage): Phase {
   const tally = points(match, stage);
-  return tally.player > tally.ai ? "won" : tally.ai > tally.player ? "lost" : "draw";
+  return tally.player > tally.ai
+    ? "won"
+    : tally.ai > tally.player
+      ? "lost"
+      : "draw";
 }
 
 export function play(match: Match, stage: Stage, index: number): Match | null {
@@ -95,8 +100,10 @@ export function play(match: Match, stage: Stage, index: number): Match | null {
       owner === opponent(actor) &&
       cell !== HOMES.player &&
       cell !== HOMES.ai &&
-      neighbors(cell).filter((neighbor) => owners[neighbor] === actor).length >= 2
-    ) captured.push(cell);
+      neighbors(cell).filter((neighbor) => owners[neighbor] === actor).length >=
+        2
+    )
+      captured.push(cell);
   });
   for (const cell of captured) owners[cell] = actor;
   const draft: Match = {
@@ -115,10 +122,12 @@ export function play(match: Match, stage: Stage, index: number): Match | null {
 }
 
 export function winnerLabel(phase: Phase): string {
-  return ({
-    playing: "En cours",
-    won: "Victoire",
-    lost: "Défaite",
-    draw: "Égalité",
-  } as const)[phase];
+  return (
+    {
+      playing: "En cours",
+      won: "Victoire",
+      lost: "Défaite",
+      draw: "Égalité",
+    } as const
+  )[phase];
 }
