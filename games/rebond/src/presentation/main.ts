@@ -44,7 +44,6 @@ const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)",
 );
 let snapshot = game.snapshot;
-let scale = 1;
 let dragging = false;
 let dragStart: Vec2 = { x: 0, y: 0 };
 let dragEnd: Vec2 = { x: 0, y: 0 };
@@ -56,7 +55,6 @@ const trail: Vec2[] = [];
 function resize(): void {
   const bounds = canvas.getBoundingClientRect();
   const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-  scale = (bounds.width || 900) / WORLD.width;
   canvas.width = Math.round((bounds.width || 900) * pixelRatio);
   canvas.height = Math.round((bounds.height || 600) * pixelRatio);
   context.setTransform(

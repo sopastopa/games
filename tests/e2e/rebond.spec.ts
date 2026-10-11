@@ -19,8 +19,16 @@ test("a reference shot reaches the target and unlocks the next stage", async ({
 }) => {
   await page.goto("/games/play/rebond/");
   await expect(page.getByTestId("phase")).toHaveText("PRÊT À LANCER");
-  await page.getByLabel("Angle du lancer").fill("38");
-  await page.getByLabel("Puissance du lancer").fill("570");
+  await page.getByLabel("Angle du lancer").evaluate((element) => {
+    const slider = element as HTMLInputElement;
+    slider.value = "38";
+    slider.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await page.getByLabel("Puissance du lancer").evaluate((element) => {
+    const slider = element as HTMLInputElement;
+    slider.value = "570";
+    slider.dispatchEvent(new Event("input", { bubbles: true }));
+  });
   await page.getByTestId("shoot").click();
   await expect(page.getByTestId("phase")).toHaveText("CIBLE ATTEINTE", {
     timeout: 10000,
