@@ -1,3 +1,4 @@
+import { installFullscreen } from "./fullscreen";
 import { TorsionController } from "../application/TorsionController";
 import { browserStore } from "../infrastructure/browser";
 import { STAGES } from "../domain/levels";
@@ -186,3 +187,5 @@ next.addEventListener("click", () => {
 });
 
 game.subscribe(render);
+
+installFullscreen();
