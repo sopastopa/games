@@ -48,10 +48,15 @@ describe("seeded district generation", () => {
         expect(withKeys.has(cell(arena.relays[2]!))).toBe(false);
         const allAccess = reachable(arena, START, ["rose", "cyan", "core"]);
         for (const point of [
-          ...arena.relays, arena.exit, ...arena.pickups, ...arena.spawns,
+          ...arena.relays,
+          arena.exit,
+          ...arena.pickups,
+          ...arena.spawns,
         ]) {
           expect(allAccess.has(cell(point))).toBe(true);
-          expect(nextStep(arena, START, point, ["rose", "cyan", "core"])).not.toBeNull();
+          expect(
+            nextStep(arena, START, point, ["rose", "cyan", "core"]),
+          ).not.toBeNull();
         }
         for (let x = 0; x < SIZE; x++) {
           expect(arena.walls[x]).toBe(true);

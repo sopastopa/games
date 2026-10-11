@@ -101,15 +101,25 @@ export class GameController {
   }
 
   togglePlan(): void {
-    if (this.game.phase === "playing") this.game = { ...this.game, phase: "planning" };
-    else if (this.game.phase === "planning") this.game = { ...this.game, phase: "playing" };
+    if (this.game.phase === "playing")
+      this.game = { ...this.game, phase: "planning" };
+    else if (this.game.phase === "planning")
+      this.game = { ...this.game, phase: "playing" };
     this.publish();
   }
 
   setWaypoint(point: Point): boolean {
     const x = Math.round(point.x);
     const y = Math.round(point.y);
-    if (this.game.phase !== "planning" || x < 1 || y < 1 || x >= SIZE - 1 || y >= SIZE - 1 || !this.game.explored[y * SIZE + x]) return false;
+    if (
+      this.game.phase !== "planning" ||
+      x < 1 ||
+      y < 1 ||
+      x >= SIZE - 1 ||
+      y >= SIZE - 1 ||
+      !this.game.explored[y * SIZE + x]
+    )
+      return false;
     this.game = { ...this.game, waypoint: { x, y } };
     this.publish();
     return true;

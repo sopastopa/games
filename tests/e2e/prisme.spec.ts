@@ -77,7 +77,9 @@ test("mobile portrait and landscape preserve shooting, movement and fullscreen",
     await page.waitForTimeout(200);
     await page.mouse.up();
     await page.getByTestId("dash").click();
-    await expect(page.getByTestId("game-status")).toContainText(/BADGES|RELAIS|PORTE|BONUS/);
+    await expect(page.getByTestId("game-status")).toContainText(
+      /BADGES|RELAIS|PORTE|BONUS/,
+    );
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth > window.innerWidth + 1,
     );
@@ -103,7 +105,6 @@ test("invalid seeds are rejected and a saved seed is restored after navigation",
   await page.reload();
   await expect(page.getByTestId("seed-input")).toHaveValue("80731");
 });
-
 
 test("strategic planning freezes the battlefield and accepts explored waypoints", async ({
   page,
@@ -169,8 +170,11 @@ test("twin stick input is playable on portrait and landscape screens", async ({
       fireBounds!.y + fireBounds!.height / 2,
     );
     await page.mouse.down();
-    await page.mouse.move(fireBounds!.x + fireBounds!.width / 2 + 24,
-      fireBounds!.y + fireBounds!.height / 2, { steps: 5 });
+    await page.mouse.move(
+      fireBounds!.x + fireBounds!.width / 2 + 24,
+      fireBounds!.y + fireBounds!.height / 2,
+      { steps: 5 },
+    );
     await page.waitForTimeout(160);
     await page.mouse.up();
     const right = await page.evaluate(

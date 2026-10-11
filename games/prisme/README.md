@@ -32,16 +32,16 @@ La structure des connexions entre salles est garantie ; les portes bloquent les 
 
 ## Commandes
 
-| Action | PC | Mobile |
-| --- | --- | --- |
-| Déplacement | ZQSD/WASD/flèches | Joystick gauche libre |
-| Tir et visée | Souris + clic ou Espace (visée assistée) | Joystick droit : appui = tir assisté ; glisser = viser et tirer |
-| Propulsion | Maj | Bouton DASH |
-| Porte | E | Bouton PORTE |
-| Scanner | R | Bouton RADAR |
-| Plan tactique | M | Bouton Plan ou minimap |
-| Pause | P ou bouton | Bouton Pause |
-| Plein écran | Bouton, quitter avec Échap | Bouton, mode natif ou repli viewport |
+| Action        | PC                                       | Mobile                                                          |
+| ------------- | ---------------------------------------- | --------------------------------------------------------------- |
+| Déplacement   | ZQSD/WASD/flèches                        | Joystick gauche libre                                           |
+| Tir et visée  | Souris + clic ou Espace (visée assistée) | Joystick droit : appui = tir assisté ; glisser = viser et tirer |
+| Propulsion    | Maj                                      | Bouton DASH                                                     |
+| Porte         | E                                        | Bouton PORTE                                                    |
+| Scanner       | R                                        | Bouton RADAR                                                    |
+| Plan tactique | M                                        | Bouton Plan ou minimap                                          |
+| Pause         | P ou bouton                              | Bouton Pause                                                    |
+| Plein écran   | Bouton, quitter avec Échap               | Bouton, mode natif ou repli viewport                            |
 
 Les joysticks se recentrent au contact, avec zone morte anti-dérive, et peuvent être utilisés simultanément. L'interface s'adapte au mode portrait/paysage et aux encoches. La partie se suspend si le navigateur passe en arrière-plan.
 

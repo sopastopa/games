@@ -44,10 +44,18 @@ describe("PRISME tactical simulation", () => {
       let state: GameState = {
         ...playing(),
         player: { ...playing().player, weapon },
-        enemies: [{
-          id: 0, kind: "hunter", x: 7, y: 5, hp: 3,
-          timer: 500, alert: 0, target: null,
-        }],
+        enemies: [
+          {
+            id: 0,
+            kind: "hunter",
+            x: 7,
+            y: 5,
+            hp: 3,
+            timer: 500,
+            alert: 0,
+            target: null,
+          },
+        ],
       };
       for (let i = 0; i < 40; i++) {
         state = stepGame(state, { ...IDLE, aimX: 1, aimY: 0, shoot: true });
@@ -60,7 +68,8 @@ describe("PRISME tactical simulation", () => {
 
   it("limits heat, consumes dash and respects invulnerability", () => {
     let state: GameState = { ...playing(), enemies: [] };
-    for (let i = 0; i < 120; i++) state = stepGame(state, { ...IDLE, shoot: true });
+    for (let i = 0; i < 120; i++)
+      state = stepGame(state, { ...IDLE, shoot: true });
     expect(state.player.heat).toBeLessThanOrEqual(100);
     state = stepGame(state, { ...IDLE, dash: true, moveY: 1 });
     expect(state.player.dashCooldown).toBe(120);
@@ -89,9 +98,13 @@ describe("PRISME tactical simulation", () => {
       keys: ["rose", "cyan"],
     };
     expect(canOpenGate(state, "core")).toBe(false);
-    state = { ...state, relays: state.relays.map((relay, i) => ({
-      ...relay, charge: i < 2 ? 100 : 0,
-    })) };
+    state = {
+      ...state,
+      relays: state.relays.map((relay, i) => ({
+        ...relay,
+        charge: i < 2 ? 100 : 0,
+      })),
+    };
     expect(canOpenGate(state, "core")).toBe(true);
     state = stepGame(state, { ...IDLE, interact: true });
     expect(state.opened).toContain("core");
@@ -101,14 +114,16 @@ describe("PRISME tactical simulation", () => {
     let state: GameState = { ...playing(), enemies: [] };
     const key = state.pickups.find((item) => item.kind === "key-rose")!;
     state = {
-      ...state, player: { ...state.player, x: key.x, y: key.y },
+      ...state,
+      player: { ...state.player, x: key.x, y: key.y },
     };
     state = stepGame(state, IDLE);
     expect(state.keys).toContain("rose");
     expect(state.pickups.some((item) => item.id === key.id)).toBe(false);
     const armor = state.pickups.find((item) => item.kind === "armor")!;
     state = {
-      ...state, player: { ...state.player, x: armor.x, y: armor.y },
+      ...state,
+      player: { ...state.player, x: armor.x, y: armor.y },
     };
     state = stepGame(state, IDLE);
     expect(state.player.armor).toBe(2);
@@ -143,7 +158,8 @@ describe("PRISME tactical simulation", () => {
     expect(state.score).toBe(200);
     expect(objectiveReady(state)).toBe(false);
     state = {
-      ...state, relays: state.relays.map((item) => ({ ...item, charge: 100 })),
+      ...state,
+      relays: state.relays.map((item) => ({ ...item, charge: 100 })),
       player: { ...state.player, ...state.arena.exit },
     };
     expect(objectiveReady(state)).toBe(true);
@@ -152,24 +168,39 @@ describe("PRISME tactical simulation", () => {
   });
 
   it("absorbs hostile shots with armor and prevents repeated damage", () => {
-    let state: GameState = { ...playing(), enemies: [], player: {
-      ...playing().player, hp: 1, armor: 1,
-    } };
+    let state: GameState = {
+      ...playing(),
+      enemies: [],
+      player: {
+        ...playing().player,
+        hp: 1,
+        armor: 1,
+      },
+    };
     const bullet: Shot = {
-      x: state.player.x - 0.2, y: state.player.y,
-      dx: 0.2, dy: 0, hostile: true, life: 20,
-      damage: 1, pierce: 1, hits: [],
+      x: state.player.x - 0.2,
+      y: state.player.y,
+      dx: 0.2,
+      dy: 0,
+      hostile: true,
+      life: 20,
+      damage: 1,
+      pierce: 1,
+      hits: [],
     };
     state = stepGame({ ...state, shots: [bullet] }, IDLE);
     expect(state.player.armor).toBe(0);
     expect(state.player.hp).toBe(1);
     const blocked = stepGame({ ...state, shots: [bullet] }, IDLE);
     expect(blocked.player.hp).toBe(1);
-    state = stepGame({
-      ...state,
-      player: { ...state.player, invulnerable: 0 },
-      shots: [bullet],
-    }, IDLE);
+    state = stepGame(
+      {
+        ...state,
+        player: { ...state.player, invulnerable: 0 },
+        shots: [bullet],
+      },
+      IDLE,
+    );
     expect(state.phase).toBe("lost");
     expect(distance(START, { x: 5, y: 5 })).toBe(0);
     expect(bestAim(createGame(17))).toEqual({ x: 1, y: 0 });

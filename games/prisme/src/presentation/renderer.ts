@@ -15,15 +15,25 @@ export interface Camera {
   y: number;
 }
 
-export function cameraFor(width: number, height: number, player: Point): Camera {
+export function cameraFor(
+  width: number,
+  height: number,
+  player: Point,
+): Camera {
   const scale =
     width < 850
       ? Math.max(24, Math.min(48, Math.min(width / 11, height / 11)))
       : Math.max(35, Math.min(70, Math.min(width / 18, height / 12)));
   return {
     scale,
-    x: Math.max(0, Math.min(SIZE - width / scale, player.x - width / scale / 2)),
-    y: Math.max(0, Math.min(SIZE - height / scale, player.y - height / scale / 2)),
+    x: Math.max(
+      0,
+      Math.min(SIZE - width / scale, player.x - width / scale / 2),
+    ),
+    y: Math.max(
+      0,
+      Math.min(SIZE - height / scale, player.y - height / scale / 2),
+    ),
   };
 }
 
@@ -81,22 +91,39 @@ function worldY(camera: Camera, y: number): number {
 
 function coloredPickup(kind: Pickup["kind"]): [string, string] {
   switch (kind) {
-    case "key-rose": return ["#ff84c1", "◆"];
-    case "key-cyan": return ["#58f3ef", "◆"];
-    case "scatter": return ["#f0a1ff", "⋈"];
-    case "rail": return ["#ffbb63", "⚡"];
-    case "armor": return ["#9ce1ff", "✚"];
-    case "radar": return ["#9afc8f", "◉"];
-    case "battery": return ["#ffee90", "↯"];
+    case "key-rose":
+      return ["#ff84c1", "◆"];
+    case "key-cyan":
+      return ["#58f3ef", "◆"];
+    case "scatter":
+      return ["#f0a1ff", "⋈"];
+    case "rail":
+      return ["#ffbb63", "⚡"];
+    case "armor":
+      return ["#9ce1ff", "✚"];
+    case "radar":
+      return ["#9afc8f", "◉"];
+    case "battery":
+      return ["#ffee90", "↯"];
   }
 }
 
-function renderWorld(ctx: CanvasRenderingContext2D, state: GameState, camera: Camera): void {
+function renderWorld(
+  ctx: CanvasRenderingContext2D,
+  state: GameState,
+  camera: Camera,
+): void {
   const { scale } = camera;
   const fromX = Math.max(0, Math.floor(camera.x) - 1);
   const fromY = Math.max(0, Math.floor(camera.y) - 1);
-  const toX = Math.min(SIZE - 1, Math.ceil(camera.x + ctx.canvas.clientWidth / scale) + 1);
-  const toY = Math.min(SIZE - 1, Math.ceil(camera.y + ctx.canvas.clientHeight / scale) + 1);
+  const toX = Math.min(
+    SIZE - 1,
+    Math.ceil(camera.x + ctx.canvas.clientWidth / scale) + 1,
+  );
+  const toY = Math.min(
+    SIZE - 1,
+    Math.ceil(camera.y + ctx.canvas.clientHeight / scale) + 1,
+  );
   for (let y = fromY; y <= toY; y++) {
     for (let x = fromX; x <= toX; x++) {
       const index = y * SIZE + x;
@@ -121,7 +148,12 @@ function renderWorld(ctx: CanvasRenderingContext2D, state: GameState, camera: Ca
         ctx.strokeRect(px + 0.5, py + 0.5, scale - 1, scale - 1);
         if ((x * 11 + y * 7 + state.seed) % 9 === 0) {
           ctx.fillStyle = "#c4f5ff40";
-          ctx.fillRect(px + scale * 0.44, py + scale * 0.44, scale * 0.07, scale * 0.07);
+          ctx.fillRect(
+            px + scale * 0.44,
+            py + scale * 0.44,
+            scale * 0.07,
+            scale * 0.07,
+          );
         }
       }
       if (!state.visible[index]) {
@@ -132,13 +164,25 @@ function renderWorld(ctx: CanvasRenderingContext2D, state: GameState, camera: Ca
   }
 }
 
-function decorations(ctx: CanvasRenderingContext2D, state: GameState, camera: Camera, frame: number): void {
+function decorations(
+  ctx: CanvasRenderingContext2D,
+  state: GameState,
+  camera: Camera,
+  frame: number,
+): void {
   const s = camera.scale;
-  const show = (point: Point): boolean => state.visible[Math.round(point.y) * SIZE + Math.round(point.x)] === true;
+  const show = (point: Point): boolean =>
+    state.visible[Math.round(point.y) * SIZE + Math.round(point.x)] === true;
   for (const door of state.arena.doors) {
-    if (!state.explored[Math.round(door.y) * SIZE + Math.round(door.x)]) continue;
+    if (!state.explored[Math.round(door.y) * SIZE + Math.round(door.x)])
+      continue;
     const opened = state.opened.includes(door.id);
-    const color = door.id === "rose" ? "#ff86c4" : door.id === "cyan" ? "#62f3ee" : "#ffcc65";
+    const color =
+      door.id === "rose"
+        ? "#ff86c4"
+        : door.id === "cyan"
+          ? "#62f3ee"
+          : "#ffcc65";
     const x = worldX(camera, door.x);
     const y = worldY(camera, door.y);
     ctx.strokeStyle = color;
@@ -151,7 +195,8 @@ function decorations(ctx: CanvasRenderingContext2D, state: GameState, camera: Ca
     }
   }
   for (const [index, relay] of state.relays.entries()) {
-    if (!state.explored[Math.round(relay.y) * SIZE + Math.round(relay.x)]) continue;
+    if (!state.explored[Math.round(relay.y) * SIZE + Math.round(relay.x)])
+      continue;
     const x = worldX(camera, relay.x);
     const y = worldY(camera, relay.y);
     const color = COLORS[index]!;
@@ -159,12 +204,22 @@ function decorations(ctx: CanvasRenderingContext2D, state: GameState, camera: Ca
     ctx.strokeStyle = color;
     ctx.lineWidth = s * 0.075;
     ctx.beginPath();
-    ctx.arc(x, y, s * 0.36, -Math.PI / 2, -Math.PI / 2 + relay.charge * Math.PI / 50);
+    ctx.arc(
+      x,
+      y,
+      s * 0.36,
+      -Math.PI / 2,
+      -Math.PI / 2 + (relay.charge * Math.PI) / 50,
+    );
     ctx.stroke();
     circle(ctx, x, y, s * 0.16, color);
     if (relay.charge === 100) circle(ctx, x, y, s * 0.08, "#ffffff");
   }
-  if (state.explored[Math.round(state.arena.exit.y) * SIZE + Math.round(state.arena.exit.x)]) {
+  if (
+    state.explored[
+      Math.round(state.arena.exit.y) * SIZE + Math.round(state.arena.exit.x)
+    ]
+  ) {
     const x = worldX(camera, state.arena.exit.x);
     const y = worldY(camera, state.arena.exit.y);
     const color = objectiveReady(state) ? "#b6ffa1" : "#778aa8";
@@ -191,13 +246,24 @@ function decorations(ctx: CanvasRenderingContext2D, state: GameState, camera: Ca
   }
 }
 
-function actors(ctx: CanvasRenderingContext2D, state: GameState, camera: Camera, frame: number, aim?: Point): void {
+function actors(
+  ctx: CanvasRenderingContext2D,
+  state: GameState,
+  camera: Camera,
+  frame: number,
+  aim?: Point,
+): void {
   const s = camera.scale;
   for (const enemy of state.enemies) {
     if (!isEnemyVisible(state, enemy)) continue;
     const x = worldX(camera, enemy.x);
     const y = worldY(camera, enemy.y);
-    const color = enemy.kind === "hunter" ? "#ff7193" : enemy.kind === "sniper" ? "#ffbb65" : "#bb92ff";
+    const color =
+      enemy.kind === "hunter"
+        ? "#ff7193"
+        : enemy.kind === "sniper"
+          ? "#ffbb65"
+          : "#bb92ff";
     const radius = enemy.kind === "bulwark" ? 0.38 : 0.29;
     ctx.shadowColor = color;
     ctx.shadowBlur = s * 0.3;
@@ -208,25 +274,52 @@ function actors(ctx: CanvasRenderingContext2D, state: GameState, camera: Camera,
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = "#fff4fd";
-    ctx.fillText(enemy.kind === "hunter" ? "▲" : enemy.kind === "sniper" ? "✛" : "■", x, y);
-    const maxHp = enemy.kind === "bulwark" ? 5 + state.zone : enemy.kind === "sniper" ? 2 : 3;
+    ctx.fillText(
+      enemy.kind === "hunter" ? "▲" : enemy.kind === "sniper" ? "✛" : "■",
+      x,
+      y,
+    );
+    const maxHp =
+      enemy.kind === "bulwark"
+        ? 5 + state.zone
+        : enemy.kind === "sniper"
+          ? 2
+          : 3;
     ctx.fillStyle = "#3c1b35";
     ctx.fillRect(x - s * 0.35, y - s * 0.48, s * 0.7, s * 0.065);
     ctx.fillStyle = color;
-    ctx.fillRect(x - s * 0.35, y - s * 0.48, s * 0.7 * Math.max(0, enemy.hp / maxHp), s * 0.065);
+    ctx.fillRect(
+      x - s * 0.35,
+      y - s * 0.48,
+      s * 0.7 * Math.max(0, enemy.hp / maxHp),
+      s * 0.065,
+    );
     if (enemy.timer < 29 && enemy.alert > 0) {
       ctx.strokeStyle = color + "a0";
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(x, y);
-      ctx.lineTo(worldX(camera, state.player.x), worldY(camera, state.player.y));
+      ctx.lineTo(
+        worldX(camera, state.player.x),
+        worldY(camera, state.player.y),
+      );
       ctx.stroke();
     }
   }
   for (const shot of state.shots) {
-    if (shot.hostile && !state.visible[Math.round(shot.y) * SIZE + Math.round(shot.x)]) continue;
+    if (
+      shot.hostile &&
+      !state.visible[Math.round(shot.y) * SIZE + Math.round(shot.x)]
+    )
+      continue;
     const color = shot.hostile ? "#ffb987" : "#76ffee";
-    circle(ctx, worldX(camera, shot.x), worldY(camera, shot.y), s * (shot.hostile ? 0.13 : 0.1), color);
+    circle(
+      ctx,
+      worldX(camera, shot.x),
+      worldY(camera, shot.y),
+      s * (shot.hostile ? 0.13 : 0.1),
+      color,
+    );
   }
   const { player } = state;
   const x = worldX(camera, player.x);
@@ -252,7 +345,8 @@ function actors(ctx: CanvasRenderingContext2D, state: GameState, camera: Camera,
   ctx.closePath();
   ctx.shadowBlur = s * 0.38;
   ctx.shadowColor = "#62f9e9";
-  ctx.fillStyle = player.invulnerable > 0 && frame % 8 < 4 ? "#ffffff" : "#64f3dc";
+  ctx.fillStyle =
+    player.invulnerable > 0 && frame % 8 < 4 ? "#ffffff" : "#64f3dc";
   ctx.fill();
   ctx.restore();
   if (state.waypoint) {
@@ -299,7 +393,9 @@ export function renderMap(
       const index = y * SIZE + x;
       if (!state.explored[index]) continue;
       const district = Number(x >= 20) + 2 * Number(y >= 20);
-      ctx.fillStyle = state.arena.walls[index] ? "#697891" : DISTRICTS[district]!;
+      ctx.fillStyle = state.arena.walls[index]
+        ? "#697891"
+        : DISTRICTS[district]!;
       ctx.fillRect(ox + x * s, oy + y * s, Math.ceil(s), Math.ceil(s));
       if (state.visible[index] && !state.arena.walls[index]) {
         ctx.fillStyle = "#56cfe836";
@@ -308,25 +404,55 @@ export function renderMap(
     }
   }
   for (const door of state.arena.doors) {
-    if (!state.explored[Math.round(door.y) * SIZE + Math.round(door.x)]) continue;
+    if (!state.explored[Math.round(door.y) * SIZE + Math.round(door.x)])
+      continue;
     ctx.fillStyle = state.opened.includes(door.id) ? "#8bf4bd" : "#f6b46b";
-    ctx.fillRect(ox + door.x * s, oy + door.y * s, Math.max(2, s), Math.max(2, s));
+    ctx.fillRect(
+      ox + door.x * s,
+      oy + door.y * s,
+      Math.max(2, s),
+      Math.max(2, s),
+    );
   }
   for (const [index, relay] of state.relays.entries()) {
     if (!state.explored[cellIndex(relay)]) continue;
-    circle(ctx, ox + (relay.x + 0.5) * s, oy + (relay.y + 0.5) * s, Math.max(2, s * 1.5), COLORS[index]!);
+    circle(
+      ctx,
+      ox + (relay.x + 0.5) * s,
+      oy + (relay.y + 0.5) * s,
+      Math.max(2, s * 1.5),
+      COLORS[index]!,
+    );
   }
   if (state.explored[cellIndex(state.arena.exit)]) {
-    circle(ctx, ox + (state.arena.exit.x + 0.5) * s, oy + (state.arena.exit.y + 0.5) * s, Math.max(2, s), "#e9ff9c");
+    circle(
+      ctx,
+      ox + (state.arena.exit.x + 0.5) * s,
+      oy + (state.arena.exit.y + 0.5) * s,
+      Math.max(2, s),
+      "#e9ff9c",
+    );
   }
   if (state.waypoint) {
     ctx.strokeStyle = "#eaff8f";
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(ox + (state.waypoint.x + 0.5) * s, oy + (state.waypoint.y + 0.5) * s, Math.max(3, s * 1.8), 0, Math.PI * 2);
+    ctx.arc(
+      ox + (state.waypoint.x + 0.5) * s,
+      oy + (state.waypoint.y + 0.5) * s,
+      Math.max(3, s * 1.8),
+      0,
+      Math.PI * 2,
+    );
     ctx.stroke();
   }
-  circle(ctx, ox + (state.player.x + 0.5) * s, oy + (state.player.y + 0.5) * s, Math.max(3, s * 1.7), "#ffffff");
+  circle(
+    ctx,
+    ox + (state.player.x + 0.5) * s,
+    oy + (state.player.y + 0.5) * s,
+    Math.max(3, s * 1.7),
+    "#ffffff",
+  );
   if (showLabels) {
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -335,7 +461,11 @@ export function renderMap(
     for (const [i, label] of ["ATELIER", "NÉON", "CRYPTE", "NOYAU"].entries()) {
       const x = ox + ((i % 2) * 20 + 10) * s;
       const y = oy + (Math.floor(i / 2) * 20 + 10) * s;
-      if (state.explored[Math.floor((y - oy) / s) * SIZE + Math.floor((x - ox) / s)])
+      if (
+        state.explored[
+          Math.floor((y - oy) / s) * SIZE + Math.floor((x - ox) / s)
+        ]
+      )
         ctx.fillText(label, x, y);
     }
   }

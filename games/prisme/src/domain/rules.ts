@@ -15,13 +15,7 @@ import {
 } from "./map";
 
 export type Phase =
-  | "ready"
-  | "playing"
-  | "paused"
-  | "planning"
-  | "cleared"
-  | "won"
-  | "lost";
+  "ready" | "playing" | "paused" | "planning" | "cleared" | "won" | "lost";
 export type Weapon = "pulse" | "scatter" | "rail";
 
 export interface Pilot extends Point {
@@ -152,7 +146,12 @@ export function createGame(seed: number, zone = 1): GameState {
   };
 }
 
-function canOccupy(arena: Arena, x: number, y: number, gates: readonly GateId[]): boolean {
+function canOccupy(
+  arena: Arena,
+  x: number,
+  y: number,
+  gates: readonly GateId[],
+): boolean {
   const r = 0.22;
   return (
     passable(arena, Math.round(x - r), Math.round(y - r), gates) &&
@@ -197,8 +196,10 @@ export function bestAim(state: GameState): Point {
 }
 
 export function objectiveReady(state: GameState): boolean {
-  return state.enemies.length === 0 &&
-    state.relays.every((relay) => relay.charge === 100);
+  return (
+    state.enemies.length === 0 &&
+    state.relays.every((relay) => relay.charge === 100)
+  );
 }
 
 function notify(state: GameState, message: string): void {
@@ -250,7 +251,10 @@ function collect(state: GameState): void {
 
 export function availableGate(state: GameState): GateId | null {
   const closest = state.arena.doors
-    .filter((gate) => !state.opened.includes(gate.id) && distance(gate, state.player) < 1.8)
+    .filter(
+      (gate) =>
+        !state.opened.includes(gate.id) && distance(gate, state.player) < 1.8,
+    )
     .sort((a, b) => distance(a, state.player) - distance(b, state.player))[0];
   return closest?.id ?? null;
 }
@@ -265,9 +269,12 @@ function operateGate(state: GameState): void {
   const id = availableGate(state);
   if (!id) return;
   if (!canOpenGate(state, id)) {
-    notify(state, id === "core"
-      ? "PORTE OR • Active les relais rose et cyan"
-      : "ACCÈS REFUSÉ • Trouve le badge " + id.toUpperCase());
+    notify(
+      state,
+      id === "core"
+        ? "PORTE OR • Active les relais rose et cyan"
+        : "ACCÈS REFUSÉ • Trouve le badge " + id.toUpperCase(),
+    );
     return;
   }
   state.opened.push(id);
@@ -286,7 +293,8 @@ function spawnFriendly(state: GameState, aim: Point): Shot[] {
   const weapon = state.player.weapon;
   const player = state.player;
   const spread = weapon === "scatter" ? [-0.19, 0, 0.19] : [0];
-  const velocity = weapon === "rail" ? 0.48 : weapon === "scatter" ? 0.25 : 0.31;
+  const velocity =
+    weapon === "rail" ? 0.48 : weapon === "scatter" ? 0.25 : 0.31;
   return spread.map((angle) => {
     const cos = Math.cos(angle);
     const sin = Math.sin(angle);
@@ -309,14 +317,25 @@ function spawnFriendly(state: GameState, aim: Point): Shot[] {
 function travel(state: GameState, shots: Shot[]): Shot[] {
   const remaining: Shot[] = [];
   for (const previous of shots) {
-    const bullet: Shot = { ...previous, hits: [...previous.hits], life: previous.life - 1 };
+    const bullet: Shot = {
+      ...previous,
+      hits: [...previous.hits],
+      life: previous.life - 1,
+    };
     if (bullet.life <= 0) continue;
     let stopped = false;
     const steps = Math.ceil(Math.hypot(bullet.dx, bullet.dy) / 0.09);
     for (let part = 0; part < steps; part++) {
       bullet.x += bullet.dx / steps;
       bullet.y += bullet.dy / steps;
-      if (!passable(state.arena, Math.round(bullet.x), Math.round(bullet.y), state.opened)) {
+      if (
+        !passable(
+          state.arena,
+          Math.round(bullet.x),
+          Math.round(bullet.y),
+          state.opened,
+        )
+      ) {
         stopped = true;
         break;
       }
@@ -336,7 +355,8 @@ function travel(state: GameState, shots: Shot[]): Shot[] {
         if (enemy) {
           enemy.hp -= bullet.damage;
           bullet.hits.push(enemy.id);
-          if (enemy.hp <= 0) state.score += enemy.kind === "bulwark" ? 220 : 100;
+          if (enemy.hp <= 0)
+            state.score += enemy.kind === "bulwark" ? 220 : 100;
           if (bullet.hits.length >= bullet.pierce) {
             stopped = true;
             break;
@@ -354,13 +374,17 @@ function simulateEnemies(state: GameState): void {
   for (const enemy of state.enemies) {
     const range = distance(enemy, player);
     const seen =
-      range <= 8 &&
-      hasSight(state.arena, enemy, player, state.opened);
+      range <= 8 && hasSight(state.arena, enemy, player, state.opened);
     if (seen) enemy.alert = 150;
     else enemy.alert = Math.max(0, enemy.alert - 1);
     if (enemy.alert === 0) continue;
     enemy.timer--;
-    const speed = enemy.kind === "hunter" ? 0.035 : enemy.kind === "bulwark" ? 0.015 : 0.018;
+    const speed =
+      enemy.kind === "hunter"
+        ? 0.035
+        : enemy.kind === "bulwark"
+          ? 0.015
+          : 0.018;
     if (enemy.kind === "hunter") {
       if (range > 0.72) advanceEnemy(state, enemy, speed, seen);
       else if (enemy.timer <= 0) {
@@ -373,7 +397,13 @@ function simulateEnemies(state: GameState): void {
         advanceEnemy(state, enemy, speed, seen);
       } else if (range < threshold && seen) {
         const backwards = unit(enemy.x - player.x, enemy.y - player.y);
-        move(state.arena, enemy, backwards.x * speed, backwards.y * speed, state.opened);
+        move(
+          state.arena,
+          enemy,
+          backwards.x * speed,
+          backwards.y * speed,
+          state.opened,
+        );
       }
       if (seen && range < 8 && enemy.timer <= 0) {
         const heading = unit(player.x - enemy.x, player.y - enemy.y);
@@ -393,8 +423,14 @@ function simulateEnemies(state: GameState): void {
   }
 }
 
-function advanceEnemy(state: GameState, enemy: Sentinel, speed: number, seen: boolean): void {
-  if (!seen && state.tick % 20 !== enemy.id % 20 && enemy.target === null) return;
+function advanceEnemy(
+  state: GameState,
+  enemy: Sentinel,
+  speed: number,
+  seen: boolean,
+): void {
+  if (!seen && state.tick % 20 !== enemy.id % 20 && enemy.target === null)
+    return;
   if (seen) {
     enemy.target = { x: state.player.x, y: state.player.y };
   }
@@ -465,8 +501,16 @@ export function stepGame(state: GameState, input: Controls): GameState {
     player.scanCharges--;
     const radius = 11;
     const explored = [...next.explored];
-    for (let y = Math.max(1, Math.floor(player.y - radius)); y <= Math.min(SIZE - 2, player.y + radius); y++) {
-      for (let x = Math.max(1, Math.floor(player.x - radius)); x <= Math.min(SIZE - 2, player.x + radius); x++) {
+    for (
+      let y = Math.max(1, Math.floor(player.y - radius));
+      y <= Math.min(SIZE - 2, player.y + radius);
+      y++
+    ) {
+      for (
+        let x = Math.max(1, Math.floor(player.x - radius));
+        x <= Math.min(SIZE - 2, player.x + radius);
+        x++
+      ) {
         if (Math.hypot(x - player.x, y - player.y) <= radius)
           explored[y * SIZE + x] = true;
       }
@@ -477,8 +521,10 @@ export function stepGame(state: GameState, input: Controls): GameState {
   if (input.shoot && player.cooldown === 0 && player.heat < 85) {
     const aim = unit(input.aimX, input.aimY);
     if (aim.x !== 0 || aim.y !== 0) {
-      const cadence = player.weapon === "rail" ? 22 : player.weapon === "scatter" ? 18 : 8;
-      const heat = player.weapon === "rail" ? 32 : player.weapon === "scatter" ? 27 : 17;
+      const cadence =
+        player.weapon === "rail" ? 22 : player.weapon === "scatter" ? 18 : 8;
+      const heat =
+        player.weapon === "rail" ? 32 : player.weapon === "scatter" ? 27 : 17;
       next.shots.push(...spawnFriendly(next, aim));
       player.cooldown = cadence;
       player.heat = Math.min(100, player.heat + heat);
@@ -505,7 +551,8 @@ export function stepGame(state: GameState, input: Controls): GameState {
     Math.round(player.y) !== Math.round(state.player.y) ||
     next.opened.length !== state.opened.length ||
     next.tick % 8 === 0
-  ) updateFog(next);
+  )
+    updateFog(next);
   if (next.waypoint && distance(next.waypoint, player) < 0.85)
     next.waypoint = null;
   if (player.hp <= 0) {

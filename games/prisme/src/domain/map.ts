@@ -9,13 +9,7 @@ export interface Point {
 
 export type GateId = "rose" | "cyan" | "core";
 export type PickupKind =
-  | "key-rose"
-  | "key-cyan"
-  | "scatter"
-  | "rail"
-  | "armor"
-  | "battery"
-  | "radar";
+  "key-rose" | "key-cyan" | "scatter" | "rail" | "armor" | "battery" | "radar";
 export type EnemyKind = "hunter" | "sniper" | "bulwark";
 
 export interface Gate extends Point {
@@ -153,10 +147,19 @@ export function visibleCells(
   const visible = Array<boolean>(SIZE * SIZE).fill(false);
   const x0 = Math.round(origin.x);
   const y0 = Math.round(origin.y);
-  for (let y = Math.max(1, y0 - radius); y <= Math.min(SIZE - 2, y0 + radius); y++) {
-    for (let x = Math.max(1, x0 - radius); x <= Math.min(SIZE - 2, x0 + radius); x++) {
+  for (
+    let y = Math.max(1, y0 - radius);
+    y <= Math.min(SIZE - 2, y0 + radius);
+    y++
+  ) {
+    for (
+      let x = Math.max(1, x0 - radius);
+      x <= Math.min(SIZE - 2, x0 + radius);
+      x++
+    ) {
       if (Math.hypot(x - origin.x, y - origin.y) > radius) continue;
-      if (hasSight(arena, origin, { x, y }, opened)) visible[y * SIZE + x] = true;
+      if (hasSight(arena, origin, { x, y }, opened))
+        visible[y * SIZE + x] = true;
     }
   }
   visible[cell({ x: x0, y: y0 })] = true;
@@ -218,8 +221,14 @@ export function generateArena(seed: number, zone: number): Arena {
   ];
   const kinds: PickupKind[] = ["scatter", "rail", "armor", "radar", "battery"];
   const candidateRooms = [
-    center(2, 0), center(3, 1), center(0, 2), center(1, 3),
-    center(2, 2), center(3, 2), center(2, 1), center(1, 2),
+    center(2, 0),
+    center(3, 1),
+    center(0, 2),
+    center(1, 3),
+    center(2, 2),
+    center(3, 2),
+    center(2, 1),
+    center(1, 2),
   ];
   for (let index = 0; index < candidateRooms.length; index++) {
     pickups.push({
@@ -236,22 +245,34 @@ export function generateArena(seed: number, zone: number): Arena {
       const origin = center(col, row);
       if (col === 0 && row === 0) continue;
       for (const offset of [
-        { x: -3, y: 0 }, { x: 3, y: 0 }, { x: 0, y: -3 }, { x: 0, y: 3 },
+        { x: -3, y: 0 },
+        { x: 3, y: 0 },
+        { x: 0, y: -3 },
+        { x: 0, y: 3 },
       ]) {
         const point = { x: origin.x + offset.x, y: origin.y + offset.y };
-        if (reserved.every((target) => Math.hypot(point.x - target.x, point.y - target.y) > 2))
+        if (
+          reserved.every(
+            (target) => Math.hypot(point.x - target.x, point.y - target.y) > 2,
+          )
+        )
           positions.push(point);
       }
     }
   }
   for (let index = positions.length - 1; index > 0; index--) {
     const other = Math.floor(random() * (index + 1));
-    [positions[index], positions[other]] = [positions[other]!, positions[index]!];
+    [positions[index], positions[other]] = [
+      positions[other]!,
+      positions[index]!,
+    ];
   }
   const kindOrder: EnemyKind[] = ["hunter", "sniper", "bulwark"];
-  const spawns: Spawn[] = positions.slice(0, 5 + zone * 3).map((point, index) => ({
-    ...point,
-    kind: kindOrder[(index + zone) % kindOrder.length]!,
-  }));
+  const spawns: Spawn[] = positions
+    .slice(0, 5 + zone * 3)
+    .map((point, index) => ({
+      ...point,
+      kind: kindOrder[(index + zone) % kindOrder.length]!,
+    }));
   return { walls, relays, exit, doors, pickups, spawns };
 }
