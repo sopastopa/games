@@ -35,7 +35,9 @@ describe("constellation controller", () => {
 
   it("undoes and redoes moves, while clearing redo after a new decision", () => {
     const { game } = fixture();
-    const [first, second] = levels[0]!.nodes.filter((node) => node.role === "neutral");
+    const [first, second] = levels[0]!.nodes.filter(
+      (node) => node.role === "neutral",
+    );
     expect(game.toggle(first!.id)).toBe(true);
     expect(game.snapshot.canUndo).toBe(true);
     expect(game.undo()).toBe(true);
@@ -75,7 +77,11 @@ describe("constellation controller", () => {
   });
 
   it("loads unlocked progress and ignores completed IDs that do not exist", () => {
-    const { game } = fixture({ unlocked: 999, current: 999, completed: ["level-01", "fake-level"] });
+    const { game } = fixture({
+      unlocked: 999,
+      current: 999,
+      completed: ["level-01", "fake-level"],
+    });
     expect(game.snapshot.unlocked).toBe(23);
     expect(game.snapshot.levelIndex).toBe(23);
     expect(game.snapshot.completed).toEqual(["level-01"]);
@@ -83,6 +89,8 @@ describe("constellation controller", () => {
   });
 
   it("requires at least one level", () => {
-    expect(() => new AbsentsController([], { read: () => null, write: () => {} })).toThrow();
+    expect(
+      () => new AbsentsController([], { read: () => null, write: () => {} }),
+    ).toThrow();
   });
 });

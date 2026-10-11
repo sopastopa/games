@@ -66,7 +66,9 @@ export class AbsentsController {
   subscribe(listener: (snapshot: Snapshot) => void): () => void {
     this.subscribers.add(listener);
     listener(this.snapshot);
-    return () => { this.subscribers.delete(listener); };
+    return () => {
+      this.subscribers.delete(listener);
+    };
   }
 
   selectLevel(index: number): boolean {
@@ -75,7 +77,8 @@ export class AbsentsController {
       index < 0 ||
       index >= this.levels.length ||
       index > this.unlocked
-    ) return false;
+    )
+      return false;
     this.levelIndex = index;
     this.clearBoard();
     this.save();
@@ -86,7 +89,8 @@ export class AbsentsController {
   toggle(id: string): boolean {
     const before = this.snapshot;
     const node = before.level.nodes.find((item) => item.id === id);
-    if (!node || node.role !== "neutral" || before.analysis.solved) return false;
+    if (!node || node.role !== "neutral" || before.analysis.solved)
+      return false;
     const removing = !this.removed.includes(id);
     if (removing && this.removed.length >= before.level.par) return false;
     this.past.push([...this.removed]);

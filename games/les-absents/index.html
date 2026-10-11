@@ -4,77 +4,176 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#080f19" />
-    <meta name="description" content="Les Absents, 24 énigmes géométriques : pour relier, il faut parfois retirer." />
+    <meta
+      name="description"
+      content="Les Absents, 24 énigmes géométriques : pour relier, il faut parfois retirer."
+    />
     <title>Les Absents — Games</title>
   </head>
   <body>
     <div class="page-shell">
       <header class="topbar">
-        <a class="back-link" href="../../" data-testid="back-home">← Tous les jeux</a>
-        <div class="logo" aria-label="Les Absents"><span class="logo-mark" aria-hidden="true">◌</span> LES ABSENTS</div>
+        <a class="back-link" href="../../" data-testid="back-home"
+          >← Tous les jeux</a
+        >
+        <div class="logo" aria-label="Les Absents">
+          <span class="logo-mark" aria-hidden="true">◌</span> LES ABSENTS
+        </div>
         <div class="collection">UNE EXPÉRIENCE GAMES</div>
       </header>
       <main>
         <div class="experience">
           <section class="story" aria-labelledby="page-title">
-            <div class="kicker">UN JEU SUR CE QUI MANQUE <span class="kicker-line"></span> 24 CONSTELLATIONS</div>
-            <h1 id="page-title">Les <em>Absents<span>.</span></em></h1>
-            <p class="introduction">On ne construit pas toujours en ajoutant. Parfois, il suffit d'effacer pour que le lien apparaisse.</p>
+            <div class="kicker">
+              UN JEU SUR CE QUI MANQUE <span class="kicker-line"></span> 24
+              CONSTELLATIONS
+            </div>
+            <h1 id="page-title">
+              Les <em>Absents<span>.</span></em>
+            </h1>
+            <p class="introduction">
+              On ne construit pas toujours en ajoutant. Parfois, il suffit
+              d'effacer pour que le lien apparaisse.
+            </p>
             <div class="chapter-details">
-              <div class="chapter-number" id="level-index" data-testid="level-index">01 / 24</div>
+              <div
+                class="chapter-number"
+                id="level-index"
+                data-testid="level-index"
+              >
+                01 / 24
+              </div>
               <p class="chapter-label" id="chapter">CHAPITRE I</p>
               <h2 id="level-title">Le premier vide</h2>
-              <p id="level-subtitle" class="level-subtitle">Un fil nouveau apparaît.</p>
+              <p id="level-subtitle" class="level-subtitle">
+                Un fil nouveau apparaît.
+              </p>
             </div>
             <div class="mission">
               <p class="mission-title">VOTRE MISSION</p>
-              <p>Retirez seulement les points blancs. Reliez les <strong>deux récepteurs</strong> à la source, sans alimenter le danger.</p>
+              <p>
+                Retirez seulement les points blancs. Reliez les
+                <strong>deux récepteurs</strong> à la source, sans alimenter le
+                danger.
+              </p>
             </div>
             <div class="legend" aria-label="Légende des points">
               <div><i class="legend-dot source"></i><span>Source</span></div>
-              <div><i class="legend-dot receiver"></i><span>Récepteur</span></div>
+              <div>
+                <i class="legend-dot receiver"></i><span>Récepteur</span>
+              </div>
               <div><i class="legend-dot hazard"></i><span>Danger</span></div>
-              <div><i class="legend-dot neutral"></i><span>À effacer</span></div>
+              <div>
+                <i class="legend-dot neutral"></i><span>À effacer</span>
+              </div>
             </div>
             <div class="progress">
-              <div class="progress-label"><span>EXPLORATION</span><span id="progress-text">0 / 24</span></div>
+              <div class="progress-label">
+                <span>EXPLORATION</span><span id="progress-text">0 / 24</span>
+              </div>
               <div class="progress-bar"><span id="progress-fill"></span></div>
             </div>
           </section>
           <section class="play-space" aria-label="Jeu Les Absents">
-            <div class="board-heading"><div class="board-heading-left"><span class="live-orbit"></span><span>CARTE RELATIONNELLE</span></div><span id="budget" data-testid="budget">1 retrait disponible</span></div>
-            <div class="board" id="board" aria-label="Réseau de points lumineux">
+            <div class="board-heading">
+              <div class="board-heading-left">
+                <span class="live-orbit"></span><span>CARTE RELATIONNELLE</span>
+              </div>
+              <span id="budget" data-testid="budget">1 retrait disponible</span>
+            </div>
+            <div
+              class="board"
+              id="board"
+              aria-label="Réseau de points lumineux"
+            >
               <div class="ambient-glow" aria-hidden="true"></div>
-              <svg class="fibers" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+              <svg
+                class="fibers"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
                 <defs>
-                  <linearGradient id="thread-gradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#96e8d5" /><stop offset="55%" stop-color="#a9c5ec" /><stop offset="100%" stop-color="#8de7d4" /></linearGradient>
+                  <linearGradient
+                    id="thread-gradient"
+                    x1="0"
+                    y1="0"
+                    x2="1"
+                    y2="1"
+                  >
+                    <stop offset="0%" stop-color="#96e8d5" />
+                    <stop offset="55%" stop-color="#a9c5ec" />
+                    <stop offset="100%" stop-color="#8de7d4" />
+                  </linearGradient>
                 </defs>
                 <g id="connections-halo"></g>
                 <g id="connections"></g>
               </svg>
               <div class="node-layer" id="node-layer"></div>
-              <span class="board-corner corner-one"></span><span class="board-corner corner-two"></span><span class="board-corner corner-three"></span><span class="board-corner corner-four"></span>
+              <span class="board-corner corner-one"></span
+              ><span class="board-corner corner-two"></span
+              ><span class="board-corner corner-three"></span
+              ><span class="board-corner corner-four"></span>
             </div>
             <div class="readings" aria-live="polite">
-              <div class="reading"><span class="reading-label">RÉCEPTEURS</span><strong id="receivers" data-testid="receivers">0 / 2</strong></div>
-              <div class="reading"><span class="reading-label">ZONE DE DANGER</span><strong id="danger" data-testid="danger">ISOLÉE</strong></div>
-              <div class="reading"><span class="reading-label">ÉTAT DU RÉSEAU</span><strong id="status" data-testid="status" role="status">À COMPLÉTER</strong></div>
+              <div class="reading">
+                <span class="reading-label">RÉCEPTEURS</span
+                ><strong id="receivers" data-testid="receivers">0 / 2</strong>
+              </div>
+              <div class="reading">
+                <span class="reading-label">ZONE DE DANGER</span
+                ><strong id="danger" data-testid="danger">ISOLÉE</strong>
+              </div>
+              <div class="reading">
+                <span class="reading-label">ÉTAT DU RÉSEAU</span
+                ><strong id="status" data-testid="status" role="status"
+                  >À COMPLÉTER</strong
+                >
+              </div>
             </div>
             <div class="tools" aria-label="Actions de jeu">
-              <button id="undo" type="button" title="Annuler (Ctrl+Z)">↶ <span>Annuler</span></button>
-              <button id="redo" type="button" title="Rétablir (Ctrl+Maj+Z)">↷ <span>Rétablir</span></button>
-              <button id="reset" type="button">↻ <span>Recommencer</span></button>
+              <button id="undo" type="button" title="Annuler (Ctrl+Z)">
+                ↶ <span>Annuler</span>
+              </button>
+              <button id="redo" type="button" title="Rétablir (Ctrl+Maj+Z)">
+                ↷ <span>Rétablir</span>
+              </button>
+              <button id="reset" type="button">
+                ↻ <span>Recommencer</span>
+              </button>
               <button id="hint" type="button">✧ <span>Indice</span></button>
             </div>
-            <p class="hint-message" id="hint-message" aria-live="polite">Touchez un point blanc pour le retirer. Touchez son empreinte pour le restaurer.</p>
-            <div class="completion" id="completion" data-testid="completion" hidden>
-              <div><span class="completion-kicker">CONNEXION ACCOMPLIE</span><h3>La forme juste apparaît.</h3><p>Le réseau est en équilibre. Passez à la constellation suivante.</p></div>
-              <button id="next" type="button" class="next-button">Constellation suivante →</button>
+            <p class="hint-message" id="hint-message" aria-live="polite">
+              Touchez un point blanc pour le retirer. Touchez son empreinte pour
+              le restaurer.
+            </p>
+            <div
+              class="completion"
+              id="completion"
+              data-testid="completion"
+              hidden
+            >
+              <div>
+                <span class="completion-kicker">CONNEXION ACCOMPLIE</span>
+                <h3>La forme juste apparaît.</h3>
+                <p>
+                  Le réseau est en équilibre. Passez à la constellation
+                  suivante.
+                </p>
+              </div>
+              <button id="next" type="button" class="next-button">
+                Constellation suivante →
+              </button>
             </div>
-            <div class="level-browser"><label for="level-select">CHOISIR UNE CONSTELLATION</label><select id="level-select" data-testid="level-select"></select></div>
+            <div class="level-browser">
+              <label for="level-select">CHOISIR UNE CONSTELLATION</label
+              ><select id="level-select" data-testid="level-select"></select>
+            </div>
           </section>
         </div>
-        <footer>Les Absents <span>·</span> Rien n'est perdu. Tout se transforme.</footer>
+        <footer>
+          Les Absents <span>·</span> Rien n'est perdu. Tout se transforme.
+        </footer>
       </main>
     </div>
     <script type="module" src="/src/presentation/main.ts"></script>

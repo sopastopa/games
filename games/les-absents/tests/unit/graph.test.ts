@@ -25,7 +25,9 @@ describe("relational graph", () => {
     expect(first.energized.has("n1")).toBe(true);
     expect(first.energized.has("target-a")).toBe(false);
     const removed = analyze(level, new Set(["n1"]));
-    expect(removed.edges.some((edge) => edge.from === "n1" || edge.to === "n1")).toBe(false);
+    expect(
+      removed.edges.some((edge) => edge.from === "n1" || edge.to === "n1"),
+    ).toBe(false);
     expect(removed.edges).toContainEqual({ from: "source", to: "target-a" });
   });
 
@@ -48,8 +50,20 @@ describe("relational graph", () => {
   it("rejects duplicate IDs, out-of-range coordinates and missing roles", () => {
     const level = levels[0]!;
     validateLevel(level);
-    expect(() => validateLevel({ ...level, nodes: [...level.nodes, level.nodes[0]!] })).toThrow(/Duplicate/);
-    expect(() => validateLevel({ ...level, nodes: [{ ...level.nodes[0]!, x: -1 }, ...level.nodes.slice(1)] })).toThrow(/Out-of-bounds/);
-    expect(() => validateLevel({ ...level, nodes: level.nodes.filter((node) => node.role !== "hazard") })).toThrow(/hazard/);
+    expect(() =>
+      validateLevel({ ...level, nodes: [...level.nodes, level.nodes[0]!] }),
+    ).toThrow(/Duplicate/);
+    expect(() =>
+      validateLevel({
+        ...level,
+        nodes: [{ ...level.nodes[0]!, x: -1 }, ...level.nodes.slice(1)],
+      }),
+    ).toThrow(/Out-of-bounds/);
+    expect(() =>
+      validateLevel({
+        ...level,
+        nodes: level.nodes.filter((node) => node.role !== "hazard"),
+      }),
+    ).toThrow(/hazard/);
   });
 });

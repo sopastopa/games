@@ -24,106 +24,34 @@ const coordinates: readonly string[] = [
   "75,33;27,46;26,20;34,66;25,35;46,73;87,42;52,44;46,82;47,58;41,35;61,79;79,82;13,15;54,72;79,58",
   "30,67;57,75;14,59;60,22;85,22;81,61;71,82;38,27;88,69;51,47;88,14;22,15;17,51;61,59;64,50;53,36",
   "16,75;16,33;63,85;69,71;52,73;68,14;54,55;45,21;58,44;38,47;64,52;76,33;20,42;77,86;19,53;79,65",
-  "45,40;62,47;77,72;44,76;74,84;63,39;20,41;48,59;58,25;23,19;19,73;28,35;43,49;80,43;36,44;78,29"
+  "45,40;62,47;77,72;44,76;74,84;63,39;20,41;48,59;58,25;23,19;19,73;28,35;43,49;80,43;36,44;78,29",
 ];
 
 const titles: readonly (readonly [string, string])[] = [
-  [
-    "Le premier vide",
-    "Un fil nouveau apparaît."
-  ],
-  [
-    "Le détour",
-    "Ce qui sépare peut rapprocher."
-  ],
-  [
-    "L'intervalle",
-    "Observe les distances invisibles."
-  ],
-  [
-    "La marge",
-    "Une seule absence suffit."
-  ],
-  [
-    "Un effet en cascade",
-    "Deux décisions liées."
-  ],
-  [
-    "L'angle mort",
-    "Ce qui semble proche ne l'est pas toujours."
-  ],
-  [
-    "Entre les lignes",
-    "Le réseau choisit ses propres routes."
-  ],
-  [
-    "L'écho",
-    "Une connexion réveille une autre."
-  ],
-  [
-    "La rupture douce",
-    "Défaire pour réunir."
-  ],
-  [
-    "Au-delà du voisin",
-    "Deux absences, un seul chemin."
-  ],
-  [
-    "Le prix du lien",
-    "Tout rapprocher n'est pas tout relier."
-  ],
-  [
-    "Trois silences",
-    "Choisis les bonnes absences."
-  ],
-  [
-    "La faille",
-    "Les ramifications se recomposent."
-  ],
-  [
-    "Le passage",
-    "Préserve l'équilibre."
-  ],
-  [
-    "Le point fragile",
-    "Un retrait peut tout changer."
-  ],
-  [
-    "L'invisible",
-    "Anticipe les nouvelles distances."
-  ],
-  [
-    "Contre-intuition",
-    "Le chemin direct n'est pas le bon."
-  ],
-  [
-    "L'équilibre instable",
-    "Trois absences exactement."
-  ],
-  [
-    "L'autre réseau",
-    "Chaque connexion a un coût."
-  ],
-  [
-    "Résonances",
-    "Plusieurs mondes possibles."
-  ],
-  [
-    "La ligne de fuite",
-    "Quatre absences nécessaires."
-  ],
-  [
-    "Sans retour",
-    "Ce que tu retires donne forme au reste."
-  ],
-  [
-    "L'ultime écart",
-    "Pense à l'ensemble du réseau."
-  ],
-  [
-    "Constellation négative",
-    "L'art d'atteindre sans alimenter le danger."
-  ]
+  ["Le premier vide", "Un fil nouveau apparaît."],
+  ["Le détour", "Ce qui sépare peut rapprocher."],
+  ["L'intervalle", "Observe les distances invisibles."],
+  ["La marge", "Une seule absence suffit."],
+  ["Un effet en cascade", "Deux décisions liées."],
+  ["L'angle mort", "Ce qui semble proche ne l'est pas toujours."],
+  ["Entre les lignes", "Le réseau choisit ses propres routes."],
+  ["L'écho", "Une connexion réveille une autre."],
+  ["La rupture douce", "Défaire pour réunir."],
+  ["Au-delà du voisin", "Deux absences, un seul chemin."],
+  ["Le prix du lien", "Tout rapprocher n'est pas tout relier."],
+  ["Trois silences", "Choisis les bonnes absences."],
+  ["La faille", "Les ramifications se recomposent."],
+  ["Le passage", "Préserve l'équilibre."],
+  ["Le point fragile", "Un retrait peut tout changer."],
+  ["L'invisible", "Anticipe les nouvelles distances."],
+  ["Contre-intuition", "Le chemin direct n'est pas le bon."],
+  ["L'équilibre instable", "Trois absences exactement."],
+  ["L'autre réseau", "Chaque connexion a un coût."],
+  ["Résonances", "Plusieurs mondes possibles."],
+  ["La ligne de fuite", "Quatre absences nécessaires."],
+  ["Sans retour", "Ce que tu retires donne forme au reste."],
+  ["L'ultime écart", "Pense à l'ensemble du réseau."],
+  ["Constellation négative", "L'art d'atteindre sans alimenter le danger."],
 ];
 
 const chapters = [
@@ -137,22 +65,37 @@ function parseNodes(coordinatesList: string): Node[] {
   return coordinatesList.split(";").map((point, index) => {
     const [x, y] = point.split(",").map(Number);
     const role: Role =
-      index === 0 ? "source" :
-      index === 1 || index === 2 ? "receiver" :
-      index === 3 ? "hazard" : "neutral";
-    const id = index === 0 ? "source" :
-      index === 1 ? "target-a" :
-      index === 2 ? "target-b" :
-      index === 3 ? "danger" : `n${index - 3}`;
+      index === 0
+        ? "source"
+        : index === 1 || index === 2
+          ? "receiver"
+          : index === 3
+            ? "hazard"
+            : "neutral";
+    const id =
+      index === 0
+        ? "source"
+        : index === 1
+          ? "target-a"
+          : index === 2
+            ? "target-b"
+            : index === 3
+              ? "danger"
+              : `n${index - 3}`;
     return { id, x: x!, y: y!, role };
   });
 }
 
 export const levels: readonly Level[] = coordinates.map((data, index) => {
   const par = index < 4 ? 1 : index < 10 ? 2 : index < 18 ? 3 : 4;
-  const chapter = index < 4 ? chapters[0] :
-    index < 10 ? chapters[1] :
-    index < 18 ? chapters[2] : chapters[3];
+  const chapter =
+    index < 4
+      ? chapters[0]
+      : index < 10
+        ? chapters[1]
+        : index < 18
+          ? chapters[2]
+          : chapters[3];
   const [title, subtitle] = titles[index]!;
   return {
     id: `level-${String(index + 1).padStart(2, "0")}`,

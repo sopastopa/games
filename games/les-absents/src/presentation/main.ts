@@ -42,11 +42,14 @@ function makePath(edge: Edge, nodes: Map<string, Node>): SVGPathElement {
   const to = nodes.get(edge.to)!;
   const dx = to.x - from.x;
   const dy = to.y - from.y;
-  const bending = ((edge.from.length + edge.to.length) % 3 - 1) * 1.1;
-  const controlX = (from.x + to.x) / 2 - dy * bending / 20;
-  const controlY = (from.y + to.y) / 2 + dx * bending / 20;
+  const bending = (((edge.from.length + edge.to.length) % 3) - 1) * 1.1;
+  const controlX = (from.x + to.x) / 2 - (dy * bending) / 20;
+  const controlY = (from.y + to.y) / 2 + (dx * bending) / 20;
   const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  path.setAttribute("d", `M ${from.x} ${from.y} Q ${controlX} ${controlY} ${to.x} ${to.y}`);
+  path.setAttribute(
+    "d",
+    `M ${from.x} ${from.y} Q ${controlX} ${controlY} ${to.x} ${to.y}`,
+  );
   path.setAttribute("fill", "none");
   path.setAttribute("stroke-linecap", "round");
   return path;
@@ -58,12 +61,20 @@ function drawLinks(snapshot: Snapshot): void {
   const threads: SVGPathElement[] = [];
   for (const edge of snapshot.analysis.edges) {
     const powered = snapshot.analysis.energized.has(edge.from);
-    const unsafe = powered &&
-      (nodes.get(edge.from)?.role === "hazard" || nodes.get(edge.to)?.role === "hazard");
+    const unsafe =
+      powered &&
+      (nodes.get(edge.from)?.role === "hazard" ||
+        nodes.get(edge.to)?.role === "hazard");
     const halo = makePath(edge, nodes);
-    halo.setAttribute("class", `thread-halo ${powered ? "lit" : "unlit"} ${unsafe ? "unsafe" : ""}`);
+    halo.setAttribute(
+      "class",
+      `thread-halo ${powered ? "lit" : "unlit"} ${unsafe ? "unsafe" : ""}`,
+    );
     const thread = makePath(edge, nodes);
-    thread.setAttribute("class", `thread ${powered ? "lit" : "unlit"} ${unsafe ? "unsafe" : ""}`);
+    thread.setAttribute(
+      "class",
+      `thread ${powered ? "lit" : "unlit"} ${unsafe ? "unsafe" : ""}`,
+    );
     halos.push(halo);
     threads.push(thread);
   }
@@ -73,7 +84,8 @@ function drawLinks(snapshot: Snapshot): void {
 
 function labelFor(node: Node, removed: boolean): string {
   if (node.role === "source") return "Source d'énergie";
-  if (node.role === "receiver") return `Récepteur ${node.id === "target-a" ? "A" : "B"}`;
+  if (node.role === "receiver")
+    return `Récepteur ${node.id === "target-a" ? "A" : "B"}`;
   if (node.role === "hazard") return "Zone de danger";
   return `Nœud ${node.id.slice(1)} — ${removed ? "restaurer" : "retirer"}`;
 }
@@ -82,7 +94,9 @@ function buildBoard(snapshot: Snapshot): void {
   elements.clear();
   nodeLayer.replaceChildren();
   for (const node of snapshot.level.nodes) {
-    const element = document.createElement(node.role === "neutral" ? "button" : "div");
+    const element = document.createElement(
+      node.role === "neutral" ? "button" : "div",
+    );
     element.className = `node node-${node.role}`;
     element.style.left = `${node.x}%`;
     element.style.top = `${node.y}%`;
@@ -137,7 +151,11 @@ function updateLevelSelect(snapshot: Snapshot): void {
       option.value = String(index);
       option.disabled = index > snapshot.unlocked;
       option.textContent = `${String(index + 1).padStart(2, "0")} — ${level.title}${
-        snapshot.completed.includes(level.id) ? " ✓" : index > snapshot.unlocked ? " · verrouillé" : ""
+        snapshot.completed.includes(level.id)
+          ? " ✓"
+          : index > snapshot.unlocked
+            ? " · verrouillé"
+            : ""
       }`;
       return option;
     }),
@@ -150,7 +168,8 @@ function render(snapshot: Snapshot): void {
     renderedLevelId = snapshot.level.id;
     highlightedId = null;
     buildBoard(snapshot);
-    hintMessage.textContent = "Touchez un point blanc pour le retirer. Touchez son empreinte pour le restaurer.";
+    hintMessage.textContent =
+      "Touchez un point blanc pour le retirer. Touchez son empreinte pour le restaurer.";
   }
   drawLinks(snapshot);
   drawNodes(snapshot);
@@ -160,9 +179,15 @@ function render(snapshot: Snapshot): void {
   subtitleLabel.textContent = snapshot.level.subtitle;
   budgetLabel.textContent = `${snapshot.movesLeft} retrait${snapshot.movesLeft !== 1 ? "s" : ""} disponible${snapshot.movesLeft !== 1 ? "s" : ""}`;
   receiverLabel.textContent = `${snapshot.analysis.receiversPowered} / ${snapshot.analysis.receiversTotal}`;
-  dangerLabel.textContent = snapshot.analysis.hazardPowered ? "ALIMENTÉE" : "ISOLÉE";
+  dangerLabel.textContent = snapshot.analysis.hazardPowered
+    ? "ALIMENTÉE"
+    : "ISOLÉE";
   dangerLabel.classList.toggle("warning", snapshot.analysis.hazardPowered);
-  statusLabel.textContent = snapshot.analysis.solved ? "ÉQUILIBRE" : snapshot.movesLeft === 0 ? "À RÉVISER" : "À COMPLÉTER";
+  statusLabel.textContent = snapshot.analysis.solved
+    ? "ÉQUILIBRE"
+    : snapshot.movesLeft === 0
+      ? "À RÉVISER"
+      : "À COMPLÉTER";
   statusLabel.classList.toggle("good", snapshot.analysis.solved);
   undoButton.disabled = !snapshot.canUndo;
   redoButton.disabled = !snapshot.canRedo;
@@ -171,7 +196,7 @@ function render(snapshot: Snapshot): void {
   nextButton.hidden = snapshot.levelIndex === snapshot.levelCount - 1;
   const completedCount = snapshot.completed.length;
   progressLabel.textContent = `${completedCount} / ${snapshot.levelCount}`;
-  progressFill.style.width = `${100 * completedCount / snapshot.levelCount}%`;
+  progressFill.style.width = `${(100 * completedCount) / snapshot.levelCount}%`;
   updateLevelSelect(snapshot);
 }
 
@@ -195,7 +220,8 @@ hintButton.addEventListener("click", () => {
   if (highlightedId) {
     hintMessage.textContent = `Indice : le nœud ${highlightedId.slice(1)} peut être retiré. Il est entouré de lumière.`;
   } else {
-    hintMessage.textContent = "Cette configuration n'a plus de solution. Annulez un retrait pour continuer.";
+    hintMessage.textContent =
+      "Cette configuration n'a plus de solution. Annulez un retrait pour continuer.";
   }
   drawNodes(controller.snapshot);
 });
@@ -206,14 +232,21 @@ levelSelect.addEventListener("change", () => {
 });
 document.addEventListener("keydown", (event) => {
   const target = event.target;
-  if (target instanceof HTMLElement && (
-    target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName)
-  )) return;
+  if (
+    target instanceof HTMLElement &&
+    (target.isContentEditable ||
+      ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName))
+  )
+    return;
   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") {
     event.preventDefault();
     if (event.shiftKey) controller.redo();
     else controller.undo();
-  } else if (event.key.toLowerCase() === "h" && !event.ctrlKey && !event.metaKey) {
+  } else if (
+    event.key.toLowerCase() === "h" &&
+    !event.ctrlKey &&
+    !event.metaKey
+  ) {
     event.preventDefault();
     hintButton.click();
   }

@@ -1,19 +1,25 @@
 import { expect, test } from "@playwright/test";
 
-test("Les Absents appears in the portal and can be opened and left", async ({ page }) => {
+test("Les Absents appears in the portal and can be opened and left", async ({
+  page,
+}) => {
   await page.goto("/games/");
   const game = page.getByRole("link", { name: "Jouer à Les Absents" });
   await expect(game).toBeVisible();
   await game.click();
   await expect(page).toHaveURL(/\/games\/play\/les-absents\/$/);
-  await expect(page.getByRole("heading", { name: /Les Absents/ })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /Les Absents/ }),
+  ).toBeVisible();
   await expect(page.getByTestId("level-index")).toHaveText("01 / 24");
   await page.getByTestId("back-home").click();
   await expect(page).toHaveURL(/\/games\/$/);
   await expect(game).toBeVisible();
 });
 
-test("a real puzzle is solved, progress unlocks and survives reload", async ({ page }) => {
+test("a real puzzle is solved, progress unlocks and survives reload", async ({
+  page,
+}) => {
   await page.goto("/games/play/les-absents/");
   await expect(page.getByTestId("completion")).toBeHidden();
   await expect(page.getByTestId("budget")).toHaveText("1 retrait disponible");
@@ -34,7 +40,9 @@ test("a real puzzle is solved, progress unlocks and survives reload", async ({ p
   await expect(page.getByTestId("completion")).toBeHidden();
 });
 
-test("undo and redo alter the board without requiring a mouse", async ({ page }) => {
+test("undo and redo alter the board without requiring a mouse", async ({
+  page,
+}) => {
   await page.goto("/games/play/les-absents/");
   const neutral = page.getByRole("button", { name: /Nœud 1 — retirer/ });
   await neutral.focus();

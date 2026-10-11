@@ -17,7 +17,8 @@ export const browserProgress: ProgressStore = {
         !Number.isFinite(data.current) ||
         !Array.isArray(data.completed) ||
         !data.completed.every((item) => typeof item === "string")
-      ) return null;
+      )
+        return null;
       return {
         unlocked: data.unlocked,
         current: data.current,

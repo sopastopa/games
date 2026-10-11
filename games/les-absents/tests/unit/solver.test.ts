@@ -24,15 +24,26 @@ describe("24 curated constellations", () => {
       const continued = findSolution(level, partial);
       expect(continued?.removed).toEqual(solution!.removed);
       expect(findSolution(level, ["source"])).toBeNull();
-      expect(findSolution(level, Array(level.par + 1).fill("n1").map((_, index) => `n${index + 1}`))).toBeNull();
+      expect(
+        findSolution(
+          level,
+          Array(level.par + 1)
+            .fill("n1")
+            .map((_, index) => `n${index + 1}`),
+        ),
+      ).toBeNull();
     },
   );
 
   it("accepts a solved board and rejects an impossible forced removal", () => {
     const level = levels[0]!;
     const solution = findSolution(level)!;
-    expect(findSolution(level, solution.removed)?.removed).toEqual(solution.removed);
-    const wrong = level.nodes.find((node) => node.role === "neutral" && !solution.removed.includes(node.id))!;
+    expect(findSolution(level, solution.removed)?.removed).toEqual(
+      solution.removed,
+    );
+    const wrong = level.nodes.find(
+      (node) => node.role === "neutral" && !solution.removed.includes(node.id),
+    )!;
     expect(findSolution(level, [wrong.id])).toBeNull();
   });
 });

@@ -12,10 +12,7 @@ export function findSolution(
     .map((node) => node.id);
   const availableIds = new Set(neutral);
   const locked = [...new Set(currentRemoved)];
-  if (
-    locked.length > level.par ||
-    locked.some((id) => !availableIds.has(id))
-  ) {
+  if (locked.length > level.par || locked.some((id) => !availableIds.has(id))) {
     return null;
   }
   const optional = neutral.filter((id) => !locked.includes(id));
@@ -24,9 +21,7 @@ export function findSolution(
     const choose = (start: number): Solution | null => {
       if (picks.length === extra) {
         const removed = [...locked, ...picks];
-        return analyze(level, new Set(removed)).solved
-          ? { removed }
-          : null;
+        return analyze(level, new Set(removed)).solved ? { removed } : null;
       }
       for (let index = start; index < optional.length; index++) {
         picks.push(optional[index]!);
