@@ -9,7 +9,17 @@ export type Palette = Readonly<{
   companion: string;
 }>;
 
-export type Obstacle = Readonly<{ x: number; width: number }>;
+export type Obstacle = Readonly<{
+  x: number;
+  width: number;
+  kind: "ink" | "gap" | "arch" | "orb";
+  bottom?: number;
+  centerY?: number;
+  amplitude?: number;
+  frequency?: number;
+  phase?: number;
+}>;
+export type Wind = Readonly<{ x: number; width: number; lift: number }>;
 export type Spark = Readonly<{ x: number; y: number }>;
 
 export type Chapter = Readonly<{
@@ -18,7 +28,13 @@ export type Chapter = Readonly<{
   place: string;
   number: string;
   motif:
-    "flowers" | "lanterns" | "candy" | "forest" | "sea" | "night" | "rainbow";
+    | "flowers"
+    | "lanterns"
+    | "candy"
+    | "forest"
+    | "sea"
+    | "night"
+    | "rainbow";
   opening: string;
   middle: string;
   ending: string;
@@ -26,7 +42,12 @@ export type Chapter = Readonly<{
   palette: Palette;
   endX: number;
   checkpoint: number;
+  speed: number;
+  airJump: boolean;
+  lesson: string;
+  concept: string;
   obstacles: readonly Obstacle[];
+  winds: readonly Wind[];
   sparks: readonly Spark[];
 }>;
 
@@ -38,9 +59,13 @@ export type Run = Readonly<{
   y: number;
   vy: number;
   grounded: boolean;
+  grace: number;
+  airJumps: number;
+  elapsed: number;
   glide: number;
   checkpoint: number;
   tries: number;
+  lastHit: Obstacle["kind"] | null;
   sparks: readonly number[];
   beat: "opening" | "middle" | "ending";
 }>;

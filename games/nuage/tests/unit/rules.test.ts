@@ -137,7 +137,7 @@ describe("NUAGE — simulation pure", () => {
     expect(() =>
       validateChapter({
         ...chapter,
-        obstacles: [{ x: chapter.checkpoint - 10, width: 40 }],
+        obstacles: [{ kind: "ink", x: chapter.checkpoint - 10, width: 40 }],
       }),
     ).toThrow("Invalid obstacle");
     expect(() =>
