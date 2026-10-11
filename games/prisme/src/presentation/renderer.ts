@@ -23,7 +23,12 @@ export function cameraFor(
   const scale =
     width < 850
       ? Math.max(24, Math.min(48, Math.min(width / 11, height / 11)))
-      : Math.max(width / SIZE, height / SIZE, 35, Math.min(70, Math.min(width / 18, height / 12)));
+      : Math.max(
+          width / SIZE,
+          height / SIZE,
+          35,
+          Math.min(70, Math.min(width / 18, height / 12)),
+        );
   return {
     scale,
     x: Math.max(

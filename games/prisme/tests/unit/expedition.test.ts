@@ -11,7 +11,11 @@ import {
 
 function walk(state: GameState, goal: Point): GameState {
   let current = state;
-  for (let tick = 0; tick < 4000 && distance(current.player, goal) > 0.19; tick++) {
+  for (
+    let tick = 0;
+    tick < 4000 && distance(current.player, goal) > 0.19;
+    tick++
+  ) {
     const from = {
       x: Math.round(current.player.x),
       y: Math.round(current.player.y),
@@ -26,10 +30,14 @@ function walk(state: GameState, goal: Point): GameState {
       moveX: x,
       moveY: y,
     });
-    if (current.phase === "cleared" && distance(current.player, goal) < 0.85) break;
-    if (current.phase !== "playing") throw new Error("Mission ended prematurely");
+    if (current.phase === "cleared" && distance(current.player, goal) < 0.85)
+      break;
+    if (current.phase !== "playing")
+      throw new Error("Mission ended prematurely");
   }
-  if (distance(current.player, goal) > (current.phase === "cleared" ? 0.85 : 0.19))
+  if (
+    distance(current.player, goal) > (current.phase === "cleared" ? 0.85 : 0.19)
+  )
     throw new Error("Path blocked: " + JSON.stringify(goal));
   return current;
 }
