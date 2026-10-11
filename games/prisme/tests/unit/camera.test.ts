@@ -1,0 +1,29 @@
+import { describe, expect, it } from "vitest";
+import { cameraFor } from "../../src/presentation/renderer";
+import { SIZE } from "../../src/domain/map";
+
+describe("PRISME full-viewport camera", () => {
+  it("scales the camera to the screen rather than squeezing a full map", () => {
+    const player = { x: 20, y: 20 };
+    const desktop = cameraFor(1280, 700, player);
+    const mobile = cameraFor(390, 720, player);
+    const landscape = cameraFor(844, 320, player);
+    for (const camera of [desktop, mobile, landscape]) {
+      expect(camera.scale).toBeGreaterThanOrEqual(24);
+      expect(camera.x).toBeGreaterThan(0);
+      expect(camera.y).toBeGreaterThan(0);
+    }
+    expect(mobile.scale * SIZE).toBeGreaterThan(390);
+    expect(landscape.scale * SIZE).toBeGreaterThan(844);
+    expect(desktop.scale * SIZE).toBeGreaterThan(1280);
+  });
+
+  it("clamps at the world edges without showing empty borders", () => {
+    const first = cameraFor(390, 600, { x: 5, y: 5 });
+    const last = cameraFor(390, 600, { x: 39, y: 39 });
+    expect(first.x).toBe(0);
+    expect(first.y).toBe(0);
+    expect(last.x + 390 / last.scale).toBeCloseTo(SIZE);
+    expect(last.y + 600 / last.scale).toBeCloseTo(SIZE);
+  });
+});
