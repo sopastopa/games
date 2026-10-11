@@ -725,7 +725,9 @@ a[data-testid="back-home"] {
   line-height: 1.2;
   text-decoration: none;
   box-shadow: none;
-  transition: border-color 150ms ease, background-color 150ms ease;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
 }
 
 a[data-testid="back-home"]:hover {
@@ -740,5 +742,7 @@ a[data-testid="back-home"]:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  a[data-testid="back-home"] { transition: none; }
+  a[data-testid="back-home"] {
+    transition: none;
+  }
 }

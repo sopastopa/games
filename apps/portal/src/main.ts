@@ -65,7 +65,11 @@ function artFor(game: GameListing): HTMLElement {
   return art;
 }
 
-function createCard(game: GameListing, featured: boolean, index: number): HTMLAnchorElement {
+function createCard(
+  game: GameListing,
+  featured: boolean,
+  index: number,
+): HTMLAnchorElement {
   const card = document.createElement("a");
   card.className = featured ? "game-card game-card-featured" : "game-card";
   card.href = `${import.meta.env.BASE_URL}play/${encodeURIComponent(game.id)}/`;
@@ -106,10 +110,13 @@ function render(): void {
   const query = normalize(searchTerm);
   const matches = catalog.filter((game) => {
     const correctCategory = category === "Tous" || game.category === category;
-    const haystack = normalize([game.title, game.category, game.description].join(" "));
+    const haystack = normalize(
+      [game.title, game.category, game.description].join(" "),
+    );
     return correctCategory && (!query || haystack.includes(query));
   });
-  const featuredId = catalog.find((game) => game.id === "nuage")?.id ?? catalog[0]?.id;
+  const featuredId =
+    catalog.find((game) => game.id === "nuage")?.id ?? catalog[0]?.id;
   const sorted = [...matches].sort((first, second) => {
     if (first.id === featuredId) return -1;
     if (second.id === featuredId) return 1;
@@ -117,13 +124,18 @@ function render(): void {
   });
   list.replaceChildren(
     ...sorted.map((game, index) =>
-      createCard(game, game.id === featuredId && !query && category === "Tous", index),
+      createCard(
+        game,
+        game.id === featuredId && !query && category === "Tous",
+        index,
+      ),
     ),
   );
   list.setAttribute("aria-busy", "false");
   empty.hidden = matches.length > 0 || catalog.length === 0;
   count.textContent =
-    matches.length + (matches.length === 1 ? " jeu" : " jeux") +
+    matches.length +
+    (matches.length === 1 ? " jeu" : " jeux") +
     (matches.length !== catalog.length ? " sur " + catalog.length : "") +
     " à découvrir";
   for (const filter of filters.querySelectorAll<HTMLButtonElement>("button")) {
@@ -191,7 +203,8 @@ async function loadCatalog(): Promise<void> {
     list.setAttribute("aria-busy", "false");
     count.textContent = "Catalogue indisponible";
     error.hidden = false;
-    error.textContent = "Le catalogue n’a pas pu être chargé. Réessayez plus tard.";
+    error.textContent =
+      "Le catalogue n’a pas pu être chargé. Réessayez plus tard.";
   }
 }
 

@@ -6,14 +6,20 @@ test("the collection exposes every published game with a consistent, clear navig
   await page.goto("/games/");
   await expect(page).toHaveTitle(/Games/);
   await expect(page.getByRole("heading", { name: /Jouer,/ })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /La collection/ })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Games, accueil" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /La collection/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Games, accueil" }),
+  ).toBeVisible();
 
   const links = page.locator("#game-list > a");
   await expect(links).toHaveCount(7);
   await expect(page.getByRole("link", { name: "Jouer à NUAGE" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Jouer à Snake" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Jouer à TORSION" })).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Jouer à TORSION" }),
+  ).toBeVisible();
   await expect(page.locator("#hero-count")).toHaveText("07");
   await expect(page.getByRole("button", { name: "Tous" })).toHaveAttribute(
     "aria-pressed",
@@ -30,7 +36,9 @@ test("category selection filters available games without losing accessible links
   await expect(adventure).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("#game-list > a")).toHaveCount(1);
   await expect(page.getByRole("link", { name: "Jouer à NUAGE" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Jouer à Snake" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Jouer à Snake" })).toHaveCount(
+    0,
+  );
   await expect(page.locator("#count")).toContainText("1 jeu sur 7");
   await page.getByRole("button", { name: "Tous" }).click();
   await expect(page.locator("#game-list > a")).toHaveCount(7);
