@@ -42,3 +42,14 @@ Les sept jeux sont des expériences **autonomes** avec leur propre direction art
 ## Vérification
 
 Les tests Playwright couvrent l'inventaire des jeux, les liens préservés, les catégories, la recherche (accents, casse, zéro résultat), la navigation clavier/retour, et la disposition sur téléphone. Les tests de gameplay de tous les jeux continuent de fonctionner indépendamment.
+
+
+## Le cadre commun des sept jeux
+
+La ressource `apps/portal/public/studio.css` est publiée à `/games/studio.css` et liée par chaque page de jeu via `../../studio.css`. La même typographie DM Sans / Space Grotesk, le fond papier, l'encre vert profond, le monogramme et les styles de navigation du portail s'appliquent donc aussi aux sept jeux.
+
+Chaque jeu dispose d'un lien d'évitement clavier, d'un retour explicite au catalogue, du signe Games en en-tête et d'une petite navigation vers le titre suivant. Le cadre est clair, les zones de gameplay contrastées restent propres à chaque jeu. Les jeux ne s'importent aucun code entre eux. Le chargement d'une ressource CSS unique n'implique aucun couplage métier.
+
+La palette commune du cadre utilise le vert minéral `#25584c`, l'encre `#1d302d`, le papier `#f7f8f5` et le filet `#dce3dc`. Les panneaux interactifs particuliers conservent leur contraste et leurs contrôles ; les grosses ombres et décorations superflues des zones extérieures sont neutralisées. `prefers-reduced-motion` est respecté.
+
+L'ensemble est couvert par les tests de navigation et de styles des sept jeux dans `tests/e2e/studio-design.spec.ts`.

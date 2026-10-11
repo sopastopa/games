@@ -3,20 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <meta name="theme-color" content="#0b1220" />
+    <meta name="theme-color" content="#f7f8f5" />
     <meta
       name="description"
       content="Snake : un jeu d'arcade jouable dans le navigateur."
     />
     <title>Snake · Games</title>
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+    <link rel="stylesheet" href="../../studio.css" />
   </head>
-  <body>
+  <body class="studio-game studio-snake">
+    <a class="studio-skip" href="#studio-main">Aller au jeu</a>
     <div class="shell">
       <header class="topbar">
         <a class="back" href="../../" data-testid="back-home">← Tous les jeux</a
         ><span class="brand">◈ GAMES</span>
+
+        <a class="studio-lockup" href="../../" aria-label="GAMES — Accueil">
+          <span aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>games<span class="studio-dot">.</span></span>
+        </a>
       </header>
-      <main class="game-layout">
+      <main id="studio-main" class="game-layout">
         <section class="game-intro">
           <p class="eyebrow">01 / ARCADE CLASSIQUE</p>
           <h1>Snake<span>.</span></h1>
@@ -70,6 +78,16 @@
             </div>
           </div>
         </section>
+
+        <nav class="studio-switcher" aria-label="Continuer dans la collection">
+          <span>Un autre jeu à découvrir ?</span>
+          <div>
+            <a href="../../">Toute la collection ↗</a>
+            <a href="../les-absents/" data-testid="studio-next"
+              >Jeu suivant : Les Absents →</a
+            >
+          </div>
+        </nav>
       </main>
     </div>
     <script type="module" src="/src/presentation/main.ts"></script>
