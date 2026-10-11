@@ -35,6 +35,8 @@ const subtitleLabel = element<HTMLElement>("#level-subtitle");
 const chapterLabel = element<HTMLElement>("#chapter");
 const completion = element<HTMLElement>("#completion");
 const starsLabel = element<HTMLElement>("#stars");
+const ricochetsLabel = element<HTMLElement>("#ricochets");
+const relayNextLabel = element<HTMLElement>("#relay-next");
 
 const game = new RebondController(
   { clock: frameClock, store: progressStore },
@@ -139,39 +141,68 @@ function draw(snapshotValue: Snapshot): void {
   line(45, WORLD.floor + 6, WORLD.width - 45, WORLD.floor + 6, "#9cc9c4", 1);
 
   for (const bumper of level.bumpers) {
-    circle(bumper.x, bumper.y, bumper.radius + 12, "#f79c7b25", 28);
-    circle(bumper.x, bumper.y, bumper.radius + 3, "#d57c5d");
-    circle(bumper.x, bumper.y, bumper.radius - 4, "#fcaa87");
-    circle(
-      bumper.x - bumper.radius * 0.23,
-      bumper.y - bumper.radius * 0.29,
-      bumper.radius * 0.27,
-      "#ffe9d9",
-    );
+    const index = level.required.indexOf(bumper.id);
+    if (index === -1) {
+      // Dark stone: an obstacle that redirects the ball, never a key.
+      circle(bumper.x, bumper.y, bumper.radius + 10, "#17384020", 13);
+      circle(bumper.x, bumper.y, bumper.radius + 3, "#42636d");
+      circle(bumper.x, bumper.y, bumper.radius - 4, "#6e9298");
+      circle(bumper.x - 4, bumper.y - 5, bumper.radius * 0.22, "#d4e4dd");
+      continue;
+    }
+    const activated = index < snapshotValue.activated.length;
+    const active = index === snapshotValue.activated.length;
+    const outer = bumper.radius + 9;
+    circle(bumper.x, bumper.y, outer + 8, activated ? "#69d5b526" : active ? "#e99b602c" : "#a1bbb51a", 18);
+    circle(bumper.x, bumper.y, bumper.radius + 2,
+      activated ? "#3aa58a" : active ? "#e4a267" : "#91aca7");
+    circle(bumper.x, bumper.y, bumper.radius - 6,
+      activated ? "#8fe5c1" : active ? "#ffdab0" : "#e0e7db");
     context.beginPath();
-    context.arc(bumper.x, bumper.y, bumper.radius + 8, 0, Math.PI * 2);
-    context.strokeStyle = "#b65c4e44";
-    context.lineWidth = 1.5;
+    context.arc(bumper.x, bumper.y, outer, 0, Math.PI * 2);
+    context.strokeStyle = activated ? "#3baa90" : active ? "#d47752" : "#819d9a";
+    context.lineWidth = active ? 3.5 : 2;
+    context.setLineDash(activated ? [] : [4, 5]);
     context.stroke();
+    context.setLineDash([]);
+    context.fillStyle = activated ? "#145f50" : "#334f55";
+    context.font = "900 22px system-ui";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillText(activated ? "✓" : String(index + 1), bumper.x, bumper.y + 1);
+    context.textAlign = "start";
+    context.textBaseline = "alphabetic";
   }
 
   const { goal } = level;
+  const open = snapshotValue.goalUnlocked;
   const breathe = 1 + Math.sin(t * 2.2) * 0.06;
-  circle(goal.x, goal.y, level.goalRadius * 1.15 * breathe, "#85d8a42c", 27);
+  circle(goal.x, goal.y, level.goalRadius * 1.15 * breathe,
+    open ? "#85d8a42c" : "#819da32c", 27);
   context.beginPath();
   context.arc(goal.x, goal.y, level.goalRadius * breathe, 0, Math.PI * 2);
-  context.strokeStyle = "#268f7e";
+  context.strokeStyle = open ? "#268f7e" : "#718e99";
   context.lineWidth = 7;
-  context.shadowColor = "#63d7a3";
-  context.shadowBlur = 17;
+  context.shadowColor = open ? "#63d7a3" : "#a0b1b3";
+  context.shadowBlur = open ? 17 : 5;
   context.stroke();
   context.shadowBlur = 0;
   context.beginPath();
   context.arc(goal.x, goal.y, level.goalRadius * 0.6, 0, Math.PI * 2);
-  context.strokeStyle = "#8abfaf";
+  context.strokeStyle = open ? "#8abfaf" : "#9aacb7";
   context.lineWidth = 1.5;
   context.stroke();
-  circle(goal.x, goal.y, 4, "#4bad91");
+  if (open) {
+    circle(goal.x, goal.y, 4, "#4bad91");
+  } else {
+    context.font = "bold 23px system-ui";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillStyle = "#4c7077";
+    context.fillText("×", goal.x, goal.y);
+    context.textAlign = "start";
+    context.textBaseline = "alphabetic";
+  }
 
   // At rest we reveal only the opening section of the physically simulated shot.
   if (phase === "ready") {
@@ -179,7 +210,7 @@ function draw(snapshotValue: Snapshot): void {
       level,
       snapshotValue.angle,
       snapshotValue.speed,
-      0.75,
+      snapshotValue.index < 5 ? 0.32 : 0.22,
     );
     for (let i = 0; i < preview.length; i++) {
       const point = preview[i]!;
@@ -281,7 +312,7 @@ function render(value: Snapshot): void {
     lastLevelId = value.level.id;
     trail.length = 0;
     dragging = false;
-    feedbackLabel.textContent = "Glisse en arrière pour viser, puis relâche.";
+    feedbackLabel.textContent = "Vise les relais numérotés : impossible de gagner avec un tir direct.";
   }
   if (lastPhase !== value.phase) {
     if (value.phase === "ready") trail.length = 0;
@@ -303,6 +334,10 @@ function render(value: Snapshot): void {
     ? `${value.best[value.level.id]} tir(s)`
     : "—";
   attemptsLabel.textContent = String(value.attempts).padStart(2, "0");
+  ricochetsLabel.textContent = `${value.activated.length} / ${value.level.required.length}`;
+  relayNextLabel.textContent = value.goalUnlocked
+    ? "CIBLE DÉVERROUILLÉE"
+    : `REL AIS N°${value.activated.length + 1} À TOUCHER`.replace("REL AIS", "RELAIS");
   angleInput.value = String(value.angle);
   powerInput.value = String(value.speed);
   angleValue.textContent = `${Math.round(value.angle)}°`;
@@ -329,10 +364,11 @@ function render(value: Snapshot): void {
     feedbackLabel.textContent = "Superbe ricochet ! La cible est atteinte.";
   else if (value.phase === "missed")
     feedbackLabel.textContent =
-      "La trajectoire n'a pas atteint la cible. Ajuste ton tir et recommence.";
+      `Échec : ${value.activated.length}/${value.level.required.length} relais. Revois l’ordre des ricochets et ton angle.`;
   else if (value.phase === "flying")
-    feedbackLabel.textContent =
-      "Observe le mouvement. Chaque tentative enseigne quelque chose.";
+    feedbackLabel.textContent = value.goalUnlocked
+      ? "Les relais sont activés ! Atteins maintenant la cible."
+      : `Relais ${value.activated.length + 1}/${value.level.required.length} : suis les anneaux numérotés.`;
   updateSelector(value);
   draw(value);
 }
