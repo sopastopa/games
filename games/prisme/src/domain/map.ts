@@ -58,11 +58,7 @@ export function reachable(arena: Arena, start: Point): Set<number> {
   return visited;
 }
 
-export function nextStep(
-  arena: Arena,
-  from: Point,
-  to: Point,
-): Point | null {
+export function nextStep(arena: Arena, from: Point, to: Point): Point | null {
   if (from.x === to.x && from.y === to.y) return null;
   const seen = new Set<number>([cell(from)]);
   const queue: { point: Point; first: Point }[] = [];

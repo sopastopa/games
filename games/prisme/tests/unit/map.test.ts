@@ -34,9 +34,7 @@ describe("seeded procedural arenas", () => {
         const reachableCells = reachable(arena, { x: 6, y: 6 });
         for (const point of [...arena.relays, arena.exit, ...arena.spawns]) {
           expect(reachableCells.has(cell(point))).toBe(true);
-          expect(
-            nextStep(arena, { x: 6, y: 6 }, point),
-          ).not.toBeNull();
+          expect(nextStep(arena, { x: 6, y: 6 }, point)).not.toBeNull();
         }
         for (let x = 0; x < SIZE; x++) {
           expect(arena.walls[x]).toBe(true);
@@ -49,8 +47,6 @@ describe("seeded procedural arenas", () => {
   it("walls block enemy sight, without hiding points in the same open cell", () => {
     const arena = generateArena(1234, 1);
     expect(hasSight(arena, { x: 6, y: 6 }, { x: 6.1, y: 6 })).toBe(true);
-    expect(
-      nextStep(arena, { x: 6, y: 6 }, { x: 6, y: 6 }),
-    ).toBeNull();
+    expect(nextStep(arena, { x: 6, y: 6 }, { x: 6, y: 6 })).toBeNull();
   });
 });

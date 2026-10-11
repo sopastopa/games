@@ -101,7 +101,8 @@ export class GameController {
   }
 
   togglePause(): void {
-    if (this.game.phase === "playing") this.game = { ...this.game, phase: "paused" };
+    if (this.game.phase === "playing")
+      this.game = { ...this.game, phase: "paused" };
     else if (this.game.phase === "paused")
       this.game = { ...this.game, phase: "playing" };
     this.publish();

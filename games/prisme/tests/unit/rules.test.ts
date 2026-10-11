@@ -119,10 +119,7 @@ describe("PRISME simulation", () => {
     );
     expect(damaged.player.hp).toBe(1);
     expect(damaged.player.invulnerable).toBeGreaterThan(0);
-    const blocked = stepGame(
-      { ...damaged, shots: [bullet] },
-      IDLE,
-    );
+    const blocked = stepGame({ ...damaged, shots: [bullet] }, IDLE);
     expect(blocked.player.hp).toBe(1);
     const lost = stepGame(
       {

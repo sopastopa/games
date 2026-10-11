@@ -1,7 +1,4 @@
-import type {
-  RecordData,
-  RecordStore,
-} from "../application/GameController";
+import type { RecordData, RecordStore } from "../application/GameController";
 
 const KEY = "games:prisme:record:v1";
 

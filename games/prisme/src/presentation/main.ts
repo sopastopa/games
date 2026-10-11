@@ -1,6 +1,11 @@
 import { GameController } from "../application/GameController";
 import { browserRecord } from "../infrastructure/browser";
-import { bestAim, objectiveReady, type Controls, type Phase } from "../domain/rules";
+import {
+  bestAim,
+  objectiveReady,
+  type Controls,
+  type Phase,
+} from "../domain/rules";
 import { MAX_ZONE } from "../domain/map";
 import { installFullscreen } from "./fullscreen";
 import { geometry, renderArena } from "./renderer";
@@ -71,27 +76,31 @@ function labels(phase: Phase): {
   if (phase === "lost") {
     return {
       heading: "Signal interrompu.",
-      description: "Le blindage a cédé. La même graine te donnera exactement la même arène : change de tactique.",
+      description:
+        "Le blindage a cédé. La même graine te donnera exactement la même arène : change de tactique.",
       action: "RÉESSAYER CETTE CARTE ↻",
     };
   }
   if (phase === "cleared") {
     return {
       heading: "Secteur sécurisé.",
-      description: "Les relais sont synchronisés et la voie d'extraction est ouverte. Un nouveau secteur t'attend.",
+      description:
+        "Les relais sont synchronisés et la voie d'extraction est ouverte. Un nouveau secteur t'attend.",
       action: "SECTEUR SUIVANT →",
     };
   }
   if (phase === "won") {
     return {
       heading: "Lumière rétablie.",
-      description: "Quatre secteurs pacifiés. La ville reprend ses couleurs. Rejoue avec une autre graine pour relever le défi.",
+      description:
+        "Quatre secteurs pacifiés. La ville reprend ses couleurs. Rejoue avec une autre graine pour relever le défi.",
       action: "NOUVEL ASSAUT ↻",
     };
   }
   return {
     heading: "La couleur est une arme.",
-    description: "Trois relais à rallumer. Des sentinelles à désactiver. Une extraction à atteindre. Chaque graine invente un nouveau terrain.",
+    description:
+      "Trois relais à rallumer. Des sentinelles à désactiver. Une extraction à atteindre. Chaque graine invente un nouveau terrain.",
     action: "DÉMARRER L'ASSAUT →",
   };
 }
@@ -118,8 +127,7 @@ function updatePhase(phase: Phase): void {
 controller.subscribe((state) => {
   updatePhase(state.phase);
   health.textContent =
-    "♥ ".repeat(state.player.hp) +
-    "♡ ".repeat(6 - state.player.hp);
+    "♥ ".repeat(state.player.hp) + "♡ ".repeat(6 - state.player.hp);
   relays.textContent =
     state.relays.filter((relay) => relay.charge >= 100).length + " / 3";
   enemies.textContent = String(state.enemies.length).padStart(2, "0");
@@ -224,7 +232,12 @@ document.addEventListener("keydown", (event) => {
     controller.togglePause();
     event.preventDefault();
   }
-  if (event.code in keyMap || event.code === "Space" || event.code === "ShiftLeft" || event.code === "ShiftRight") {
+  if (
+    event.code in keyMap ||
+    event.code === "Space" ||
+    event.code === "ShiftLeft" ||
+    event.code === "ShiftRight"
+  ) {
     event.preventDefault();
     keys.add(event.code);
     if (event.code.startsWith("Shift") && !event.repeat) dashRequested = true;
@@ -232,7 +245,9 @@ document.addEventListener("keydown", (event) => {
 });
 document.addEventListener("keyup", (event) => keys.delete(event.code));
 
-for (const button of document.querySelectorAll<HTMLButtonElement>("[data-move]")) {
+for (const button of document.querySelectorAll<HTMLButtonElement>(
+  "[data-move]",
+)) {
   const direction = button.dataset.move;
   if (!direction) continue;
   button.addEventListener("pointerdown", (event) => {
@@ -268,9 +283,11 @@ dash.addEventListener("click", () => {
 
 function input(): Controls {
   const moving = (direction: string): boolean =>
-    moves.has(direction) ||
-    [...keys].some((key) => keyMap[key] === direction);
-  const useAutomaticAim = !aimFromPointer || (fireHeld && fire.classList.contains("held")) || keys.has("Space");
+    moves.has(direction) || [...keys].some((key) => keyMap[key] === direction);
+  const useAutomaticAim =
+    !aimFromPointer ||
+    (fireHeld && fire.classList.contains("held")) ||
+    keys.has("Space");
   const aim = useAutomaticAim ? bestAim(controller.state) : pointerAim;
   const result: Controls = {
     moveX: Number(moving("right")) - Number(moving("left")),

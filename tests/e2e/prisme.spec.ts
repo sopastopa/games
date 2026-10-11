@@ -13,15 +13,15 @@ test("catalogue → seeded assault → pause → resume → portal", async ({
   await page.getByTestId("primary").click();
   await expect(page.getByTestId("overlay")).toBeHidden();
   await expect(page.getByTestId("seed-label")).toContainText("17713");
-  const before = await page.locator("#board").evaluate((canvas: HTMLCanvasElement) =>
-    canvas.toDataURL(),
-  );
+  const before = await page
+    .locator("#board")
+    .evaluate((canvas: HTMLCanvasElement) => canvas.toDataURL());
   await page.keyboard.down("ArrowRight");
   await page.waitForTimeout(220);
   await page.keyboard.up("ArrowRight");
-  const after = await page.locator("#board").evaluate((canvas: HTMLCanvasElement) =>
-    canvas.toDataURL(),
-  );
+  const after = await page
+    .locator("#board")
+    .evaluate((canvas: HTMLCanvasElement) => canvas.toDataURL());
   expect(after).not.toBe(before);
   await page.getByTestId("pause-toggle").click();
   await expect(page.getByTestId("overlay")).toBeVisible();
@@ -77,9 +77,7 @@ test("mobile portrait and landscape preserve shooting, movement and fullscreen",
     await page.waitForTimeout(200);
     await page.mouse.up();
     await page.getByTestId("dash").click();
-    await expect(page.getByTestId("game-status")).toContainText(
-      "RELAIS",
-    );
+    await expect(page.getByTestId("game-status")).toContainText("RELAIS");
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth > window.innerWidth + 1,
     );

@@ -73,7 +73,13 @@ function relayRing(
   ctx.strokeStyle = color + "60";
   ctx.lineWidth = Math.max(1, step * 0.04);
   ctx.beginPath();
-  ctx.arc(x, y, step * (0.4 + Math.sin(frame / 20 + index) * 0.03), 0, Math.PI * 2);
+  ctx.arc(
+    x,
+    y,
+    step * (0.4 + Math.sin(frame / 20 + index) * 0.03),
+    0,
+    Math.PI * 2,
+  );
   ctx.stroke();
   ctx.strokeStyle = color;
   ctx.lineWidth = step * 0.095;
@@ -155,7 +161,12 @@ export function renderArena(
         ctx.strokeRect(left + 0.5, top + 0.5, step - 1, step - 1);
         if ((x * 9 + y * 13 + game.seed) % 7 === 0) {
           ctx.fillStyle = "#adf6ff45";
-          ctx.fillRect(left + step * 0.43, top + step * 0.43, step * 0.06, step * 0.06);
+          ctx.fillRect(
+            left + step * 0.43,
+            top + step * 0.43,
+            step * 0.06,
+            step * 0.06,
+          );
         }
       }
     }
@@ -177,7 +188,11 @@ export function renderArena(
   ctx.stroke();
   ctx.shadowBlur = 0;
   for (let index = 0; index < game.relays.length; index++) {
-    relayRing(ctx, game.relays[index], index, frame, { step, offsetX, offsetY });
+    relayRing(ctx, game.relays[index], index, frame, {
+      step,
+      offsetX,
+      offsetY,
+    });
   }
 
   for (const enemy of game.enemies) {
@@ -226,7 +241,8 @@ export function renderArena(
   ctx.lineTo(0, step * 0.14);
   ctx.lineTo(-step * 0.25, step * 0.26);
   ctx.closePath();
-  ctx.fillStyle = player.invulnerable > 0 && frame % 8 < 4 ? "#ffffff" : "#67f9e5";
+  ctx.fillStyle =
+    player.invulnerable > 0 && frame % 8 < 4 ? "#ffffff" : "#67f9e5";
   ctx.fill();
   ctx.shadowBlur = 0;
   circle(ctx, 0, 0, step * 0.1, "#0c1c3b");

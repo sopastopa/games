@@ -221,9 +221,7 @@ export function stepGame(state: GameState, input: Controls): GameState {
     shots.push(moving);
   }
   // Shots already inserted for firing are represented by their moved copies.
-  const spawned = input.shoot && player.cooldown === 8
-    ? 1
-    : 0;
+  const spawned = input.shoot && player.cooldown === 8 ? 1 : 0;
   if (spawned) shots.splice(0, spawned);
 
   next.enemies = enemies.filter((enemy) => enemy.hp > 0);
