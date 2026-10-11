@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#10101d" />
+    <meta
+      name="description"
+      content="PULSE, un jeu de précision : un seul geste, le bon moment."
+    />
+    <title>PULSE — Games</title>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a href="../../" class="back-link" data-testid="back-home"
+          >← Tous les jeux</a
+        >
+        <span class="top-logo"><b>◈</b> GAMES</span>
+        <span class="top-edition">ARCADE / 03</span>
+      </header>
+      <main class="game-layout">
+        <section class="intro">
+          <div class="eyebrow">
+            <span class="signal"></span> UN JEU DE PUR TIMING
+          </div>
+          <h1>PULSE<span class="period">.</span></h1>
+          <p class="intro-lead">
+            Un mouvement.<br />Une impulsion.<br /><em>Le moment parfait.</em>
+          </p>
+          <p class="concept">
+            Frappe quand le point lumineux traverse l'arc doré. Chaque réussite
+            inverse sa trajectoire. Jusqu'où garderas-tu le rythme ?
+          </p>
+          <div class="rule-divider"></div>
+          <div class="steps" aria-label="Comment jouer">
+            <div>
+              <span class="step-number">01</span
+              ><span>Regarde tourner l'aiguille.</span>
+            </div>
+            <div>
+              <span class="step-number">02</span
+              ><span>Appuie dans la zone dorée.</span>
+            </div>
+            <div>
+              <span class="step-number">03</span
+              ><span>Vise le centre pour doubler les points.</span>
+            </div>
+          </div>
+          <p class="keyboard-guide">
+            ESPACE · FRAPPER <span>/</span> P · PAUSE
+          </p>
+        </section>
+        <section class="arcade" aria-label="Jeu de précision PULSE">
+          <div class="panel-header">
+            <span><i></i> MODE PRÉCISION</span>
+            <span id="round-label">UNE TOUCHE. ZÉRO LOTERIE.</span>
+          </div>
+          <div class="scoreboard">
+            <div>
+              <span>SCORE</span
+              ><strong id="score" data-testid="score">0</strong>
+            </div>
+            <div>
+              <span>RECORD</span><strong id="best" data-testid="best">0</strong>
+            </div>
+            <div>
+              <span>IMPACTS</span
+              ><strong id="hits" data-testid="hits">0</strong>
+            </div>
+          </div>
+          <div class="game-stage">
+            <div class="canvas-wrap">
+              <canvas
+                id="dial"
+                role="button"
+                tabindex="0"
+                aria-label="Cadran du jeu. Appuyez sur Entrée ou espace pour frapper."
+                data-testid="dial"
+              ></canvas>
+              <div class="center-label" aria-hidden="true">
+                <span>FEEL THE</span><b>BEAT</b>
+              </div>
+            </div>
+            <div
+              class="feedback"
+              id="feedback"
+              aria-live="polite"
+              data-testid="feedback"
+            >
+              Prêt à synchroniser ?
+            </div>
+            <div class="status" id="status" data-testid="status" role="status">
+              PRÊT
+            </div>
+          </div>
+          <button
+            class="action-button"
+            id="action"
+            type="button"
+            data-testid="action"
+          >
+            COMMENCER <span>↗</span>
+          </button>
+          <div class="secondary-actions">
+            <button id="pause" type="button" disabled>⏸ Pause</button>
+            <button id="reset" type="button">↺ Recommencer</button>
+            <button id="sound" type="button" aria-pressed="false">
+              ♪ Son : non
+            </button>
+          </div>
+          <p class="fine-print">
+            Sans publicité, sans compte et sans limite de temps. Le record reste
+            sur cet appareil.
+          </p>
+        </section>
+      </main>
+      <footer>PULSE <span>•</span> Le jeu s'arrête quand tu le décides.</footer>
+    </div>
+    <script type="module" src="/src/presentation/main.ts"></script>
+  </body>
+</html>

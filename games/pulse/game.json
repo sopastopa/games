@@ -1,0 +1,10 @@
+{
+  "id": "pulse",
+  "title": "PULSE",
+  "description": "Une seule touche. Vise le bon instant, inverse la trajectoire et dépasse ton record.",
+  "version": "1.0.0",
+  "category": "Adresse",
+  "icon": "◎",
+  "accent": "#fbbf68",
+  "published": true
+}
