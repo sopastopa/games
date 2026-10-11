@@ -1,0 +1,10 @@
+{
+  "id": "snake",
+  "title": "Snake",
+  "description": "Attrape les pommes, grandis et évite les collisions. Jusqu'où iras-tu ?",
+  "version": "1.0.0",
+  "category": "Arcade",
+  "icon": "🐍",
+  "accent": "#b4ff79",
+  "published": true
+}
