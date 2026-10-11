@@ -3,9 +3,6 @@ name: Deploy Games to GitHub Pages
 on:
   push:
     branches: [main]
-    paths:
-      - index.html
-      - .github/workflows/pages.yml
   workflow_dispatch:
 
 permissions:
@@ -18,29 +15,34 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  verify:
+    name: Validate and build all games
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test:unit
+      - run: pnpm build
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:e2e
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
   deploy:
+    needs: verify
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v6
-
-      - name: Prepare site
-        run: |
-          mkdir -p _site
-          cp index.html _site/index.html
-          touch _site/.nojekyll
-
-      - name: Upload site
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: _site
-
-      - name: Publish site
+      - uses: actions/deploy-pages@v5
         id: deployment
-        uses: actions/deploy-pages@v5

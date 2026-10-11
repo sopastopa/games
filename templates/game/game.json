@@ -1,0 +1,10 @@
+{
+  "id": "__SLUG__",
+  "title": "__TITLE__",
+  "description": "Un nouveau mini-jeu à découvrir.",
+  "version": "0.1.0",
+  "category": "Prototype",
+  "icon": "🎮",
+  "accent": "#b4ff79",
+  "published": false
+}

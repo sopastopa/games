@@ -1,0 +1,11 @@
+{
+  "name": "@games/__SLUG__",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run tests/unit"
+  }
+}
