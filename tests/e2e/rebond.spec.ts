@@ -48,6 +48,7 @@ test("the player can drag to launch, prepare again and use the keyboard", async 
 }) => {
   await page.goto("/games/play/rebond/");
   const board = page.getByTestId("board");
+  await board.scrollIntoViewIfNeeded();
   const box = await board.boundingBox();
   if (!box) throw new Error("Board is not visible");
   await page.mouse.move(box.x + box.width * 0.55, box.y + box.height * 0.4);
