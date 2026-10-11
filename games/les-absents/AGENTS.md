@@ -10,3 +10,4 @@
 - Tous les gestes sont disponibles au clavier et à la souris ou au toucher ; les nœuds neutres sont des boutons.
 - Le portail et le code des autres jeux ne doivent pas être modifiés.
 - Exiger tests du solveur, règles, historique, persistance, navigation et publication.
+- Plein écran obligatoire : API native avec repli viewport sur mobile, sortie par le bouton ou Échap, rendu adaptatif sans perdre l'état. Maintenir tests unitaires de transitions et tests Playwright desktop/mobile.

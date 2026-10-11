@@ -20,3 +20,4 @@
 - Garantir les points de contrôle hors danger et la possibilité de réussir chaque chapitre sans collision en mode normal grâce aux traces rejouées par `tests/unit/courses.test.ts`.
 - Toute modification de physique ou de difficulté doit mettre à jour les parcours attestés, sans supprimer le test qui les valide.
 - En mode Promenade, tous les types de dangers restent visibles mais ne font jamais échouer le joueur.
+- Plein écran obligatoire : API native avec repli viewport sur mobile, sortie par le bouton ou Échap, rendu adaptatif sans perdre l'état. Maintenir tests unitaires de transitions et tests Playwright desktop/mobile.

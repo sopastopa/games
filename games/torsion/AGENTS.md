@@ -8,3 +8,4 @@
 - Les ateliers sont débloqués un par un ; progression stockée avec tolérance aux corruptions et à l'indisponibilité de localStorage.
 - Contrôles accessibles au clavier, souris et toucher ; retour portail "../../", focus visible, reduced-motion, responsive.
 - Toute évolution nécessite tests de règles, niveaux, contrôleur, stockage et Playwright.
+- Plein écran obligatoire : API native avec repli viewport sur mobile, sortie par le bouton ou Échap, rendu adaptatif sans perdre l'état. Maintenir tests unitaires de transitions et tests Playwright desktop/mobile.

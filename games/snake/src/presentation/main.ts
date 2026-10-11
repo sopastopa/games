@@ -1,3 +1,4 @@
+import { installFullscreen } from "./fullscreen";
 import "./style.css";
 import { SnakeController } from "../application/SnakeController";
 import { browserBestScore, browserClock } from "../infrastructure/browser";
@@ -158,3 +159,5 @@ for (const element of document.querySelectorAll<HTMLButtonElement>(
   );
 }
 window.addEventListener("pagehide", () => controller.destroy(), { once: true });
+
+installFullscreen();

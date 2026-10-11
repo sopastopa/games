@@ -37,3 +37,5 @@ Créer le jeu à partir du template, implémenter les règles et leurs tests, co
 - Les contrôles de protection de `main` sont à activer dans les paramètres du dépôt (droits admin requis).
 
 Voir `docs/ARCHITECTURE.md`, `docs/GAME_STANDARDS.md` et `docs/adr/0001-monorepo.md`.
+
+Tous les jeux proposent un mode **Plein écran** (PC et mobile), avec repli occupant le viewport si l'API native n'est pas disponible. Les transitions et l'affichage sont couverts par Vitest et Playwright.

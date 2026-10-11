@@ -1,3 +1,4 @@
+import { installFullscreen } from "./fullscreen";
 import "./style.css";
 import { RebondController } from "../application/RebondController";
 import type { Snapshot } from "../application/RebondController";
@@ -508,3 +509,5 @@ document.addEventListener("visibilitychange", () => {
 window.addEventListener("resize", resize);
 window.addEventListener("pagehide", () => game.destroy(), { once: true });
 resize();
+
+installFullscreen();

@@ -1,3 +1,4 @@
+import { installFullscreen } from "./fullscreen";
 import { NuageController } from "../application/NuageController";
 import { CHAPTERS } from "../domain/chapters";
 import { WORLD, narrative } from "../domain/rules";
@@ -287,4 +288,7 @@ window.addEventListener("blur", () => {
 window.addEventListener("pagehide", () => game.dispose(), { once: true });
 
 game.subscribe(render);
+window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
+
+installFullscreen();

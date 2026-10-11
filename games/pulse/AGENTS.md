@@ -8,3 +8,4 @@
 - Respecter les préférences de mouvement réduit et suspendre le jeu si la page n'est plus visible.
 - Aucun mécanisme de rétention coercitif : ni récompense quotidienne, ni publicité, ni notifications, ni achats.
 - Les tests unitaires couvrent l'algorithme de précision, la progression, les états et le stockage.
+- Plein écran obligatoire : API native avec repli viewport sur mobile, sortie par le bouton ou Échap, rendu adaptatif sans perdre l'état. Maintenir tests unitaires de transitions et tests Playwright desktop/mobile.

@@ -6,3 +6,4 @@
 - Keep the renderer free of gameplay rules.
 - Preserve keyboard, touch, restart, pause and return-to-portal accessibility.
 - Expand unit tests whenever domain rules change.
+- Plein écran obligatoire : API native avec repli viewport sur mobile, sortie par le bouton ou Échap, rendu adaptatif sans perdre l'état. Maintenir tests unitaires de transitions et tests Playwright desktop/mobile.

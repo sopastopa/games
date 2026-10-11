@@ -1,3 +1,4 @@
+import { installFullscreen } from "./fullscreen";
 import "./style.css";
 import { GameController } from "../application/GameController";
 
@@ -8,3 +9,5 @@ const game = new GameController();
 button.addEventListener("click", () => {
   counter.textContent = String(game.play());
 });
+
+installFullscreen();

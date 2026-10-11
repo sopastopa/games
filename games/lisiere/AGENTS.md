@@ -12,3 +12,4 @@
 - L'IA n'agit qu'après le délai fourni par un port injectable ; gérer l'annulation, la navigation et la destruction proprement.
 - Clavier, souris, tactile, focus visible, responsive, préférence reduced-motion.
 - Jeu sans compte, notification, achats ou récompense aléatoire ; progression locale robuste.
+- Plein écran obligatoire : API native avec repli viewport sur mobile, sortie par le bouton ou Échap, rendu adaptatif sans perdre l'état. Maintenir tests unitaires de transitions et tests Playwright desktop/mobile.

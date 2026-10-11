@@ -1,3 +1,4 @@
+import { installFullscreen } from "./fullscreen";
 import "./style.css";
 import { LisiereController } from "../application/LisiereController";
 import type { Snapshot } from "../application/LisiereController";
@@ -213,3 +214,5 @@ document.addEventListener("visibilitychange", () => {
   if (document.hidden) controller.suspend();
   else controller.resume();
 });
+
+installFullscreen();

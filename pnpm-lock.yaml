@@ -35,7 +35,19 @@ importers:
 
   apps/portal: {}
 
+  games/les-absents: {}
+
+  games/lisiere: {}
+
+  games/nuage: {}
+
+  games/pulse: {}
+
+  games/rebond: {}
+
   games/snake: {}
+
+  games/torsion: {}
 
 packages:
 

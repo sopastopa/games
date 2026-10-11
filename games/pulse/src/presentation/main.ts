@@ -1,3 +1,4 @@
+import { installFullscreen } from "./fullscreen";
 import "./style.css";
 import { PulseController } from "../application/PulseController";
 import type { Snapshot } from "../application/ports";
@@ -262,3 +263,5 @@ window.addEventListener("blur", () => game.suspend());
 window.addEventListener("resize", fitCanvas);
 window.addEventListener("pagehide", () => game.destroy(), { once: true });
 fitCanvas();
+
+installFullscreen();

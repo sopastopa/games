@@ -21,6 +21,8 @@
 - Pas de dépendances sans justification ; respecter les licences ; aucune injection HTML non échappée ; utiliser les API DOM sûres.
 - Gérer arrêt des timers, suppression des abonnements et visibilité de la page ; sauvegardes isolées par jeu et robustes à l'indisponibilité du stockage.
 - Support clavier, tactile et petits écrans ; styles de focus visibles, textes lisibles et navigation accessible.
+- Plein écran obligatoire sur PC et mobile pour chaque jeu : bouton accessible, API Fullscreen native si disponible, repli occupant le viewport sinon, sortie au bouton ou par Échap, commandes et état conservés. Le rendu doit s'adapter aux redimensionnements.
+- Chaque jeu possède des tests unitaires du mode plein écran (entrée, sortie, changement externe, refus et absence de l'API) et des tests Playwright sur ordinateur et mobile.
 - Garder les règles testables avec une horloge et un hasard injectables.
 
 ## Tests et livraison — obligatoires

@@ -1,3 +1,4 @@
+import { installFullscreen } from "./fullscreen";
 import "./style.css";
 import { AbsentsController } from "../application/AbsentsController";
 import type { Snapshot } from "../application/AbsentsController";
@@ -251,3 +252,5 @@ document.addEventListener("keydown", (event) => {
     hintButton.click();
   }
 });
+
+installFullscreen();
