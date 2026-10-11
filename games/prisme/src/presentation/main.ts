@@ -38,6 +38,7 @@ const fire = required<HTMLButtonElement>("#fire");
 const dash = required<HTMLButtonElement>("#dash");
 
 installFullscreen();
+seedInput.value = String(controller.best.lastSeed);
 
 const keys = new Set<string>();
 const moves = new Set<string>();
