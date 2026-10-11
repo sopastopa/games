@@ -928,29 +928,99 @@ select {
   }
 }
 
-
-.logo { color: #263630; }
-.logo-mark, .kicker, .chapter-label { color: #3b7d6c; }
-.collection { color: #849288; }
-.experience { gap: clamp(28px, 5vw, 85px); padding-block: 65px 80px; }
-.story { color: #263630; }
-.story h1 { font-family: "Space Grotesk", "DM Sans", sans-serif; font-weight: 600; font-size: clamp(58px, 7.8vw, 100px); }
-.introduction, .level-subtitle, .mission p:last-child { color: #66796f; }
-.chapter-details { border-color: var(--site-line); }
-.chapter-details h2, .chapter-number { color: #273c31; }
-.mission { background: #edf2eb; border: 1px solid #d8e4db; border-radius: 8px; }
-.mission-title, .mission strong { color: #376e5b; }
-.legend { color: #526d60; }
-.progress-label { color: #526d60; }
-.progress-bar { background: #d6e1d8; }
-.board-heading { color: #567166; }
-.board { box-shadow: none; border-radius: 9px; }
-.readings { color: #3f5c51; }
-.reading { background: #fff; border-color: var(--site-line); }
-.reading-label { color: #718478; }
-.tools button { background: #fff; color: #305347; border-color: #cbdccf; border-radius: 8px; }
-.tools button:hover:not(:disabled) { background: #e9f2e9; border-color: #91b6a4; }
-.level-browser { border-color: var(--site-line); }
-.level-browser label { color: #567166; }
-.level-browser select { background: #fff; color: #263630; border-color: #ccd9ce; }
-@media (max-width: 760px) { .experience { padding-top: 40px; } }
+.logo {
+  color: #263630;
+}
+.logo-mark,
+.kicker,
+.chapter-label {
+  color: #3b7d6c;
+}
+.collection {
+  color: #849288;
+}
+.experience {
+  gap: clamp(28px, 5vw, 85px);
+  padding-block: 65px 80px;
+}
+.story {
+  color: #263630;
+}
+.story h1 {
+  font-family: "Space Grotesk", "DM Sans", sans-serif;
+  font-weight: 600;
+  font-size: clamp(58px, 7.8vw, 100px);
+}
+.introduction,
+.level-subtitle,
+.mission p:last-child {
+  color: #66796f;
+}
+.chapter-details {
+  border-color: var(--site-line);
+}
+.chapter-details h2,
+.chapter-number {
+  color: #273c31;
+}
+.mission {
+  background: #edf2eb;
+  border: 1px solid #d8e4db;
+  border-radius: 8px;
+}
+.mission-title,
+.mission strong {
+  color: #376e5b;
+}
+.legend {
+  color: #526d60;
+}
+.progress-label {
+  color: #526d60;
+}
+.progress-bar {
+  background: #d6e1d8;
+}
+.board-heading {
+  color: #567166;
+}
+.board {
+  box-shadow: none;
+  border-radius: 9px;
+}
+.readings {
+  color: #3f5c51;
+}
+.reading {
+  background: #fff;
+  border-color: var(--site-line);
+}
+.reading-label {
+  color: #718478;
+}
+.tools button {
+  background: #fff;
+  color: #305347;
+  border-color: #cbdccf;
+  border-radius: 8px;
+}
+.tools button:hover:not(:disabled) {
+  background: #e9f2e9;
+  border-color: #91b6a4;
+}
+.level-browser {
+  border-color: var(--site-line);
+}
+.level-browser label {
+  color: #567166;
+}
+.level-browser select {
+  background: #fff;
+  color: #263630;
+  border-color: #ccd9ce;
+}
+@media (max-width: 760px) {
+  .experience {
+    padding-top: 40px;
+  }
+}

@@ -957,22 +957,71 @@ select {
   }
 }
 
-
-.brand { color: #385f51; }
-.brand > span { color: #ad8b65; }
-.masthead-label { color: #788b7e; }
-.intro { padding-block: 60px 55px; }
-.intro h1 { font-family: "Space Grotesk", "DM Sans", sans-serif; font-weight: 600; color: #263630; }
-.eyebrow { color: #866e53; }
-.intro p { color: #65756c; }
-.game-header { border-color: var(--site-line); }
-.game-header h2 { color: #263630; }
-.game-header p { color: #65766e; }
-.section-eyebrow, .stage-number span { color: #728879; }
-.board-surround { box-shadow: none; border-radius: 10px; }
-.campaign-card { background: #fff; border: 1px solid #dce4db; border-radius: 10px; box-shadow: none; color: #263630; }
-.rules-card { color: #f0f4eb; background: #24453b; border-color: #24453b; border-radius: 10px; }
-.rules-card .rule p, .rules-card .rules-legend { color: #cfdfd2; }
-.turn-status { color: #e5eadf; }
-.fair-play { color: #63776a; }
-@media (max-width: 760px) { .intro { padding-block: 45px; } }
+.brand {
+  color: #385f51;
+}
+.brand > span {
+  color: #ad8b65;
+}
+.masthead-label {
+  color: #788b7e;
+}
+.intro {
+  padding-block: 60px 55px;
+}
+.intro h1 {
+  font-family: "Space Grotesk", "DM Sans", sans-serif;
+  font-weight: 600;
+  color: #263630;
+}
+.eyebrow {
+  color: #866e53;
+}
+.intro p {
+  color: #65756c;
+}
+.game-header {
+  border-color: var(--site-line);
+}
+.game-header h2 {
+  color: #263630;
+}
+.game-header p {
+  color: #65766e;
+}
+.section-eyebrow,
+.stage-number span {
+  color: #728879;
+}
+.board-surround {
+  box-shadow: none;
+  border-radius: 10px;
+}
+.campaign-card {
+  background: #fff;
+  border: 1px solid #dce4db;
+  border-radius: 10px;
+  box-shadow: none;
+  color: #263630;
+}
+.rules-card {
+  color: #f0f4eb;
+  background: #24453b;
+  border-color: #24453b;
+  border-radius: 10px;
+}
+.rules-card .rule p,
+.rules-card .rules-legend {
+  color: #cfdfd2;
+}
+.turn-status {
+  color: #e5eadf;
+}
+.fair-play {
+  color: #63776a;
+}
+@media (max-width: 760px) {
+  .intro {
+    padding-block: 45px;
+  }
+}
