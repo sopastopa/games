@@ -16,6 +16,10 @@ export type Snapshot = Readonly<{
   speed: number;
   canContinue: boolean;
   starCount: number;
+  /** Bumpers activated in the mandatory order during this shot. */
+  activated: readonly string[];
+  nextRequired: string | null;
+  goalUnlocked: boolean;
 }>;
 
 export class RebondController {
@@ -24,6 +28,7 @@ export class RebondController {
   private best: Record<string, number> = {};
   private phase: Phase = "ready";
   private attempts = 0;
+  private activated: string[] = [];
   private angle = 42;
   private speed = 580;
   private ball: Ball;
@@ -66,6 +71,9 @@ export class RebondController {
       phase: this.phase,
       ball: { ...this.ball },
       attempts: this.attempts,
+      activated: [...this.activated],
+      nextRequired: this.current.required[this.activated.length] ?? null,
+      goalUnlocked: this.activated.length === this.current.required.length,
       angle: this.angle,
       speed: this.speed,
       canContinue:
@@ -103,6 +111,7 @@ export class RebondController {
   shoot(): boolean {
     if (this.phase !== "ready") return false;
     this.ball = launch(this.current.source, this.angle, this.speed);
+    this.activated = [];
     this.phase = "flying";
     this.attempts++;
     this.accumulator = 0;
@@ -116,6 +125,7 @@ export class RebondController {
     if (this.phase === "ready") return;
     this.stop();
     this.phase = "ready";
+    this.activated = [];
     this.ball = launch(this.current.source, this.angle, 0);
     this.notify();
   }
@@ -124,6 +134,7 @@ export class RebondController {
     this.stop();
     this.phase = "ready";
     this.attempts = 0;
+    this.activated = [];
     this.ball = launch(this.current.source, this.angle, 0);
     this.notify();
   }
@@ -166,7 +177,13 @@ export class RebondController {
       this.accumulator -= STEP;
       const result = advance(this.ball, this.current);
       this.ball = result.ball;
-      if (result.hitGoal) this.finish();
+      // An impact only counts when it is the next numbered relay.
+      for (const contact of result.contacts) {
+        if (contact === this.current.required[this.activated.length]) {
+          this.activated.push(contact);
+        }
+      }
+      if (result.hitGoal && this.activated.length === this.current.required.length) this.finish();
       else if (result.expired) {
         this.stop();
         this.phase = "missed";
