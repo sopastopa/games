@@ -68,7 +68,7 @@ function relayRing(
   const { step, offsetX, offsetY } = geometry;
   const x = pixel(relay.x, offsetX, step);
   const y = pixel(relay.y, offsetY, step);
-  const color = COLORS[index];
+  const color = COLORS[index]!;
   circle(ctx, x, y, step * 0.52, color + "18");
   ctx.strokeStyle = color + "60";
   ctx.lineWidth = Math.max(1, step * 0.04);
@@ -123,7 +123,7 @@ export function renderArena(
   }
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   const { step, offsetX, offsetY } = geometry(canvas);
-  ctx.fillStyle = BACKGROUNDS[(game.zone - 1) % BACKGROUNDS.length];
+  ctx.fillStyle = BACKGROUNDS[(game.zone - 1) % BACKGROUNDS.length]!;
   ctx.fillRect(0, 0, width, height);
   const ambient = ctx.createRadialGradient(
     width * 0.5,
@@ -188,7 +188,7 @@ export function renderArena(
   ctx.stroke();
   ctx.shadowBlur = 0;
   for (let index = 0; index < game.relays.length; index++) {
-    relayRing(ctx, game.relays[index], index, frame, {
+    relayRing(ctx, game.relays[index]!, index, frame, {
       step,
       offsetX,
       offsetY,
