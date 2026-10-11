@@ -1,9 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { shortestPath } from "../../games/veille/src/domain/generation";
-import {
-  directionBetween,
-  newExpedition,
-} from "../../games/veille/src/domain/rules";
+import { newExpedition } from "../../games/veille/src/domain/rules";
 import { EXIT } from "../../games/veille/src/domain/types";
 
 test("catalogue → deployment → movement → reload → portal", async ({
