@@ -156,7 +156,10 @@ export function generateArena(seed: number, zone: number): Arena {
   // Seeded Fisher-Yates ensures reproducible enemy placement.
   for (let index = positions.length - 1; index > 0; index--) {
     const other = Math.floor(random() * (index + 1));
-    [positions[index], positions[other]] = [positions[other]!, positions[index]!];
+    [positions[index], positions[other]] = [
+      positions[other]!,
+      positions[index]!,
+    ];
   }
   const spawns = positions.slice(0, 2 + zone * 2);
   if (spawns.length !== 2 + zone * 2)
