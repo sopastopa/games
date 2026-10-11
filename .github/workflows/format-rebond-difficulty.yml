@@ -1,0 +1,39 @@
+name: Format REBOND difficulty upgrade
+
+on:
+  push:
+    branches: [feat/rebond-hard-mode]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: format-rebond-hard-mode
+  cancel-in-progress: true
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/rebond-hard-mode
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec prettier --write games/rebond tests/e2e/rebond.spec.ts
+      - name: Commit normalized source formatting
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add games/rebond tests/e2e/rebond.spec.ts
+          if ! git diff --cached --quiet; then
+            git commit -m "style(rebond): format difficulty upgrade"
+            git push origin HEAD:feat/rebond-hard-mode
+          fi
