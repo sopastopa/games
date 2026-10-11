@@ -1,0 +1,10 @@
+{
+  "id": "prisme",
+  "title": "PRISME",
+  "description": "Un shooter tactique en plein écran. Cartes à seed, relais à capturer, ennemis à déjouer et extraction sous les néons.",
+  "version": "1.0.0",
+  "category": "Action",
+  "icon": "✺",
+  "accent": "#fb6fb2",
+  "published": true
+}
