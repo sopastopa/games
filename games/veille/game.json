@@ -1,0 +1,10 @@
+{
+  "id": "veille",
+  "title": "VEILLE",
+  "description": "Explore une cité engloutie : 12 secteurs, cartes renouvelées, marées, sentinelles, trois spécialités et une histoire à reconstituer.",
+  "version": "1.0.0",
+  "category": "Aventure",
+  "icon": "◇",
+  "accent": "#7fdfcc",
+  "published": true
+}
