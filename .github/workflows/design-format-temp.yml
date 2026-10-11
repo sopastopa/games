@@ -1,0 +1,33 @@
+name: Frame formatting (temporary)
+
+on:
+  push:
+    branches: [feat/games-editorial-design-system]
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Normalize light game frames
+        run: pnpm exec prettier --write games/*/src/presentation/style.css games/*/index.html tests/e2e/game-frames.spec.ts docs/DESIGN_SYSTEM.md
+      - name: Commit normalized styling
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add games/*/src/presentation/style.css games/*/index.html tests/e2e/game-frames.spec.ts docs/DESIGN_SYSTEM.md
+          if ! git diff --cached --quiet; then
+            git commit -m "style: format light game frames"
+            git push
+          fi

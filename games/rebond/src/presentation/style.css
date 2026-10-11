@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
 :root {
   color: #182f37;
   background: #f6f0e6;
@@ -746,3 +748,103 @@ a[data-testid="back-home"]:focus-visible {
     transition: none;
   }
 }
+
+/* GAMES / visual identity — quiet outer frame shared across the collection. */
+:root {
+  --site-paper: #f7f8f5;
+  --site-ink: #263630;
+  --site-muted: #65746a;
+  --site-line: #dce4dc;
+  --site-accent: #316a5b;
+  font-family: "DM Sans", "Avenir Next", ui-sans-serif, system-ui, sans-serif;
+  color: var(--site-ink);
+  background: var(--site-paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  color: var(--site-ink);
+  background: var(--site-paper);
+}
+
+:is(.shell, .page, .page-shell) {
+  width: min(100% - 76px, 1280px);
+  padding-inline: 0;
+  margin-inline: auto;
+}
+
+:is(.topbar, .masthead) {
+  height: auto;
+  min-height: 86px;
+  border-bottom: 1px solid var(--site-line);
+  gap: 24px;
+}
+
+:is(.back, .back-link, .home-link) {
+  color: #405c50;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+:is(.back, .back-link, .home-link):hover {
+  color: #246452;
+}
+
+:is(button, input, select, a, canvas):focus-visible {
+  outline: 3px solid #3f8771;
+  outline-offset: 3px;
+}
+
+:is(button, select, input) {
+  font-family: inherit;
+}
+
+button:not(:disabled),
+select,
+input {
+  touch-action: manipulation;
+}
+
+button,
+select {
+  border-radius: 8px;
+}
+
+@media (max-width: 760px) {
+  :is(.shell, .page, .page-shell) {
+    width: min(100% - 36px, 1280px);
+  }
+
+  :is(.topbar, .masthead) {
+    min-height: 72px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+:root { --site-paper: #f7f8f5; }
+.wordmark { color: #345f54; letter-spacing: .08em; }
+.logo-symbol, .eyebrow, .section-kicker { color: #986f51; }
+.header-version { color: #809187; }
+.intro { padding-block: clamp(48px, 6vw, 80px) 57px; }
+.intro h1 { font-family: "Space Grotesk", "DM Sans", sans-serif; font-weight: 600; }
+.sublead { color: #69776d; }
+.intro-right { opacity: .8; }
+.arena-section { border-color: var(--site-line); }
+.canvas-shell { box-shadow: none; border: 1px solid #d5e1d8; border-radius: 9px; }
+.control-panel { box-shadow: none; border-radius: 10px; background: #244c48; }
+.philosophy { border-color: var(--site-line); }
+@media (max-width: 760px) { .intro { padding-top: 42px; } }

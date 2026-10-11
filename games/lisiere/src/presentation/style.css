@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
 :root {
   color: #e5e8dd;
   background: #111c1b;
@@ -869,3 +871,108 @@ a[data-testid="back-home"]:focus-visible {
     transition: none;
   }
 }
+
+/* GAMES / visual identity — quiet outer frame shared across the collection. */
+:root {
+  --site-paper: #f7f8f5;
+  --site-ink: #263630;
+  --site-muted: #65746a;
+  --site-line: #dce4dc;
+  --site-accent: #316a5b;
+  font-family: "DM Sans", "Avenir Next", ui-sans-serif, system-ui, sans-serif;
+  color: var(--site-ink);
+  background: var(--site-paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  color: var(--site-ink);
+  background: var(--site-paper);
+}
+
+:is(.shell, .page, .page-shell) {
+  width: min(100% - 76px, 1280px);
+  padding-inline: 0;
+  margin-inline: auto;
+}
+
+:is(.topbar, .masthead) {
+  height: auto;
+  min-height: 86px;
+  border-bottom: 1px solid var(--site-line);
+  gap: 24px;
+}
+
+:is(.back, .back-link, .home-link) {
+  color: #405c50;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+:is(.back, .back-link, .home-link):hover {
+  color: #246452;
+}
+
+:is(button, input, select, a, canvas):focus-visible {
+  outline: 3px solid #3f8771;
+  outline-offset: 3px;
+}
+
+:is(button, select, input) {
+  font-family: inherit;
+}
+
+button:not(:disabled),
+select,
+input {
+  touch-action: manipulation;
+}
+
+button,
+select {
+  border-radius: 8px;
+}
+
+@media (max-width: 760px) {
+  :is(.shell, .page, .page-shell) {
+    width: min(100% - 36px, 1280px);
+  }
+
+  :is(.topbar, .masthead) {
+    min-height: 72px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+.brand { color: #385f51; }
+.brand > span { color: #ad8b65; }
+.masthead-label { color: #788b7e; }
+.intro { padding-block: 60px 55px; }
+.intro h1 { font-family: "Space Grotesk", "DM Sans", sans-serif; font-weight: 600; color: #263630; }
+.eyebrow { color: #866e53; }
+.intro p { color: #65756c; }
+.game-header { border-color: var(--site-line); }
+.game-header h2 { color: #263630; }
+.game-header p { color: #65766e; }
+.section-eyebrow, .stage-number span { color: #728879; }
+.board-surround { box-shadow: none; border-radius: 10px; }
+.campaign-card { background: #fff; border: 1px solid #dce4db; border-radius: 10px; box-shadow: none; color: #263630; }
+.rules-card { color: #f0f4eb; background: #24453b; border-color: #24453b; border-radius: 10px; }
+.rules-card .rule p, .rules-card .rules-legend { color: #cfdfd2; }
+.turn-status { color: #e5eadf; }
+.fair-play { color: #63776a; }
+@media (max-width: 760px) { .intro { padding-block: 45px; } }

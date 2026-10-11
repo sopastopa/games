@@ -1006,3 +1006,124 @@ a[data-testid="back-home"]:focus-visible {
     transition: none;
   }
 }
+
+/* GAMES / visual identity — quiet outer frame shared across the collection. */
+:root {
+  --site-paper: #f7f8f5;
+  --site-ink: #263630;
+  --site-muted: #65746a;
+  --site-line: #dce4dc;
+  --site-accent: #316a5b;
+  font-family: "DM Sans", "Avenir Next", ui-sans-serif, system-ui, sans-serif;
+  color: var(--site-ink);
+  background: var(--site-paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  color: var(--site-ink);
+  background: var(--site-paper);
+}
+
+:is(.shell, .page, .page-shell) {
+  width: min(100% - 76px, 1280px);
+  padding-inline: 0;
+  margin-inline: auto;
+}
+
+:is(.topbar, .masthead) {
+  height: auto;
+  min-height: 86px;
+  border-bottom: 1px solid var(--site-line);
+  gap: 24px;
+}
+
+:is(.back, .back-link, .home-link) {
+  color: #405c50;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+:is(.back, .back-link, .home-link):hover {
+  color: #246452;
+}
+
+:is(button, input, select, a, canvas):focus-visible {
+  outline: 3px solid #3f8771;
+  outline-offset: 3px;
+}
+
+:is(button, select, input) {
+  font-family: inherit;
+}
+
+button:not(:disabled),
+select,
+input {
+  touch-action: manipulation;
+}
+
+button,
+select {
+  border-radius: 8px;
+}
+
+@media (max-width: 760px) {
+  :is(.shell, .page, .page-shell) {
+    width: min(100% - 36px, 1280px);
+  }
+
+  :is(.topbar, .masthead) {
+    min-height: 72px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+:root { --site-ink: #2d3e36; }
+.grain { display: none; }
+.brand { font-size: 34px; text-shadow: none; transform: none; color: #3c7768; }
+.brand span:first-child, .brand-spark { color: #b97c62; }
+.edition, .edition span { color: #768a7c; }
+.intro { padding-block: 65px 46px; }
+.intro::after { opacity: .5; font-size: 60px; }
+.intro h1 { color: #263630; font-size: clamp(43px, 6vw, 78px); }
+.intro h1 em, .travel-card h3 em, .how-card h3 em {
+  background: none; -webkit-text-fill-color: initial; color: #4a8675;
+}
+.intro > p { color: #67766d; }
+.kicker { color: #658674; }
+.experience { background: #fff; border: 1px solid #dce5dc; border-radius: 12px; box-shadow: none; }
+.experience::before { height: 4px; background: #83ac9c; }
+.chapter-header { padding-top: 4px; }
+.chapter-header h2 { color: #283b32; }
+.world-frame { border-radius: 9px; background: #e4ebe5; box-shadow: none; padding: 8px; }
+.world-frame canvas { border-radius: 5px; }
+.challenge-banner { background: #f1f5ef; border: 1px solid #dae7dc; border-radius: 8px; }
+.challenge-pill { background: #316a5b; }
+.story-card { background: #f8f8f1; border: 1px solid #e6e9dd; border-radius: 8px; }
+.story-card::before { opacity: .22; }
+.jump-button { background: #316a5b; color: #fff; border: 1px solid #316a5b; box-shadow: none; }
+.jump-button:not(:disabled):active { transform: none; box-shadow: none; background: #265546; }
+.control-button { background: #fff; border: 1px solid #cbd9ce; color: #2d4c3c; }
+.control-button:not(:disabled):hover { background: #ecf3eb; }
+.ending { background: #eaf2e9; border: 1px solid #cddfcf; border-radius: 9px; }
+.next-button { background: #316a5b; box-shadow: none; border: 1px solid #316a5b; border-radius: 8px; }
+.next-button:hover { background: #265546; }
+.travel-card, .how-card { background: #fff; border: 1px solid #dee6de; box-shadow: none; border-radius: 10px; }
+.promenade { background: #f2f6f0; border: 1px solid #d2e0d4; }
+footer { border-color: var(--site-line); }
+@media (max-width: 560px) { .intro { padding-top: 45px; } .experience { box-shadow: none; } }
