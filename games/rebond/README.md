@@ -3,6 +3,7 @@
 Un jeu de trajectoires à commandes intuitives et physique déterministe, sans minuteur imposé.
 
 ## Comment jouer
+
 - Sur ordinateur ou mobile : fais glisser depuis la bille vers le bas-gauche (comme un lance-pierre), puis relâche pour lancer.
 - Déplacement au clavier : **←/→** ajuste l'angle, **↑/↓** ajuste la puissance, **Espace/Entrée** lance.
 - **R** prépare un nouveau lancer. Le bouton Réinitialiser recommence le niveau.
@@ -10,6 +11,7 @@ Un jeu de trajectoires à commandes intuitives et physique déterministe, sans m
 - Chaque niveau conserve le meilleur nombre de tentatives. Pas de limite d'essais ni de récompenses externes.
 
 ## Architecture
+
 - domain: moteur physique pur et niveaux déterministes générés depuis des tirs de référence, validés par les tests.
 - application: contrôleur d'états, tirs et progression, ports d'horloge et de persistance.
 - infrastructure: horloge requestAnimationFrame et sauvegarde localStorage robuste.

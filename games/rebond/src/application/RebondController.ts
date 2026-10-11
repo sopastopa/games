@@ -31,34 +31,60 @@ export class RebondController {
   private cancelClock: (() => void) | null = null;
   private readonly listeners = new Set<(snapshot: Snapshot) => void>();
 
-  constructor(private readonly ports: Ports, private readonly stages: readonly Level[] = officialLevels) {
+  constructor(
+    private readonly ports: Ports,
+    private readonly stages: readonly Level[] = officialLevels,
+  ) {
     if (!stages.length) throw new Error("At least one level required");
     const progress = ports.store.read();
     if (progress) {
-      this.unlocked = Math.min(stages.length - 1, Math.max(0, Math.floor(progress.unlocked) || 0));
-      this.index = Math.min(this.unlocked, Math.max(0, Math.floor(progress.current) || 0));
+      this.unlocked = Math.min(
+        stages.length - 1,
+        Math.max(0, Math.floor(progress.unlocked) || 0),
+      );
+      this.index = Math.min(
+        this.unlocked,
+        Math.max(0, Math.floor(progress.current) || 0),
+      );
       this.best = { ...progress.best };
     }
     this.ball = launch(this.current.source, this.angle, 0);
   }
 
-  private get current(): Level { return this.stages[this.index]!; }
+  private get current(): Level {
+    return this.stages[this.index]!;
+  }
 
   get snapshot(): Snapshot {
     const record = this.best[this.current.id] ?? 0;
     return {
-      level: this.current, index: this.index, count: this.stages.length,
-      unlocked: this.unlocked, best: { ...this.best }, phase: this.phase,
-      ball: { ...this.ball }, attempts: this.attempts, angle: this.angle, speed: this.speed,
-      canContinue: this.phase === "solved" && this.index < this.stages.length - 1,
-      starCount: this.phase === "solved" ? this.stars(this.attempts) : record ? this.stars(record) : 0,
+      level: this.current,
+      index: this.index,
+      count: this.stages.length,
+      unlocked: this.unlocked,
+      best: { ...this.best },
+      phase: this.phase,
+      ball: { ...this.ball },
+      attempts: this.attempts,
+      angle: this.angle,
+      speed: this.speed,
+      canContinue:
+        this.phase === "solved" && this.index < this.stages.length - 1,
+      starCount:
+        this.phase === "solved"
+          ? this.stars(this.attempts)
+          : record
+            ? this.stars(record)
+            : 0,
     };
   }
 
   subscribe(listener: (state: Snapshot) => void): () => void {
     this.listeners.add(listener);
     listener(this.snapshot);
-    return () => { this.listeners.delete(listener); };
+    return () => {
+      this.listeners.delete(listener);
+    };
   }
 
   aim(angle: number, speed: number): boolean {
@@ -103,7 +129,13 @@ export class RebondController {
   }
 
   selectLevel(index: number): boolean {
-    if (!Number.isInteger(index) || index < 0 || index > this.unlocked || index >= this.stages.length) return false;
+    if (
+      !Number.isInteger(index) ||
+      index < 0 ||
+      index > this.unlocked ||
+      index >= this.stages.length
+    )
+      return false;
     this.index = index;
     this.restart();
     this.save();
@@ -127,7 +159,9 @@ export class RebondController {
 
   private frame(seconds: number): void {
     if (this.phase !== "flying") return;
-    this.accumulator += Number.isFinite(seconds) ? Math.max(0, Math.min(0.1, seconds)) : 0;
+    this.accumulator += Number.isFinite(seconds)
+      ? Math.max(0, Math.min(0.1, seconds))
+      : 0;
     while (this.accumulator >= STEP && this.phase === "flying") {
       this.accumulator -= STEP;
       const result = advance(this.ball, this.current);
@@ -147,7 +181,10 @@ export class RebondController {
     const id = this.current.id;
     const previous = this.best[id] ?? Number.POSITIVE_INFINITY;
     this.best[id] = Math.min(previous, this.attempts);
-    this.unlocked = Math.max(this.unlocked, Math.min(this.stages.length - 1, this.index + 1));
+    this.unlocked = Math.max(
+      this.unlocked,
+      Math.min(this.stages.length - 1, this.index + 1),
+    );
     this.save();
   }
 
@@ -156,7 +193,11 @@ export class RebondController {
   }
 
   private save(): void {
-    const progress: Progress = { unlocked: this.unlocked, current: this.index, best: { ...this.best } };
+    const progress: Progress = {
+      unlocked: this.unlocked,
+      current: this.index,
+      best: { ...this.best },
+    };
     this.ports.store.write(progress);
   }
 

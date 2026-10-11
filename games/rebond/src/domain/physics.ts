@@ -1,12 +1,21 @@
 import type { Ball, Bumper, Level, Motion, Vec2 } from "./types";
 
-export const WORLD = { width: 900, height: 600, margin: 35, floor: 562 } as const;
+export const WORLD = {
+  width: 900,
+  height: 600,
+  margin: 35,
+  floor: 562,
+} as const;
 export const BALL_RADIUS = 11;
 export const STEP = 1 / 120;
 export const GRAVITY = 520;
 export const MAX_FLIGHT = 6.5;
 
-export function launch(source: Vec2, angleDegrees: number, speed: number): Ball {
+export function launch(
+  source: Vec2,
+  angleDegrees: number,
+  speed: number,
+): Ball {
   const angle = (angleDegrees * Math.PI) / 180;
   return {
     x: source.x,
@@ -33,10 +42,23 @@ export function step(ball: Ball, bumpers: readonly Bumper[], dt = STEP): Ball {
   const minY = WORLD.margin + BALL_RADIUS;
   const maxY = WORLD.floor - BALL_RADIUS;
 
-  if (x < minX) { x = minX; vx = Math.abs(vx) * 0.83; }
-  if (x > maxX) { x = maxX; vx = -Math.abs(vx) * 0.83; }
-  if (y < minY) { y = minY; vy = Math.abs(vy) * 0.83; }
-  if (y > maxY) { y = maxY; vy = -Math.abs(vy) * 0.77; vx *= 0.988; }
+  if (x < minX) {
+    x = minX;
+    vx = Math.abs(vx) * 0.83;
+  }
+  if (x > maxX) {
+    x = maxX;
+    vx = -Math.abs(vx) * 0.83;
+  }
+  if (y < minY) {
+    y = minY;
+    vy = Math.abs(vy) * 0.83;
+  }
+  if (y > maxY) {
+    y = maxY;
+    vy = -Math.abs(vy) * 0.77;
+    vx *= 0.988;
+  }
 
   for (const bumper of bumpers) {
     let dx = x - bumper.x;
@@ -44,7 +66,11 @@ export function step(ball: Ball, bumpers: readonly Bumper[], dt = STEP): Ball {
     let separation = Math.hypot(dx, dy);
     const required = BALL_RADIUS + bumper.radius;
     if (separation >= required) continue;
-    if (separation < 0.000001) { dx = 0; dy = -1; separation = 1; }
+    if (separation < 0.000001) {
+      dx = 0;
+      dy = -1;
+      separation = 1;
+    }
     const nx = dx / separation;
     const ny = dy / separation;
     x = bumper.x + nx * required;
@@ -80,7 +106,12 @@ export function project(
   return ball;
 }
 
-export function estimateTrajectory(level: Level, angle: number, speed: number, seconds = 0.75): Vec2[] {
+export function estimateTrajectory(
+  level: Level,
+  angle: number,
+  speed: number,
+  seconds = 0.75,
+): Vec2[] {
   const points: Vec2[] = [];
   let ball = launch(level.source, angle, speed);
   const count = Math.round(seconds / STEP);

@@ -10,22 +10,44 @@ export const progressStore: ProgressStore = {
       const unknown: unknown = JSON.parse(raw);
       if (!unknown || typeof unknown !== "object") return null;
       const object = unknown as Record<string, unknown>;
-      if (!Number.isInteger(object.unlocked) || !Number.isInteger(object.current)) return null;
-      if (!object.best || typeof object.best !== "object" || Array.isArray(object.best)) return null;
+      if (
+        !Number.isInteger(object.unlocked) ||
+        !Number.isInteger(object.current)
+      )
+        return null;
+      if (
+        !object.best ||
+        typeof object.best !== "object" ||
+        Array.isArray(object.best)
+      )
+        return null;
       const best: Record<string, number> = {};
-      for (const [id, value] of Object.entries(object.best as Record<string, unknown>)) {
-        if (Number.isSafeInteger(value) && (value as number) >= 1 && (value as number) <= 1000000) {
+      for (const [id, value] of Object.entries(
+        object.best as Record<string, unknown>,
+      )) {
+        if (
+          Number.isSafeInteger(value) &&
+          (value as number) >= 1 &&
+          (value as number) <= 1000000
+        ) {
           best[id] = value as number;
         }
       }
-      return { unlocked: object.unlocked as number, current: object.current as number, best };
+      return {
+        unlocked: object.unlocked as number,
+        current: object.current as number,
+        best,
+      };
     } catch {
       return null;
     }
   },
   write(progress: Progress): void {
-    try { window.localStorage.setItem(key, JSON.stringify(progress)); }
-    catch { /* Game always works without persistence. */ }
+    try {
+      window.localStorage.setItem(key, JSON.stringify(progress));
+    } catch {
+      /* Game always works without persistence. */
+    }
   },
 };
 
@@ -42,6 +64,9 @@ export const frameClock: Clock = {
       if (active) frameId = window.requestAnimationFrame(frame);
     };
     frameId = window.requestAnimationFrame(frame);
-    return () => { active = false; window.cancelAnimationFrame(frameId); };
+    return () => {
+      active = false;
+      window.cancelAnimationFrame(frameId);
+    };
   },
 };

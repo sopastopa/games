@@ -1,18 +1,30 @@
 import { describe, expect, it, vi } from "vitest";
 import { RebondController } from "../../src/application/RebondController";
-import type { Clock, Ports, Progress, ProgressStore } from "../../src/application/ports";
+import type {
+  Clock,
+  Ports,
+  Progress,
+  ProgressStore,
+} from "../../src/application/ports";
 import { levels } from "../../src/domain/levels";
 
 function harness(saved: Progress | null = null) {
   let update: (delta: number) => void = () => {};
   const cancel = vi.fn();
   const write = vi.fn();
-  const clock: Clock = { begin(callback) { update = callback; return cancel; } };
+  const clock: Clock = {
+    begin(callback) {
+      update = callback;
+      return cancel;
+    },
+  };
   const store: ProgressStore = { read: () => saved, write };
   const ports: Ports = { clock, store };
   return {
     game: new RebondController(ports),
-    tick(delta = 1 / 60) { update(delta); },
+    tick(delta = 1 / 60) {
+      update(delta);
+    },
     cancel,
     write,
   };
@@ -63,7 +75,8 @@ describe("REBOND application controller", () => {
     const { angle, speed } = levels[0]!.reference;
     expect(game.aim(angle, speed)).toBe(true);
     expect(game.shoot()).toBe(true);
-    for (let i = 0; i < 250 && game.snapshot.phase === "flying"; i++) tick(1 / 60);
+    for (let i = 0; i < 250 && game.snapshot.phase === "flying"; i++)
+      tick(1 / 60);
     expect(game.snapshot.phase).toBe("solved");
     expect(game.snapshot.starCount).toBe(3);
     expect(game.snapshot.best[levels[0]!.id]).toBe(1);
@@ -75,7 +88,11 @@ describe("REBOND application controller", () => {
   });
 
   it("restores saved progress and handles page suspend gracefully", () => {
-    const { game } = harness({ unlocked: 5, current: 3, best: { "rebond-01": 2 } });
+    const { game } = harness({
+      unlocked: 5,
+      current: 3,
+      best: { "rebond-01": 2 },
+    });
     expect(game.snapshot.index).toBe(3);
     expect(game.snapshot.starCount).toBe(0);
     expect(game.selectLevel(0)).toBe(true);
