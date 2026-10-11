@@ -234,3 +234,44 @@ button[hidden] {
     font-size: 16px;
   }
 }
+
+/* Games collection — shared return navigation.
+   Each game retains its own immersive palette and gameplay presentation. */
+a[data-testid="back-home"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 41px;
+  padding: 0 16px;
+  border: 1px solid #dce5de;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #24574b;
+  font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-decoration: none;
+  box-shadow: none;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
+}
+
+a[data-testid="back-home"]:hover {
+  background: #e8f1eb;
+  color: #174739;
+  border-color: #9cbaaa;
+}
+
+a[data-testid="back-home"]:focus-visible {
+  outline: 3px solid #5a9883;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a[data-testid="back-home"] {
+    transition: none;
+  }
+}
