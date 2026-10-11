@@ -374,7 +374,7 @@ function simulateEnemies(state: GameState): void {
   for (const enemy of state.enemies) {
     const range = distance(enemy, player);
     const seen =
-      range <= 8 && hasSight(state.arena, enemy, player, state.opened);
+      range <= 7 && hasSight(state.arena, enemy, player, state.opened);
     if (seen) enemy.alert = 150;
     else enemy.alert = Math.max(0, enemy.alert - 1);
     if (enemy.alert === 0) continue;
