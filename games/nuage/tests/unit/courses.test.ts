@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { CHAPTERS } from "../../src/domain/chapters";
-import { createRun, jump, orbY, start, step, validateChapter, WORLD } from "../../src/domain/rules";
+import {
+  createRun,
+  jump,
+  orbY,
+  start,
+  step,
+  validateChapter,
+  WORLD,
+} from "../../src/domain/rules";
 
 type Guide = Readonly<{
   jumps: readonly number[];
@@ -17,14 +25,17 @@ const GUIDES: readonly Guide[] = [
   { jumps: [24, 87, 132, 156, 204], holdBlocks: [42, 147, 150] },
   { jumps: [21, 66, 144, 198], holdBlocks: [81, 162, 201, 216, 219] },
   { jumps: [18, 108, 147, 168, 219], holdBlocks: [162, 165] },
-  { jumps: [18, 78, 99, 135, 186, 288], holdBlocks: [93, 96, 195, 201, 204, 207] },
+  {
+    jumps: [18, 78, 99, 135, 186, 288],
+    holdBlocks: [93, 96, 195, 201, 204, 207],
+  },
 ];
 
 describe("NUAGE — campagne de difficulté", () => {
   it("introduces new concepts chapter by chapter", () => {
     expect(CHAPTERS).toHaveLength(7);
-    const hazards = CHAPTERS.map((chapter) =>
-      new Set(chapter.obstacles.map((item) => item.kind)),
+    const hazards = CHAPTERS.map(
+      (chapter) => new Set(chapter.obstacles.map((item) => item.kind)),
     );
     expect([...hazards[0]!]).toEqual(["ink"]);
     expect(hazards[1]!.has("gap")).toBe(true);
@@ -33,7 +44,9 @@ describe("NUAGE — campagne de difficulté", () => {
     expect(CHAPTERS[4]!.winds.length).toBeGreaterThan(0);
     expect(hazards[5]!.has("orb")).toBe(true);
     expect(CHAPTERS[6]!.speed).toBeGreaterThan(CHAPTERS[0]!.speed);
-    expect(CHAPTERS.every((chapter) => chapter.lesson && chapter.concept)).toBe(true);
+    expect(CHAPTERS.every((chapter) => chapter.lesson && chapter.concept)).toBe(
+      true,
+    );
   });
 
   it.each(CHAPTERS.map((chapter, index) => ({ chapter, index })))(

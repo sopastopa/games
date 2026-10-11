@@ -1,7 +1,10 @@
 import type { Chapter } from "./types";
 import { COURSES } from "./courses";
 
-type Story = Omit<Chapter, "speed" | "airJump" | "lesson" | "concept" | "winds" | "obstacles"> & {
+type Story = Omit<
+  Chapter,
+  "speed" | "airJump" | "lesson" | "concept" | "winds" | "obstacles"
+> & {
   obstacles: readonly { x: number; width: number }[];
 };
 

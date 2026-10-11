@@ -2,7 +2,14 @@ import type { Chapter } from "./types";
 
 export type Course = Pick<
   Chapter,
-  "endX" | "checkpoint" | "speed" | "airJump" | "lesson" | "concept" | "obstacles" | "winds"
+  | "endX"
+  | "checkpoint"
+  | "speed"
+  | "airJump"
+  | "lesson"
+  | "concept"
+  | "obstacles"
+  | "winds"
 >;
 
 // Every section introduces a concrete motor skill. Positions and timing are
@@ -41,7 +48,8 @@ export const COURSES: readonly Course[] = [
     checkpoint: 1140,
     speed: 252,
     airJump: false,
-    lesson: "Les arches sont sûres au sol : lâche le plané pour passer en dessous.",
+    lesson:
+      "Les arches sont sûres au sol : lâche le plané pour passer en dessous.",
     concept: "03 · ARCHES BASSES",
     obstacles: [
       { kind: "ink", x: 410, width: 90 },
@@ -74,7 +82,8 @@ export const COURSES: readonly Course[] = [
     checkpoint: 1300,
     speed: 270,
     airJump: true,
-    lesson: "Dans un courant coloré, maintiens le plané pour prendre de l'altitude ; relâche pour redescendre.",
+    lesson:
+      "Dans un courant coloré, maintiens le plané pour prendre de l'altitude ; relâche pour redescendre.",
     concept: "05 · COURANTS ASCENDANTS",
     obstacles: [
       { kind: "ink", x: 365, width: 100 },
@@ -94,15 +103,31 @@ export const COURSES: readonly Course[] = [
     checkpoint: 1390,
     speed: 279,
     airJump: true,
-    lesson: "Les lucioles d'encre oscillent : observe leur rythme avant d'agir.",
+    lesson:
+      "Les lucioles d'encre oscillent : observe leur rythme avant d'agir.",
     concept: "06 · DANGERS MOBILES",
     obstacles: [
       { kind: "ink", x: 350, width: 95 },
       { kind: "arch", x: 630, width: 118, bottom: 349 },
-      { kind: "orb", x: 860, width: 40, centerY: 336, amplitude: 56, frequency: 3.2 },
+      {
+        kind: "orb",
+        x: 860,
+        width: 40,
+        centerY: 336,
+        amplitude: 56,
+        frequency: 3.2,
+      },
       { kind: "gap", x: 1110, width: 215 },
       { kind: "ink", x: 1580, width: 95 },
-      { kind: "orb", x: 1845, width: 40, centerY: 345, amplitude: 54, frequency: 2.8, phase: 1.3 },
+      {
+        kind: "orb",
+        x: 1845,
+        width: 40,
+        centerY: 345,
+        amplitude: 54,
+        frequency: 2.8,
+        phase: 1.3,
+      },
       { kind: "gap", x: 2110, width: 250 },
       { kind: "arch", x: 2500, width: 127, bottom: 356 },
     ],
@@ -113,17 +138,33 @@ export const COURSES: readonly Course[] = [
     checkpoint: 1650,
     speed: 291,
     airJump: true,
-    lesson: "Enchaîne sauts, planés, secondes impulsions et descentes sous les arches : tu connais maintenant tous les gestes.",
+    lesson:
+      "Enchaîne sauts, planés, secondes impulsions et descentes sous les arches : tu connais maintenant tous les gestes.",
     concept: "07 · LA GRANDE AURORE",
     obstacles: [
       { kind: "ink", x: 350, width: 102 },
       { kind: "arch", x: 595, width: 132, bottom: 353 },
       { kind: "gap", x: 838, width: 242 },
-      { kind: "orb", x: 1260, width: 40, centerY: 350, amplitude: 54, frequency: 3.5 },
+      {
+        kind: "orb",
+        x: 1260,
+        width: 40,
+        centerY: 350,
+        amplitude: 54,
+        frequency: 3.5,
+      },
       { kind: "ink", x: 1490, width: 96 },
       { kind: "gap", x: 1860, width: 355 },
       { kind: "arch", x: 2365, width: 135, bottom: 354 },
-      { kind: "orb", x: 2665, width: 40, centerY: 346, amplitude: 51, frequency: 3.1, phase: 0.6 },
+      {
+        kind: "orb",
+        x: 2665,
+        width: 40,
+        centerY: 346,
+        amplitude: 51,
+        frequency: 3.1,
+        phase: 0.6,
+      },
       { kind: "ink", x: 2960, width: 110 },
     ],
     winds: [{ x: 1760, width: 350, lift: 880 }],

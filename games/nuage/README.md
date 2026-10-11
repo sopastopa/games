@@ -14,15 +14,15 @@ Pip, une petite créature lumineuse, traverse sept paysages dont les couleurs on
 
 ## Apprentissage du gameplay
 
-| Chapitre | Compétence introduite | Défi |
-| --- | --- | --- |
-| 1 — Rose | Timing du saut | Deux flaques élargies ; apprendre à décoller au bon endroit. |
-| 2 — Orange | Plané contrôlé | Fossés longs exigeant de gérer la descente. |
-| 3 — Jaune | Alternance haute / basse | Passer au-dessus des fossés, puis sous des arches. |
-| 4 — Vert | Double saut | Un seul second saut disponible en l'air ; long fossé à enchaîner. |
-| 5 — Bleu | Courants ascendants | Maintenir pour être porté, relâcher pour redescendre. |
-| 6 — Violet | Dangers mobiles | Lucioles qui oscillent ; rythme et lecture du décor. |
-| 7 — Aurore | Combinaison | Alternance de tous les types de défis à vitesse accrue. |
+| Chapitre   | Compétence introduite    | Défi                                                              |
+| ---------- | ------------------------ | ----------------------------------------------------------------- |
+| 1 — Rose   | Timing du saut           | Deux flaques élargies ; apprendre à décoller au bon endroit.      |
+| 2 — Orange | Plané contrôlé           | Fossés longs exigeant de gérer la descente.                       |
+| 3 — Jaune  | Alternance haute / basse | Passer au-dessus des fossés, puis sous des arches.                |
+| 4 — Vert   | Double saut              | Un seul second saut disponible en l'air ; long fossé à enchaîner. |
+| 5 — Bleu   | Courants ascendants      | Maintenir pour être porté, relâcher pour redescendre.             |
+| 6 — Violet | Dangers mobiles          | Lucioles qui oscillent ; rythme et lecture du décor.              |
+| 7 — Aurore | Combinaison              | Alternance de tous les types de défis à vitesse accrue.           |
 
 Les obstacles et leur rythme sont fixes : aucune difficulté aléatoire. La vitesse augmente de 238 à 291 unités/s, tandis que les courses deviennent plus longues et combinent des éléments appris. L'intégralité des sept chapitres est automatiquement traversée sans aucune collision par des traces d'actions normales dans `tests/unit/courses.test.ts` : ces tests empêchent de livrer un chapitre impossible.
 

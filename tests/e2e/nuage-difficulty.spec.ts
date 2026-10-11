@@ -4,12 +4,13 @@ test.use({ hasTouch: true });
 
 test("shows the actual course concept and hit feedback", async ({ page }) => {
   await page.goto("/games/play/nuage/");
-  await expect(page.getByTestId("chapter-concept")).toHaveText("01 · SAUT PRÉCIS");
-  await page.locator("body").press("Space");
-  await expect(page.getByTestId("incident")).toContainText(
-    "Encre touchée",
-    { timeout: 7000 },
+  await expect(page.getByTestId("chapter-concept")).toHaveText(
+    "01 · SAUT PRÉCIS",
   );
+  await page.locator("body").press("Space");
+  await expect(page.getByTestId("incident")).toContainText("Encre touchée", {
+    timeout: 7000,
+  });
   await expect(page.getByTestId("game-status")).toContainText("REPRISES");
 });
 
@@ -29,7 +30,9 @@ test("airborne second jump is unlocked later and works with keyboard", async ({
     );
   });
   await page.goto("/games/play/nuage/");
-  await expect(page.getByTestId("chapter-concept")).toContainText("DOUBLE SAUT");
+  await expect(page.getByTestId("chapter-concept")).toContainText(
+    "DOUBLE SAUT",
+  );
   await page.locator("body").press("Space");
   await page.locator("body").press("Space");
   await expect(page.getByTestId("ability")).toContainText("2e SAUT DISPONIBLE");
@@ -54,7 +57,9 @@ test("later chapters display the new hazards on a mobile viewport", async ({
     );
   });
   await page.goto("/games/play/nuage/");
-  await expect(page.getByTestId("chapter-concept")).toContainText("GRANDE AURORE");
+  await expect(page.getByTestId("chapter-concept")).toContainText(
+    "GRANDE AURORE",
+  );
   await expect(page.getByText("Fossé : franchis en l'air")).toBeVisible();
   await expect(page.getByTestId("jump")).toBeVisible();
   await page.getByTestId("jump").tap();

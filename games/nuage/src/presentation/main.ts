@@ -120,11 +120,16 @@ function render(view: View): void {
   text(
     ability,
     run.grounded
-      ? (chapter.airJump ? "✦ DOUBLE SAUT PRÊT" : "✳ SAUT PRÊT") + " · PLANÉ RECHARGÉ"
+      ? (chapter.airJump ? "✦ DOUBLE SAUT PRÊT" : "✳ SAUT PRÊT") +
+          " · PLANÉ RECHARGÉ"
       : (chapter.airJump
-          ? run.airJumps > 0 ? "✦ 2e SAUT DISPONIBLE" : "✦ 2e SAUT UTILISÉ"
+          ? run.airJumps > 0
+            ? "✦ 2e SAUT DISPONIBLE"
+            : "✦ 2e SAUT UTILISÉ"
           : "✳ EN VOL") +
-          " · PLANÉ " + Math.round((run.glide / WORLD.glideSeconds) * 100) + " %",
+          " · PLANÉ " +
+          Math.round((run.glide / WORLD.glideSeconds) * 100) +
+          " %",
   );
   incident.hidden = run.lastHit === null;
   const explanations = {
@@ -136,7 +141,10 @@ function render(view: View): void {
   text(incident, run.lastHit ? explanations[run.lastHit] : "");
   canvas.setAttribute(
     "aria-label",
-    "Plateau NUAGE : " + chapter.concept + ". " + chapter.lesson +
+    "Plateau NUAGE : " +
+      chapter.concept +
+      ". " +
+      chapter.lesson +
       " Utilise Espace, flèche haut ou le bouton Sauter.",
   );
   const percentage = Math.round((run.x / chapter.endX) * 100);

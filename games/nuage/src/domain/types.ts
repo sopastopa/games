@@ -28,13 +28,7 @@ export type Chapter = Readonly<{
   place: string;
   number: string;
   motif:
-    | "flowers"
-    | "lanterns"
-    | "candy"
-    | "forest"
-    | "sea"
-    | "night"
-    | "rainbow";
+    "flowers" | "lanterns" | "candy" | "forest" | "sea" | "night" | "rainbow";
   opening: string;
   middle: string;
   ending: string;

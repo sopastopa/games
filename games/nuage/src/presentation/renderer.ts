@@ -208,7 +208,12 @@ function paintHazards(
       deep.addColorStop(0, "#241738");
       deep.addColorStop(1, "#080c2a");
       ctx.fillStyle = deep;
-      ctx.fillRect(x, WORLD.ground - 1, obstacle.width, WORLD.height - WORLD.ground + 3);
+      ctx.fillRect(
+        x,
+        WORLD.ground - 1,
+        obstacle.width,
+        WORLD.height - WORLD.ground + 3,
+      );
       ctx.strokeStyle = "#fae4ff";
       ctx.lineWidth = 4;
       ctx.beginPath();
@@ -218,7 +223,13 @@ function paintHazards(
       ctx.lineTo(x + obstacle.width, WORLD.ground + 34);
       ctx.stroke();
       for (let i = 0; i < Math.floor(obstacle.width / 26); i++) {
-        circle(ctx, x + 16 + i * 26, WORLD.ground + 50 + (i % 2) * 18, 2.5, "#f5cdff");
+        circle(
+          ctx,
+          x + 16 + i * 26,
+          WORLD.ground + 50 + (i % 2) * 18,
+          2.5,
+          "#f5cdff",
+        );
       }
       if (promenade) {
         ctx.fillStyle = "#d1fff0b8";
@@ -262,9 +273,24 @@ function paintHazards(
       ctx.fillStyle = "#302342";
       ctx.beginPath();
       ctx.moveTo(x, WORLD.ground + 2);
-      ctx.quadraticCurveTo(x + 6, WORLD.ground - 33, x + obstacle.width * 0.24, WORLD.ground - 23);
-      ctx.quadraticCurveTo(x + obstacle.width * 0.48, WORLD.ground - 58, x + obstacle.width * 0.7, WORLD.ground - 25);
-      ctx.quadraticCurveTo(x + obstacle.width, WORLD.ground - 49, x + obstacle.width, WORLD.ground);
+      ctx.quadraticCurveTo(
+        x + 6,
+        WORLD.ground - 33,
+        x + obstacle.width * 0.24,
+        WORLD.ground - 23,
+      );
+      ctx.quadraticCurveTo(
+        x + obstacle.width * 0.48,
+        WORLD.ground - 58,
+        x + obstacle.width * 0.7,
+        WORLD.ground - 25,
+      );
+      ctx.quadraticCurveTo(
+        x + obstacle.width,
+        WORLD.ground - 49,
+        x + obstacle.width,
+        WORLD.ground,
+      );
       ctx.closePath();
       ctx.fill();
       circle(ctx, x + obstacle.width * 0.5, WORLD.ground - 24, 4.5, "#fff1a0");

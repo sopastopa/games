@@ -44,7 +44,8 @@ export function validateChapter(chapter: Chapter): void {
       obstacle.x + obstacle.width >= chapter.endX - 60 ||
       Math.abs(chapter.checkpoint - obstacle.x) < WORLD.radius + 30 ||
       (chapter.checkpoint >= obstacle.x &&
-        chapter.checkpoint <= obstacle.x + obstacle.width + WORLD.radius + 30) ||
+        chapter.checkpoint <=
+          obstacle.x + obstacle.width + WORLD.radius + 30) ||
       (obstacle.kind === "arch" &&
         (!Number.isFinite(obstacle.bottom) ||
           (obstacle.bottom ?? 0) < 310 ||
@@ -160,7 +161,9 @@ function touchesObstacle(
     x - WORLD.radius < obstacle.x + obstacle.width;
   if (!overlapsX) return false;
   if (obstacle.kind === "arch")
-    return y - WORLD.radius < (obstacle.bottom ?? 350) && y + WORLD.radius > 155;
+    return (
+      y - WORLD.radius < (obstacle.bottom ?? 350) && y + WORLD.radius > 155
+    );
   return y + WORLD.radius > WORLD.ground - WORLD.obstacleHeight;
 }
 
@@ -217,8 +220,8 @@ export function step(
     const gliding = holding && glide > 0 && vy >= 0;
     const currentLift =
       holding && glide > 0
-        ? chapter.winds.find((wind) => x >= wind.x && x <= wind.x + wind.width)
-            ?.lift ?? 0
+        ? (chapter.winds.find((wind) => x >= wind.x && x <= wind.x + wind.width)
+            ?.lift ?? 0)
         : 0;
     const gravity = gliding ? WORLD.glideGravity : WORLD.gravity;
     vy = Math.max(-680, Math.min(830, vy + (gravity - currentLift) * dt));
@@ -250,7 +253,12 @@ export function step(
     : undefined;
   if (!promenade && (y > WORLD.ground + 43 || collision)) {
     return respawn(
-      run, chapter, elapsed, checkpoint, beat, sparks,
+      run,
+      chapter,
+      elapsed,
+      checkpoint,
+      beat,
+      sparks,
       collision?.kind ?? "gap",
     );
   }
