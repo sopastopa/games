@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "typecheck": "tsc --noEmit -p apps/portal/tsconfig.json && tsc --noEmit -p games/snake/tsconfig.json",
+    "typecheck": "pnpm -r --if-present run typecheck",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
     "build": "node scripts/build-site.mjs",
