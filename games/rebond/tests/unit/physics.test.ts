@@ -10,6 +10,7 @@ import {
   project,
   STEP,
   step,
+  stepWithContacts,
   WORLD,
 } from "../../src/domain/physics";
 import type { Bumper } from "../../src/domain/types";
@@ -89,6 +90,21 @@ describe("REBOND — deterministic physics", () => {
     );
   });
 
+  it("detects a genuine physical collision, without counting a near miss", () => {
+    const bumper: Bumper = { id: "b1", x: 450, y: 300, radius: 28 };
+    const colliding = stepWithContacts(
+      { x: 410, y: 300, vx: 950, vy: 0, elapsed: 0 },
+      [bumper],
+    );
+    expect(colliding.contacts).toContain("b1");
+    const missed = stepWithContacts(
+      { x: 410, y: 200, vx: 950, vy: 0, elapsed: 0 },
+      [bumper],
+    );
+    expect(missed.contacts).toEqual([]);
+    expect(stepWithContacts(colliding.ball, [bumper], 0).contacts).toEqual([]);
+  });
+
   it("projects exactly the same path as the manual fixed-step simulation", () => {
     const source = { x: 145, y: 440 };
     const sample = project(source, 43, 620, [], 1);
@@ -107,6 +123,7 @@ describe("REBOND — deterministic physics", () => {
           goal: source,
           goalRadius: 22,
           bumpers: [],
+          required: [],
           reference: { angle: 43, speed: 620, time: 1 },
         },
         43,
@@ -126,6 +143,7 @@ describe("REBOND — deterministic physics", () => {
       goal: { x: 145, y: 440 },
       goalRadius: 30,
       bumpers: [],
+      required: [],
       reference: { angle: 40, speed: 600, time: 1 },
     };
     expect(advance(launch(source, 40, 600), level).hitGoal).toBe(true);

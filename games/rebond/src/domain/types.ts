@@ -14,6 +14,8 @@ export type Level = Readonly<{
   goal: Vec2;
   goalRadius: number;
   bumpers: readonly Bumper[];
+  /** Ordered mandatory ricochets; the goal is locked until they are completed. */
+  required: readonly string[];
   reference: Readonly<{ angle: number; speed: number; time: number }>;
 }>;
 export type Phase = "ready" | "flying" | "solved" | "missed";
@@ -28,4 +30,5 @@ export type Motion = Readonly<{
   ball: Ball;
   hitGoal: boolean;
   expired: boolean;
+  contacts: readonly string[];
 }>;

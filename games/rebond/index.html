@@ -33,12 +33,13 @@
             </p>
             <p class="sublead">
               Prends ton élan, trouve le bon angle et laisse la physique faire
-              le reste. Chaque tentative révèle un nouveau chemin.
+              le reste. La cible est verrouillée : touche les relais numérotés
+              dans l’ordre avant de l’atteindre.
             </p>
           </div>
           <aside class="intro-right">
             <span class="index-decoration">◉</span>
-            <span>Glisse pour viser.<br />Relâche pour jouer.</span>
+            <span>Active les relais.<br />Déverrouille la cible.</span>
           </aside>
         </section>
         <section class="arena-section" aria-label="Jeu REBOND">
@@ -68,6 +69,13 @@
                   <span><i></i> SIMULATION PHYSIQUE</span
                   ><span id="phase" data-testid="phase">PRÊT À LANCER</span>
                 </div>
+                <div class="relay-status" aria-live="polite">
+                  <span class="relay-caption">RICHOCHETS OBLIGATOIRES</span>
+                  <strong id="ricochets" data-testid="ricochets">0 / 1</strong>
+                  <span id="relay-next" data-testid="relay-next"
+                    >Vise le relais 1</span
+                  >
+                </div>
                 <canvas
                   id="board"
                   width="900"
@@ -77,8 +85,8 @@
                   data-testid="board"
                 ></canvas>
                 <div class="board-footer">
-                  <span>◉ BILLE</span><span>◎ CIBLE</span
-                  ><span>● RICOCHET</span>
+                  <span>◉ BILLE</span><span>◎ CIBLE</span><span>①② RELAIS</span
+                  ><span>● OBSTACLE</span>
                 </div>
               </div>
               <div
@@ -87,7 +95,8 @@
                 role="status"
                 data-testid="feedback"
               >
-                Pour viser, fais glisser vers le bas-gauche. Puis relâche.
+                Les anneaux numérotés doivent être touchés dans l’ordre. Un tir
+                direct ne suffit pas.
               </div>
               <div
                 class="completion"

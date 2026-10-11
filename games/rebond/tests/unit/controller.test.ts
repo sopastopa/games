@@ -55,11 +55,13 @@ describe("REBOND application controller", () => {
     expect(game.shoot()).toBe(true);
     expect(game.shoot()).toBe(false);
     expect(game.snapshot.attempts).toBe(1);
+    expect(game.snapshot.goalUnlocked).toBe(false);
     expect(game.aim(40, 600)).toBe(false);
     tick(0.05);
     expect(game.snapshot.ball.elapsed).toBeGreaterThan(0);
     game.retry();
     expect(game.snapshot.phase).toBe("ready");
+    expect(game.snapshot.activated).toEqual([]);
     expect(game.snapshot.attempts).toBe(1);
     expect(cancel).toHaveBeenCalled();
     game.restart();
@@ -78,6 +80,8 @@ describe("REBOND application controller", () => {
     for (let i = 0; i < 250 && game.snapshot.phase === "flying"; i++)
       tick(1 / 60);
     expect(game.snapshot.phase).toBe("solved");
+    expect(game.snapshot.activated).toEqual(levels[0]!.required);
+    expect(game.snapshot.goalUnlocked).toBe(true);
     expect(game.snapshot.starCount).toBe(3);
     expect(game.snapshot.best[levels[0]!.id]).toBe(1);
     expect(game.snapshot.unlocked).toBe(1);
@@ -85,6 +89,22 @@ describe("REBOND application controller", () => {
     expect(game.next()).toBe(true);
     expect(game.snapshot.index).toBe(1);
     expect(game.snapshot.attempts).toBe(0);
+  });
+
+  it("does not unlock the goal when a straight shot skips mandatory relays", () => {
+    const { game, tick } = harness();
+    // Aiming toward the target is not a valid solution if the numbered relays
+    // are untouched. A shot can geometrically cross the goal and stay locked.
+    const level = levels[0]!;
+    expect(level.required).toHaveLength(1);
+    expect(game.snapshot.goalUnlocked).toBe(false);
+    expect(game.aim(8, 420)).toBe(true);
+    game.shoot();
+    for (let i = 0; i < 900 && game.snapshot.phase === "flying"; i++)
+      tick(1 / 60);
+    expect(game.snapshot.phase).not.toBe("solved");
+    expect(game.snapshot.unlocked).toBe(0);
+    expect(game.snapshot.activated).toEqual([]);
   });
 
   it("restores saved progress and handles page suspend gracefully", () => {

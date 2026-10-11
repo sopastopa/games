@@ -662,3 +662,46 @@ footer a {
     transition: none !important;
   }
 }
+
+/* Relay puzzle overlay — a direct shot at the goal cannot win. */
+.relay-status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 7px 15px;
+  padding: 13px 15px;
+  background: #244b54;
+  color: #e1f2e9;
+  border: 1px solid #5d9e90;
+  border-top: none;
+}
+.relay-caption {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+}
+.relay-status strong {
+  color: #ffe1b9;
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+}
+#relay-next {
+  color: #a4dfd0;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+@media (max-width: 510px) {
+  .relay-status {
+    padding: 9px 10px;
+    gap: 6px 10px;
+  }
+  .relay-caption,
+  #relay-next {
+    font-size: 9px;
+  }
+  .relay-status strong {
+    font-size: 15px;
+  }
+}

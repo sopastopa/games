@@ -30,9 +30,14 @@ export function distance(a: Vec2, b: Vec2): number {
   return Math.hypot(a.x - b.x, a.y - b.y);
 }
 
-export function step(ball: Ball, bumpers: readonly Bumper[], dt = STEP): Ball {
+export function stepWithContacts(
+  ball: Ball,
+  bumpers: readonly Bumper[],
+  dt = STEP,
+): Readonly<{ ball: Ball; contacts: readonly string[] }> {
   const elapsed = Number.isFinite(dt) && dt > 0 ? Math.min(STEP, dt) : 0;
-  if (!elapsed) return ball;
+  if (!elapsed) return { ball, contacts: [] };
+  const contacts: string[] = [];
   let { x, y, vx, vy } = ball;
   vy += GRAVITY * elapsed;
   x += vx * elapsed;
@@ -79,15 +84,22 @@ export function step(ball: Ball, bumpers: readonly Bumper[], dt = STEP): Ball {
     if (towards < 0) {
       vx -= 1.88 * towards * nx;
       vy -= 1.88 * towards * ny;
+      contacts.push(bumper.id);
     }
   }
-  return { x, y, vx, vy, elapsed: ball.elapsed + elapsed };
+  return { ball: { x, y, vx, vy, elapsed: ball.elapsed + elapsed }, contacts };
+}
+
+export function step(ball: Ball, bumpers: readonly Bumper[], dt = STEP): Ball {
+  return stepWithContacts(ball, bumpers, dt).ball;
 }
 
 export function advance(ball: Ball, level: Level, dt = STEP): Motion {
-  const next = step(ball, level.bumpers, dt);
+  const result = stepWithContacts(ball, level.bumpers, dt);
+  const next = result.ball;
   return {
     ball: next,
+    contacts: result.contacts,
     hitGoal: distance(next, level.goal) <= level.goalRadius + BALL_RADIUS,
     expired: next.elapsed >= MAX_FLIGHT,
   };
