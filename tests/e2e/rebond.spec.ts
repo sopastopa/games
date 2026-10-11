@@ -21,19 +21,21 @@ test("a reference shot reaches the target and unlocks the next stage", async ({
   await expect(page.getByTestId("phase")).toHaveText("PRÊT À LANCER");
   await page.getByLabel("Angle du lancer").evaluate((element) => {
     const slider = element as HTMLInputElement;
-    slider.value = "38";
+    slider.value = "36";
     slider.dispatchEvent(new Event("input", { bubbles: true }));
   });
   await page.getByLabel("Puissance du lancer").evaluate((element) => {
     const slider = element as HTMLInputElement;
-    slider.value = "570";
+    slider.value = "740";
     slider.dispatchEvent(new Event("input", { bubbles: true }));
   });
+  await expect(page.getByTestId("ricochets")).toHaveText("0 / 1");
   await page.getByTestId("shoot").click();
   await expect(page.getByTestId("phase")).toHaveText("CIBLE ATTEINTE", {
     timeout: 10000,
   });
   await expect(page.getByTestId("completion")).toBeVisible();
+  await expect(page.getByTestId("ricochets")).toHaveText("1 / 1");
   await expect(page.getByTestId("attempts")).toHaveText("01");
   await page.reload();
   await expect(
@@ -41,6 +43,7 @@ test("a reference shot reaches the target and unlocks the next stage", async ({
   ).toBeEnabled();
   await page.getByTestId("level-select").selectOption("1");
   await expect(page.getByTestId("level-index")).toHaveText("02 / 18");
+  await expect(page.getByTestId("ricochets")).toHaveText("0 / 1");
 });
 
 test("the player can drag to launch, prepare again and use the keyboard", async ({
