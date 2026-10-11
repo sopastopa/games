@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101923" />
+    <meta
+      name="description"
+      content="TORSION : un quart de tour, des dizaines de stratégies. Un puzzle de logique à apprendre en jouant."
+    />
+    <title>TORSION — Games</title>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="masthead">
+        <a class="back" href="../../" data-testid="back-home">← Tous les jeux</a>
+        <span class="wordmark">▣ TORSION <small> / GAMES Nº06</small></span>
+      </header>
+      <main>
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="eyebrow"><span class="signal"></span> L'ATELIER DES QUARTS DE TOUR</div>
+          <h1 id="hero-title">
+            Un seul geste.<br /><em>Mille façons de penser.</em>
+          </h1>
+          <p>
+            Tourne un groupe de quatre cases. Ramène chaque pièce sur son
+            numéro. Au début, c'est évident. Puis chaque mouvement compte.
+          </p>
+        </section>
+        <div class="layout">
+          <section class="game-panel" aria-label="Plateau de TORSION">
+            <div class="game-heading">
+              <div>
+                <span class="eyebrow" id="chapter">I · LE GESTE</span>
+                <h2 id="stage-title">L'étincelle</h2>
+              </div>
+              <div class="stage-tag">ATELIER <strong id="stage-index" data-testid="stage-index">01 / 12</strong></div>
+            </div>
+            <p class="stage-lesson" id="lesson">Un clic fait tourner quatre cases.</p>
+            <div class="board-topline">
+              <span>● TABLE DE ROTATION</span>
+              <span id="turns" data-testid="turns">00 TOURS</span>
+            </div>
+            <div class="board-frame">
+              <div id="board" class="board" data-testid="board" aria-label="Plateau de jeu"></div>
+              <span class="frame-corner top-left"></span>
+              <span class="frame-corner top-right"></span>
+              <span class="frame-corner bottom-left"></span>
+              <span class="frame-corner bottom-right"></span>
+            </div>
+            <div class="board-legend">
+              <span><i class="legend-piece"></i> Pièce mobile</span>
+              <span><i class="legend-target"></i> Cible fixe</span>
+              <span><i class="legend-rock"></i> Rocher</span>
+            </div>
+            <div class="game-status" role="status" aria-live="polite">
+              <span class="status-glyph">✳</span>
+              <div>
+                <strong id="status" data-testid="game-status">À TOI DE JOUER</strong>
+                <p id="status-detail">Appuie sur ↻ entre quatre cases pour les faire tourner.</p>
+              </div>
+            </div>
+            <div class="solved" id="solved-panel" data-testid="solved-panel" hidden>
+              <span>✦ ATELIER RÉSOLU</span>
+              <h3>Le mouvement juste.</h3>
+              <p id="result">Chaque pièce a retrouvé sa place.</p>
+              <button type="button" id="next" class="primary">Atelier suivant →</button>
+            </div>
+            <div class="actions">
+              <button type="button" id="undo">↶ Annuler</button>
+              <button type="button" id="restart">↻ Recommencer</button>
+            </div>
+          </section>
+          <aside class="sidebar" aria-label="Guide et progression">
+            <div class="progress-card">
+              <div class="card-eyebrow">TA PROGRESSION <span>✳</span></div>
+              <div class="big-number"><strong id="completed">00</strong><span>/ 12</span></div>
+              <p>ATELIERS MAÎTRISÉS</p>
+              <div class="progress-track"><div id="progress-fill"></div></div>
+              <label for="stage-select">CHOISIR UN ATELIER</label>
+              <select id="stage-select" data-testid="stage-select"></select>
+              <div class="best">MEILLEURE SOLUTION <strong id="best">—</strong></div>
+            </div>
+            <div class="rule-card">
+              <span class="card-eyebrow">LE MODE D'EMPLOI</span>
+              <h3>Tourner.<br /><em>Comprendre.</em></h3>
+              <div class="rule"><b>01</b><p><strong>Repère</strong> les chiffres et leurs cibles en pointillés.</p></div>
+              <div class="rule"><b>02</b><p><strong>Appuie sur ↻</strong> au croisement de quatre cases pour tourner le bloc.</p></div>
+              <div class="rule"><b>03</b><p><strong>Aligne</strong> chaque chiffre sur sa cible. Les cases vides bougent aussi.</p></div>
+              <div class="rule"><b>04</b><p><strong>Anticipe.</strong> Les mouvements déplacent parfois plusieurs pièces.</p></div>
+              <p class="hint"><strong>IDÉE À EXPLORER</strong><span id="insight">Regarde comment les cases tournent.</span></p>
+            </div>
+            <div class="quiet-note">
+              Sans chronomètre, sans pénalité, sans hasard. Tu peux t'arrêter et reprendre librement.
+            </div>
+          </aside>
+        </div>
+        <footer>
+          <span>▣ TORSION · LA STRATÉGIE D'UN QUART DE TOUR</span>
+          <a href="../../">Tous les jeux ↗</a>
+        </footer>
+      </main>
+    </div>
+    <script type="module" src="/src/presentation/main.ts"></script>
+  </body>
+</html>
