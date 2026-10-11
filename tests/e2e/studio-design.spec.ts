@@ -4,7 +4,9 @@ test("the collection keeps search, categories and all existing game links", asyn
   page,
 }) => {
   await page.goto("/games/");
-  await expect(page.getByRole("heading", { name: /Jouer, tout simplement/ })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /Jouer, tout simplement/ }),
+  ).toBeVisible();
   await expect(page.getByText("7 jeux à découvrir")).toBeVisible();
   await expect(page.locator(".game-card")).toHaveCount(7);
 
@@ -14,8 +16,12 @@ test("the collection keeps search, categories and all existing game links", asyn
     "true",
   );
   await expect(page.getByRole("link", { name: "Jouer à PULSE" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Jouer à REBOND" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Jouer à NUAGE" })).toHaveCount(0);
+  await expect(
+    page.getByRole("link", { name: "Jouer à REBOND" }),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Jouer à NUAGE" })).toHaveCount(
+    0,
+  );
 
   await page.getByRole("button", { name: "Tous" }).click();
   await page.getByTestId("game-search").fill("torsion");
@@ -39,13 +45,24 @@ test("the light catalogue stays responsive with no horizontal overflow", async (
 test("all seven games share the light studio frame, keyboard skip and collection links", async ({
   page,
 }) => {
-  const slugs = ["snake", "les-absents", "pulse", "rebond", "lisiere", "torsion", "nuage"];
+  const slugs = [
+    "snake",
+    "les-absents",
+    "pulse",
+    "rebond",
+    "lisiere",
+    "torsion",
+    "nuage",
+  ];
   for (const slug of slugs) {
     await page.goto("/games/play/" + slug + "/");
     await expect(page.getByTestId("back-home")).toBeVisible();
     await expect(page.locator(".studio-lockup")).toBeVisible();
     await expect(page.locator("#studio-main")).toBeVisible();
-    await expect(page.getByTestId("studio-next")).toHaveAttribute("href", /\.\.\//);
+    await expect(page.getByTestId("studio-next")).toHaveAttribute(
+      "href",
+      /\.\.\//,
+    );
     await expect(page.locator("link[href='../../studio.css']")).toHaveCount(1);
     const background = await page.evaluate(
       () => getComputedStyle(document.body).backgroundColor,
@@ -66,7 +83,10 @@ test("mobile gameplay retains its input and offers an accessible route to the ne
   await page.keyboard.press("Enter");
   await expect(page.locator("#studio-main")).toBeVisible();
   await expect(page.getByTestId("jump")).toBeVisible();
-  await expect(page.getByTestId("studio-next")).toHaveAttribute("href", "../snake/");
+  await expect(page.getByTestId("studio-next")).toHaveAttribute(
+    "href",
+    "../snake/",
+  );
   await page.getByTestId("studio-next").click();
   await expect(page).toHaveURL(/\/games\/play\/snake\/$/);
   await expect(page.getByRole("heading", { name: /Snake/ })).toBeVisible();

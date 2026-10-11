@@ -43,7 +43,6 @@ Les sept jeux sont des expériences **autonomes** avec leur propre direction art
 
 Les tests Playwright couvrent l'inventaire des jeux, les liens préservés, les catégories, la recherche (accents, casse, zéro résultat), la navigation clavier/retour, et la disposition sur téléphone. Les tests de gameplay de tous les jeux continuent de fonctionner indépendamment.
 
-
 ## Le cadre commun des sept jeux
 
 La ressource `apps/portal/public/studio.css` est publiée à `/games/studio.css` et liée par chaque page de jeu via `../../studio.css`. La même typographie DM Sans / Space Grotesk, le fond papier, l'encre vert profond, le monogramme et les styles de navigation du portail s'appliquent donc aussi aux sept jeux.

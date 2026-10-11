@@ -20,7 +20,6 @@
 
 La couverture ne doit pas être un chiffre aveugle : chaque règle critique doit faire l'objet d'un test significatif.
 
-
 ## Cadre de la collection
 
 - Un jeu publié inclut une navigation « Tous les jeux » et le cadre visuel Games (`../../studio.css`, fournit par `apps/portal/public/studio.css`) sans coupler ses règles métier aux autres jeux.
