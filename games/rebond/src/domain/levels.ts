@@ -239,7 +239,7 @@ const designs: readonly Design[] = [
     "Quatre rebonds, aucun raccourci.",
     36,
     780,
-    2.17,
+    2.1,
     [
       [0.34, -1, 0.66],
       [0.78, -1, 0.61],
