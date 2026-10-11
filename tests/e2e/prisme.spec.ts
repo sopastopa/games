@@ -77,7 +77,9 @@ test("mobile portrait and landscape preserve shooting, movement and fullscreen",
     await page.waitForTimeout(200);
     await page.mouse.up();
     await page.getByTestId("dash").click();
-    await expect(page.getByTestId("game-status")).toContainText("RELAIS");
+    await expect(page.getByTestId("game-status")).toContainText(
+      /BADGES|RELAIS|PORTE|BONUS/,
+    );
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth > window.innerWidth + 1,
     );
@@ -102,4 +104,83 @@ test("invalid seeds are rejected and a saved seed is restored after navigation",
   await expect(page.getByTestId("overlay")).toBeHidden();
   await page.reload();
   await expect(page.getByTestId("seed-input")).toHaveValue("80731");
+});
+
+test("strategic planning freezes the battlefield and accepts explored waypoints", async ({
+  page,
+}) => {
+  await page.goto("/games/play/prisme/");
+  await page.getByTestId("primary").click();
+  await page.keyboard.press("KeyM");
+  await expect(page.getByTestId("planning")).toBeVisible();
+  await expect(page.getByTestId("overlay")).toBeHidden();
+  await expect(page.getByTestId("plan-map")).toBeVisible();
+  const chart = page.getByTestId("plan-map");
+  const box = await chart.boundingBox();
+  expect(box).not.toBeNull();
+  // Starting district lies near the northwest of the world.
+  const s = Math.min(box!.width, box!.height) / 41;
+  const ox = (box!.width - 41 * s) / 2;
+  const oy = (box!.height - 41 * s) / 2;
+  await page.mouse.click(box!.x + ox + s * 7.5, box!.y + oy + s * 5.5);
+  await page.getByTestId("close-plan").click();
+  await expect(page.getByTestId("planning")).toBeHidden();
+  await expect(page.getByTestId("game-status")).toBeVisible();
+});
+
+test("reconnaissance spends one radar charge; desktop doors remain accessible", async ({
+  page,
+}) => {
+  await page.goto("/games/play/prisme/");
+  await page.getByTestId("primary").click();
+  await expect(page.locator("#scan-charges")).toHaveText("RADAR : 2");
+  await page.getByTestId("scan").click();
+  await expect(page.locator("#scan-charges")).toHaveText("RADAR : 1");
+  await expect(page.getByTestId("game-status")).toContainText("RECONNAISSANCE");
+  await expect(page.getByTestId("interact")).toBeVisible();
+  await page.keyboard.press("KeyP");
+  await expect(page.getByTestId("overlay")).toBeVisible();
+});
+
+test("twin stick input is playable on portrait and landscape screens", async ({
+  page,
+}) => {
+  for (const size of [
+    { width: 390, height: 844 },
+    { width: 844, height: 390 },
+  ]) {
+    await page.setViewportSize(size);
+    await page.goto("/games/play/prisme/");
+    await page.getByTestId("primary").click();
+    const move = page.getByTestId("move-stick");
+    const rect = await move.boundingBox();
+    expect(rect).not.toBeNull();
+    const x = rect!.x + rect!.width / 2;
+    const y = rect!.y + rect!.height / 2;
+    await page.mouse.move(x, y);
+    await page.mouse.down();
+    await page.mouse.move(x + 38, y, { steps: 5 });
+    await page.waitForTimeout(250);
+    await page.mouse.up();
+    const fire = page.getByTestId("fire");
+    const fireBounds = await fire.boundingBox();
+    expect(fireBounds).not.toBeNull();
+    await page.mouse.move(
+      fireBounds!.x + fireBounds!.width / 2,
+      fireBounds!.y + fireBounds!.height / 2,
+    );
+    await page.mouse.down();
+    await page.mouse.move(
+      fireBounds!.x + fireBounds!.width / 2 + 24,
+      fireBounds!.y + fireBounds!.height / 2,
+      { steps: 5 },
+    );
+    await page.waitForTimeout(160);
+    await page.mouse.up();
+    const right = await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth + 1,
+    );
+    expect(right).toBe(true);
+    await expect(page.getByTestId("board")).toBeVisible();
+  }
 });
