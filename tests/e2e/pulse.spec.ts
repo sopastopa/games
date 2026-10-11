@@ -41,6 +41,7 @@ test("sound requires opt-in and a keyboard shortcut starts play", async ({ page 
   await expect(sound).toHaveAttribute("aria-pressed", "false");
   await sound.click();
   await expect(page.getByRole("button", { name: /Son : oui/ })).toHaveAttribute("aria-pressed", "true");
+  await page.getByTestId("dial").focus();
   await page.keyboard.press("Space");
   await expect(page.getByTestId("status")).toHaveText("EN JEU");
   await page.keyboard.press("p");

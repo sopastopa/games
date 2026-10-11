@@ -1,7 +1,7 @@
 import "./style.css";
 import { PulseController } from "../application/PulseController";
 import type { Snapshot } from "../application/ports";
-import { angularDistance, TAU } from "../domain/rules";
+import { TAU } from "../domain/rules";
 import { bestStore, BrowserSound, frameClock } from "../infrastructure/browser";
 
 function required<T extends Element>(selector: string): T {
@@ -213,7 +213,7 @@ soundButton.addEventListener("click", () => {
 document.addEventListener("keydown", (event) => {
   const target = event.target;
   if (target instanceof HTMLElement &&
-    (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName))) return;
+    (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT", "BUTTON", "A"].includes(target.tagName))) return;
   if (event.code === "Space" || (event.code === "Enter" && target === canvas)) {
     event.preventDefault();
     game.action();

@@ -25,7 +25,7 @@ export class PulseController {
 
   action(): void {
     if (this.state.phase === "lost") {
-      this.restart();
+      this.transition(start(createGame()));
       return;
     }
     if (this.state.phase === "ready" || this.state.phase === "paused") {
