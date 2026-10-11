@@ -381,7 +381,7 @@ canvas.addEventListener("pointermove", (event) => {
   }
   draw(snapshot);
 });
-canvas.addEventListener("pointerup", (event) => {
+function finishDrag(event: PointerEvent): void {
   if (!dragging || activePointer !== event.pointerId) return;
   dragEnd = position(event);
   dragging = false;
@@ -400,7 +400,9 @@ canvas.addEventListener("pointerup", (event) => {
       "Tire vers le bas-gauche, comme un lance-pierre.";
     draw(snapshot);
   }
-});
+}
+canvas.addEventListener("pointerup", finishDrag);
+window.addEventListener("pointerup", finishDrag);
 canvas.addEventListener("pointercancel", () => {
   dragging = false;
   activePointer = null;
@@ -440,7 +442,6 @@ document.addEventListener("keydown", (event) => {
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) game.suspend();
 });
-window.addEventListener("blur", () => game.suspend());
 window.addEventListener("resize", resize);
 window.addEventListener("pagehide", () => game.destroy(), { once: true });
 resize();
