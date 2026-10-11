@@ -125,6 +125,18 @@ export class LisiereController {
     return this.select(this.index + 1);
   }
 
+  suspend(): void {
+    this.stopAi();
+    this.notify();
+  }
+
+  resume(): void {
+    if (this.match.phase === "playing" && this.match.turn === "ai" && !this.cancelAi) {
+      this.planAi();
+      this.notify();
+    }
+  }
+
   destroy(): void {
     this.stopAi();
     this.listeners.clear();

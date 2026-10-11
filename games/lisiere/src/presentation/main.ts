@@ -177,5 +177,6 @@ nextButton.addEventListener("click", () => controller.next());
 select.addEventListener("change", () => controller.select(Number(select.value)));
 window.addEventListener("pagehide", () => controller.destroy(), { once: true });
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden) controller.destroy();
+  if (document.hidden) controller.suspend();
+  else controller.resume();
 });
