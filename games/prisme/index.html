@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b1025" />
+    <meta name="description" content="PRISME, un shooter tactique coloré à cartes procédurales et graines partageables." />
+    <title>PRISME · Assaut chromatique · Games</title>
+  </head>
+  <body>
+    <div class="shell" id="shell">
+      <header class="topbar">
+        <a href="../../" class="home" data-testid="back-home" aria-label="Retour au catalogue">← <span>GAMES</span></a>
+        <div class="identity"><span class="identity-icon">✺</span><strong>PRISME</strong><span class="identity-sub">/ ASSAUT CHROMATIQUE</span></div>
+        <div class="top-actions">
+          <button type="button" id="pause" data-testid="pause-toggle">Ⅱ Pause</button>
+          <button type="button" id="fullscreen" data-testid="fullscreen-toggle" aria-pressed="false">⛶ Plein écran</button>
+        </div>
+      </header>
+      <main class="game">
+        <div class="stats" aria-label="État de la mission">
+          <div class="stat"><span>SECTEUR</span><strong id="sector" data-testid="sector">01 / 04</strong></div>
+          <div class="stat"><span>BLINDAGE</span><strong id="health" data-testid="health">♥ ♥ ♥ ♥ ♥ ♥</strong></div>
+          <div class="stat"><span>RELAIS</span><strong id="relays" data-testid="relays">0 / 3</strong></div>
+          <div class="stat"><span>SENTINELLES</span><strong id="enemies" data-testid="enemies">—</strong></div>
+          <div class="stat"><span>SCORE</span><strong id="score" data-testid="score">00000</strong></div>
+        </div>
+        <div class="playfield">
+          <section class="arena-wrap" aria-label="Arène de tir tactique PRISME">
+            <div class="arena-top"><span class="onair">● SYSTÈME PRISME</span><span id="seed-label" data-testid="seed-label">SEED —</span></div>
+            <div class="canvas-wrap">
+              <canvas id="board" data-testid="board" aria-label="Arène tactique. Se déplacer, viser et tirer sur les sentinelles, puis activer les relais et rejoindre la sortie." tabindex="0"></canvas>
+              <div class="overlay" id="overlay" data-testid="overlay">
+                <div class="panel">
+                  <span class="kicker">OPÉRATION / CHROMA</span>
+                  <h1 id="overlay-title">La couleur est <em>une arme.</em></h1>
+                  <p id="overlay-copy">Trois relais à rallumer. Des sentinelles à désactiver. Une extraction à atteindre. Chaque graine invente un nouveau terrain.</p>
+                  <label id="seed-box" for="seed-input">GRAINE DE LA CARTE
+                    <input id="seed-input" data-testid="seed-input" type="number" min="1" max="999999999" step="1" value="48271" inputmode="numeric" />
+                  </label>
+                  <button id="primary" class="primary" data-testid="primary">DÉMARRER L'ASSAUT →</button>
+                  <p class="micro" id="overlay-hint">ZQSD / flèches : bouger · Souris + clic : tirer · Maj : propulsion</p>
+                </div>
+              </div>
+            </div>
+            <div class="arena-bottom"><span id="objective" data-testid="game-status" role="status">PRÊT POUR LA MISSION</span><span>✦ CYAN · ROSE · OR</span></div>
+          </section>
+          <aside class="side" aria-label="Commandes et équipement">
+            <div class="side-heading"><span>01 / ÉQUIPEMENT</span><strong>VECTEUR // 04</strong></div>
+            <div class="meter-title"><span>CHALEUR DE L'ARME</span><span id="heat-value">0%</span></div>
+            <div class="meter"><div class="fill heat-fill" id="heat-bar"></div></div>
+            <div class="meter-title"><span>PROPULSION</span><span id="dash-value">PRÊTE</span></div>
+            <div class="meter"><div class="fill dash-fill" id="dash-bar"></div></div>
+            <div class="touch-controls" aria-label="Commandes tactiles">
+              <div class="dpad" aria-label="Déplacement">
+                <button type="button" data-move="up" aria-label="Monter">↑</button>
+                <button type="button" data-move="left" aria-label="Gauche">←</button>
+                <button type="button" data-move="down" aria-label="Descendre">↓</button>
+                <button type="button" data-move="right" aria-label="Droite">→</button>
+              </div>
+              <div class="combat-controls">
+                <button type="button" class="fire" id="fire" data-testid="fire" aria-label="Tirer sur la sentinelle visible la plus proche">◎<small>TIR</small></button>
+                <button type="button" class="dash" id="dash" data-testid="dash" aria-label="Propulsion">↗<small>DASH</small></button>
+              </div>
+            </div>
+            <div class="instructions"><strong>RÈGLES D'ENGAGEMENT</strong><p>01. Neutralise les sentinelles.</p><p>02. Reste dans chaque halo pour capter son énergie.</p><p>03. Rejoins l'extraction ◈ une fois les objectifs remplis.</p></div>
+            <div class="tips">Un tir chauffe l'arme. Se déplacer derrière les murs interrompt les lignes de feu ennemies. Les relais restaurent le blindage.</div>
+            <div class="bottom-tag">GÉNÉRATION DÉTERMINISTE · SANS COMPTE</div>
+          </aside>
+        </div>
+        <p id="announce" class="sr-only" aria-live="polite"></p>
+      </main>
+    </div>
+    <script type="module" src="./src/presentation/main.ts"></script>
+  </body>
+</html>
