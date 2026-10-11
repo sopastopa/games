@@ -26,7 +26,9 @@ function setup(options: { supported?: boolean; rejects?: boolean } = {}) {
       return unsubscribe;
     },
   };
-  const control = createFullscreenControl(host, (active) => states.push(active));
+  const control = createFullscreenControl(host, (active) =>
+    states.push(active),
+  );
   return {
     control,
     states,

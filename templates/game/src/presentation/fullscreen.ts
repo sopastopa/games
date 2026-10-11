@@ -80,7 +80,9 @@ export function installFullscreen(): void {
     (active) => {
       document.documentElement.classList.toggle("game-fullscreen", active);
       button.setAttribute("aria-pressed", String(active));
-      button.textContent = active ? "⤢ Quitter le plein écran" : "⛶ Plein écran";
+      button.textContent = active
+        ? "⤢ Quitter le plein écran"
+        : "⛶ Plein écran";
       window.dispatchEvent(new Event("resize"));
     },
   );

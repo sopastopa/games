@@ -1242,7 +1242,10 @@ footer {
   border-radius: 7px;
   background: #e9f0e9;
   color: #263b31;
-  font: 600 12px "DM Sans", system-ui, sans-serif;
+  font:
+    600 12px "DM Sans",
+    system-ui,
+    sans-serif;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -1294,7 +1297,19 @@ html.game-fullscreen :is(.topbar, .masthead) {
     flex-wrap: wrap;
     gap: 8px;
   }
-  html.game-fullscreen :is(.topbar, .masthead) > :is(.brand, .top-logo, .top-edition, .logo, .collection, .wordmark, .header-version, .masthead-label, .edition) {
+  html.game-fullscreen
+    :is(.topbar, .masthead)
+    > :is(
+      .brand,
+      .top-logo,
+      .top-edition,
+      .logo,
+      .collection,
+      .wordmark,
+      .header-version,
+      .masthead-label,
+      .edition
+    ) {
     display: none;
   }
 }

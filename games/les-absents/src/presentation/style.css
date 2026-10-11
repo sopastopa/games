@@ -1034,7 +1034,10 @@ select {
   border-radius: 7px;
   background: #e9f0e9;
   color: #263b31;
-  font: 600 12px "DM Sans", system-ui, sans-serif;
+  font:
+    600 12px "DM Sans",
+    system-ui,
+    sans-serif;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -1086,7 +1089,19 @@ html.game-fullscreen :is(.topbar, .masthead) {
     flex-wrap: wrap;
     gap: 8px;
   }
-  html.game-fullscreen :is(.topbar, .masthead) > :is(.brand, .top-logo, .top-edition, .logo, .collection, .wordmark, .header-version, .masthead-label, .edition) {
+  html.game-fullscreen
+    :is(.topbar, .masthead)
+    > :is(
+      .brand,
+      .top-logo,
+      .top-edition,
+      .logo,
+      .collection,
+      .wordmark,
+      .header-version,
+      .masthead-label,
+      .edition
+    ) {
     display: none;
   }
 }
@@ -1096,7 +1111,9 @@ html.game-fullscreen .experience {
   gap: 20px;
   padding: 16px 0 32px;
 }
-html.game-fullscreen .story > :is(.kicker, h1, .introduction, .mission, .legend) {
+html.game-fullscreen
+  .story
+  > :is(.kicker, h1, .introduction, .mission, .legend) {
   display: none;
 }
 html.game-fullscreen .board {
