@@ -8,6 +8,7 @@ const games = [
   { slug: "lisiere", board: "#board" },
   { slug: "torsion", board: "#board" },
   { slug: "nuage", board: "#world" },
+  { slug: "veille", board: "#board" },
 ];
 
 for (const { slug, board } of games) {

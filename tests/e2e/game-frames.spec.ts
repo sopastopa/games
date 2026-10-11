@@ -8,9 +8,10 @@ const games = [
   "lisiere",
   "torsion",
   "nuage",
+  "veille",
 ] as const;
 
-test("the seven games use a clear, consistent outer frame without changing navigation", async ({
+test("the published games use a clear, consistent outer frame without changing navigation", async ({
   page,
 }) => {
   for (const slug of games) {
