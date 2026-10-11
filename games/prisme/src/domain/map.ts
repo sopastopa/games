@@ -48,7 +48,7 @@ export function reachable(arena: Arena, start: Point): Set<number> {
   const visited = new Set<number>([cell(start)]);
   const queue: Point[] = [start];
   for (let index = 0; index < queue.length; index++) {
-    for (const next of neighbors(arena, queue[index])) {
+    for (const next of neighbors(arena, queue[index]!)) {
       if (!visited.has(cell(next))) {
         visited.add(cell(next));
         queue.push(next);
@@ -67,7 +67,7 @@ export function nextStep(arena: Arena, from: Point, to: Point): Point | null {
     queue.push({ point: neighbor, first: neighbor });
   }
   for (let index = 0; index < queue.length; index++) {
-    const item = queue[index];
+    const item = queue[index]!;
     if (item.point.x === to.x && item.point.y === to.y) return item.first;
     for (const neighbor of neighbors(arena, item.point)) {
       if (seen.has(cell(neighbor))) continue;
@@ -156,7 +156,7 @@ export function generateArena(seed: number, zone: number): Arena {
   // Seeded Fisher-Yates ensures reproducible enemy placement.
   for (let index = positions.length - 1; index > 0; index--) {
     const other = Math.floor(random() * (index + 1));
-    [positions[index], positions[other]] = [positions[other], positions[index]];
+    [positions[index], positions[other]] = [positions[other]!, positions[index]!];
   }
   const spawns = positions.slice(0, 2 + zone * 2);
   if (spawns.length !== 2 + zone * 2)
