@@ -49,7 +49,7 @@ describe("PRISME simulation", () => {
   });
 
   it("requires cooling between volleys and has finite dash duration", () => {
-    let state = { ...playing(), enemies: [] };
+    let state: GameState = { ...playing(), enemies: [] };
     for (let i = 0; i < 120; i++) {
       state = stepGame(state, { ...IDLE, shoot: true });
     }
@@ -64,14 +64,14 @@ describe("PRISME simulation", () => {
   });
 
   it("captures relays only from nearby, healing once on completion", () => {
-    let state = { ...playing(), enemies: [] };
-    const relay = state.relays[0];
+    let state: GameState = { ...playing(), enemies: [] };
+    const relay = state.relays[0]!;
     state = {
       ...state,
       player: { ...state.player, x: relay.x, y: relay.y, hp: 3 },
     };
     for (let i = 0; i < 70; i++) state = stepGame(state, IDLE);
-    expect(state.relays[0].charge).toBe(100);
+    expect(state.relays[0]!.charge).toBe(100);
     expect(state.player.hp).toBe(4);
     expect(state.score).toBe(200);
     for (let i = 0; i < 10; i++) state = stepGame(state, IDLE);
