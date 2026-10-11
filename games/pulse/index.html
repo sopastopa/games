@@ -3,14 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#10101d" />
+    <meta name="theme-color" content="#f7f8f5" />
     <meta
       name="description"
       content="PULSE, un jeu de précision : un seul geste, le bon moment."
     />
     <title>PULSE — Games</title>
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+    <link rel="stylesheet" href="../../studio.css" />
   </head>
-  <body>
+  <body class="studio-game studio-pulse">
+    <a class="studio-skip" href="#studio-main">Aller au jeu</a>
     <div class="shell">
       <header class="topbar">
         <a href="../../" class="back-link" data-testid="back-home"
@@ -18,8 +21,13 @@
         >
         <span class="top-logo"><b>◈</b> GAMES</span>
         <span class="top-edition">ARCADE / 03</span>
+
+        <a class="studio-lockup" href="../../" aria-label="GAMES — Accueil">
+          <span aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>games<span class="studio-dot">.</span></span>
+        </a>
       </header>
-      <main class="game-layout">
+      <main id="studio-main" class="game-layout">
         <section class="intro">
           <div class="eyebrow">
             <span class="signal"></span> UN JEU DE PUR TIMING
@@ -115,6 +123,16 @@
           </p>
         </section>
       </main>
+      <nav class="studio-switcher" aria-label="Continuer dans la collection">
+        <span>Un autre jeu à découvrir ?</span>
+        <div>
+          <a href="../../">Toute la collection ↗</a>
+          <a href="../rebond/" data-testid="studio-next"
+            >Jeu suivant : REBOND →</a
+          >
+        </div>
+      </nav>
+
       <footer>PULSE <span>•</span> Le jeu s'arrête quand tu le décides.</footer>
     </div>
     <script type="module" src="/src/presentation/main.ts"></script>

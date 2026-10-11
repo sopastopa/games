@@ -3,14 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#111b1a" />
+    <meta name="theme-color" content="#f7f8f5" />
     <meta
       name="description"
       content="LISIÈRE : un duel stratégique à un seul geste. Conquiers, encercles et contrôle les sanctuaires."
     />
     <title>LISIÈRE — Games</title>
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+    <link rel="stylesheet" href="../../studio.css" />
   </head>
-  <body>
+  <body class="studio-game studio-lisiere">
+    <a class="studio-skip" href="#studio-main">Aller au jeu</a>
     <div class="shell">
       <header class="masthead">
         <a href="../../" class="home-link" data-testid="back-home"
@@ -18,8 +21,13 @@
         >
         <div class="brand"><span aria-hidden="true">◈</span> LISIÈRE</div>
         <div class="masthead-label">UN JEU DE TERRITOIRE / GAMES Nº05</div>
+
+        <a class="studio-lockup" href="../../" aria-label="GAMES — Accueil">
+          <span aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>games<span class="studio-dot">.</span></span>
+        </a>
       </header>
-      <main>
+      <main id="studio-main">
         <section class="intro">
           <div class="eyebrow">
             <span class="eyebrow-line"></span> UN DUEL AU TOUR PAR TOUR
@@ -187,6 +195,16 @@
             </p>
           </aside>
         </div>
+        <nav class="studio-switcher" aria-label="Continuer dans la collection">
+          <span>Un autre jeu à découvrir ?</span>
+          <div>
+            <a href="../../">Toute la collection ↗</a>
+            <a href="../torsion/" data-testid="studio-next"
+              >Jeu suivant : TORSION →</a
+            >
+          </div>
+        </nav>
+
         <footer>
           ✳ LISIÈRE <span>·</span> Le territoire est une question de choix.
           <a href="../../">Tous les jeux ↗</a>

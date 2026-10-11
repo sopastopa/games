@@ -3,14 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#080f19" />
+    <meta name="theme-color" content="#f7f8f5" />
     <meta
       name="description"
       content="Les Absents, 24 énigmes géométriques : pour relier, il faut parfois retirer."
     />
     <title>Les Absents — Games</title>
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+    <link rel="stylesheet" href="../../studio.css" />
   </head>
-  <body>
+  <body class="studio-game studio-les-absents">
+    <a class="studio-skip" href="#studio-main">Aller au jeu</a>
     <div class="page-shell">
       <header class="topbar">
         <a class="back-link" href="../../" data-testid="back-home"
@@ -20,8 +23,13 @@
           <span class="logo-mark" aria-hidden="true">◌</span> LES ABSENTS
         </div>
         <div class="collection">UNE EXPÉRIENCE GAMES</div>
+
+        <a class="studio-lockup" href="../../" aria-label="GAMES — Accueil">
+          <span aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>games<span class="studio-dot">.</span></span>
+        </a>
       </header>
-      <main>
+      <main id="studio-main">
         <div class="experience">
           <section class="story" aria-labelledby="page-title">
             <div class="kicker">
@@ -171,6 +179,16 @@
             </div>
           </section>
         </div>
+        <nav class="studio-switcher" aria-label="Continuer dans la collection">
+          <span>Un autre jeu à découvrir ?</span>
+          <div>
+            <a href="../../">Toute la collection ↗</a>
+            <a href="../pulse/" data-testid="studio-next"
+              >Jeu suivant : PULSE →</a
+            >
+          </div>
+        </nav>
+
         <footer>
           Les Absents <span>·</span> Rien n'est perdu. Tout se transforme.
         </footer>

@@ -1,0 +1,493 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+/*
+ * GAMES — Studio shell, shared across the collection.
+ * The play surfaces keep their own visual language. Everything around them
+ * shares the same typography, page background, navigation and interaction
+ * standards. Served as a static portal asset to avoid inter-game imports.
+ */
+html:has(body.studio-game) {
+  background: #f7f8f5;
+}
+
+body.studio-game {
+  --studio-ink: #1d302d;
+  --studio-muted: #63736d;
+  --studio-line: #dce3dc;
+  --studio-accent: #25584c;
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  color: var(--studio-ink);
+  background: #f7f8f5;
+  font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body.studio-game :focus-visible {
+  outline: 3px solid #25584c;
+  outline-offset: 4px;
+}
+
+body.studio-game .studio-skip {
+  position: fixed;
+  z-index: 100;
+  top: -90px;
+  left: 22px;
+  display: block;
+  padding: 12px 16px;
+  border-radius: 6px;
+  background: #1d302d;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+}
+body.studio-game .studio-skip:focus {
+  top: 10px;
+}
+
+body.studio-game :is(.topbar, .masthead) {
+  height: 78px;
+  min-height: 78px;
+  padding: 0;
+  border-bottom: 1px solid var(--studio-line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+body.studio-game
+  :is(.topbar, .masthead)
+  > :not([data-testid="back-home"]):not(.studio-lockup) {
+  display: none;
+}
+
+body.studio-game a[data-testid="back-home"] {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 6px;
+  color: var(--studio-muted);
+  text-decoration: none;
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 730;
+  letter-spacing: 0;
+}
+body.studio-game a[data-testid="back-home"]:hover {
+  color: var(--studio-accent);
+}
+body.studio-game .studio-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--studio-ink);
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 810;
+  letter-spacing: -0.065em;
+  text-decoration: none;
+}
+body.studio-game .studio-lockup > span:first-child {
+  display: grid;
+  grid-template-columns: repeat(2, 8px);
+  grid-template-rows: repeat(2, 8px);
+  gap: 3px;
+  transform: rotate(-11deg);
+}
+body.studio-game .studio-lockup i {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 1px;
+  background: #25584c;
+}
+body.studio-game .studio-lockup i:nth-child(2) {
+  background: #e2a76c;
+}
+body.studio-game .studio-lockup i:nth-child(3) {
+  background: #a3bfae;
+}
+body.studio-game .studio-lockup i:nth-child(4) {
+  background: #d78372;
+}
+body.studio-game .studio-lockup .studio-dot {
+  color: #d36e58;
+}
+
+body.studio-game :is(h1, h2, h3) {
+  font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  text-wrap: balance;
+}
+
+body.studio-game button:not(.tile):not(.node):not(.pivot),
+body.studio-game select {
+  border-radius: 8px;
+  font-family: inherit;
+}
+body.studio-game button:not(.tile):not(.node):not(.pivot) {
+  touch-action: manipulation;
+}
+body.studio-game select {
+  min-height: 44px;
+}
+body.studio-game :is(.shell, .page, .page-shell) {
+  max-width: 1280px;
+}
+body.studio-game footer {
+  border-top-color: var(--studio-line);
+  color: var(--studio-muted);
+}
+body.studio-game footer a {
+  color: var(--studio-accent);
+  text-decoration: none;
+}
+body.studio-game footer a:hover {
+  text-decoration: underline;
+}
+
+body.studio-game .studio-switcher {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding: 25px 0 35px;
+  margin: 40px 0 0;
+  border-top: 1px solid var(--studio-line);
+  color: var(--studio-muted);
+}
+body.studio-game .studio-switcher > span {
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+body.studio-game .studio-switcher > div {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+body.studio-game .studio-switcher a {
+  color: var(--studio-accent);
+  font-size: 13px;
+  font-weight: 740;
+  text-decoration: none;
+  padding: 7px 0;
+  border-bottom: 1px solid transparent;
+}
+body.studio-game .studio-switcher a:hover {
+  border-bottom-color: currentColor;
+}
+
+/* Snake — editorial information on white, dark game board retained. */
+body.studio-snake .game-layout {
+  padding: clamp(45px, 5.8vw, 82px) 0 88px;
+  gap: clamp(38px, 7vw, 95px);
+}
+body.studio-snake .game-intro h1 {
+  color: #1d302d;
+  font-size: clamp(68px, 9vw, 112px);
+}
+body.studio-snake .game-intro h1 span,
+body.studio-snake .eyebrow {
+  color: #25715f;
+}
+body.studio-snake .game-intro > p:not(.eyebrow) {
+  color: #63736d;
+}
+body.studio-snake .game-intro .instructions {
+  color: #667970 !important;
+}
+body.studio-snake .board-frame {
+  border-color: #adbec0;
+  box-shadow: none;
+}
+body.studio-snake .status-bar {
+  color: #4c6259;
+}
+body.studio-snake .score-item {
+  border-radius: 8px;
+}
+
+/* The Absents — quiet reading surface and a contrasting board. */
+body.studio-les-absents .experience {
+  padding-top: clamp(48px, 5vw, 80px);
+  gap: clamp(32px, 6vw, 85px);
+}
+body.studio-les-absents .story h1 {
+  color: #213831;
+  font-size: clamp(58px, 8vw, 100px);
+}
+body.studio-les-absents .story h1 em {
+  color: #287762;
+}
+body.studio-les-absents .story h1 em span {
+  color: #c76d66;
+}
+body.studio-les-absents .kicker,
+body.studio-les-absents .chapter-number {
+  color: #287762;
+}
+body.studio-les-absents :is(.introduction, .level-subtitle) {
+  color: #667d72;
+}
+body.studio-les-absents .chapter-details {
+  border-color: #c7d9ce;
+}
+body.studio-les-absents .chapter-details h2 {
+  color: #1d302d;
+}
+body.studio-les-absents .chapter-label {
+  color: #758a7d;
+}
+body.studio-les-absents .mission {
+  box-shadow: none;
+}
+body.studio-les-absents .mission :is(h2, h3, p) {
+  color: #d9e8e2;
+}
+body.studio-les-absents .level-browser {
+  border-color: #d6e1d8;
+}
+
+/* PULSE — a precise dial framed by light editorial text. */
+body.studio-pulse .game-layout {
+  gap: clamp(34px, 5.8vw, 88px);
+  padding: clamp(48px, 6vw, 85px) 0 75px;
+}
+body.studio-pulse .intro h1 {
+  background: none;
+  color: #1d302d;
+  -webkit-text-fill-color: #1d302d;
+  font-size: clamp(70px, 9.2vw, 116px);
+}
+body.studio-pulse .intro h1 .period {
+  color: #bc775d;
+  -webkit-text-fill-color: #bc775d;
+}
+body.studio-pulse :is(.intro-lead, .steps div) {
+  color: #253b35;
+}
+body.studio-pulse .intro-lead em,
+body.studio-pulse .eyebrow,
+body.studio-pulse .step-number {
+  color: #a6644d;
+}
+body.studio-pulse :is(.concept, .keyboard-guide) {
+  color: #66796e;
+}
+body.studio-pulse .rule-divider {
+  background: #dbe3da;
+}
+body.studio-pulse .arcade {
+  box-shadow: none;
+}
+
+/* REBOND — simplify ornamental typography and keep the range controls. */
+body.studio-rebond .intro {
+  padding: clamp(45px, 5.8vw, 80px) 0 54px;
+}
+body.studio-rebond h1 {
+  font-size: clamp(70px, 9.5vw, 124px);
+}
+body.studio-rebond .intro-right {
+  display: none;
+}
+body.studio-rebond .eyebrow,
+body.studio-rebond .lede em {
+  color: #aa634d;
+}
+body.studio-rebond .canvas-shell,
+body.studio-rebond .control-panel {
+  box-shadow: none;
+}
+
+/* LISIÈRE — its maps keep original contrast while the site stays bright. */
+body.studio-lisiere .intro {
+  padding: clamp(46px, 5.8vw, 82px) 0 43px;
+}
+body.studio-lisiere .intro h1 {
+  color: #1d302d;
+  font-size: clamp(52px, 6.5vw, 86px);
+}
+body.studio-lisiere .intro h1 em {
+  color: #996c48;
+}
+body.studio-lisiere .intro h1 em span {
+  color: #5f8e78;
+}
+body.studio-lisiere .intro p {
+  color: #60796c;
+}
+body.studio-lisiere .eyebrow,
+body.studio-lisiere .section-eyebrow {
+  color: #a16c50;
+}
+body.studio-lisiere .game-header h2 {
+  color: #243b33;
+}
+body.studio-lisiere .game-header {
+  border-color: #d4dfd6;
+}
+body.studio-lisiere .game-header p {
+  color: #627b70;
+}
+body.studio-lisiere .game-header .stage-number span {
+  color: #7a8e82;
+}
+body.studio-lisiere .game-header .stage-number strong {
+  color: #805939;
+}
+body.studio-lisiere .board-surround,
+body.studio-lisiere .campaign-card,
+body.studio-lisiere .rules-card {
+  box-shadow: none;
+}
+
+/* TORSION — clear introduction with a single dark interactive table. */
+body.studio-torsion .hero {
+  padding: clamp(48px, 5.5vw, 80px) 0 42px;
+}
+body.studio-torsion .hero h1 {
+  color: #1d302d;
+  font-size: clamp(43px, 5.3vw, 70px);
+}
+body.studio-torsion .hero h1 em {
+  color: #287762;
+}
+body.studio-torsion .hero p {
+  color: #647b71;
+}
+body.studio-torsion .hero .eyebrow {
+  color: #287762;
+}
+body.studio-torsion .hero .signal {
+  background: #287762;
+  box-shadow: none;
+}
+body.studio-torsion .game-panel,
+body.studio-torsion .progress-card,
+body.studio-torsion .rule-card {
+  box-shadow: none;
+}
+body.studio-torsion .quiet-note {
+  color: #63736d;
+}
+
+/* NUAGE — keep the colorful illustrated world, calm the surrounding UI. */
+body.studio-nuage .grain,
+body.studio-nuage .intro::after {
+  display: none;
+}
+body.studio-nuage .intro {
+  padding: clamp(50px, 6vw, 85px) 0 42px;
+}
+body.studio-nuage .intro h1 {
+  font-size: clamp(44px, 6vw, 75px);
+  color: #1d302d;
+}
+body.studio-nuage .intro h1 em,
+body.studio-nuage :is(.travel-card h3 em, .how-card h3 em) {
+  background: none;
+  -webkit-text-fill-color: #287762;
+  color: #287762;
+}
+body.studio-nuage .intro > p {
+  color: #657b70;
+}
+body.studio-nuage .kicker {
+  color: #287762;
+}
+body.studio-nuage .experience {
+  background: #fff;
+  border: 1px solid #d6e4db;
+  border-radius: 12px;
+  box-shadow: none;
+  padding: clamp(19px, 3vw, 32px);
+}
+body.studio-nuage .experience::before {
+  height: 3px;
+  background: #3d8b75;
+}
+body.studio-nuage .world-frame {
+  border-radius: 8px;
+  box-shadow: none;
+}
+body.studio-nuage .world-frame canvas {
+  border-radius: 4px;
+}
+body.studio-nuage .travel-card,
+body.studio-nuage .how-card {
+  background: #fff;
+  border: 1px solid #d6e4db;
+  border-radius: 10px;
+  box-shadow: none;
+}
+body.studio-nuage .story-card {
+  background: #fffaf0;
+  border: 1px solid #ece4cd;
+}
+body.studio-nuage .story-card::before {
+  opacity: 0.2;
+}
+body.studio-nuage .challenge-banner {
+  background: #f3f6f2;
+  border: 1px solid #d5e4db;
+}
+body.studio-nuage .jump-button {
+  border: 1px solid #287762;
+  background: #2c8069;
+  color: #fff;
+  box-shadow: none;
+}
+body.studio-nuage .jump-button:not(:disabled):active {
+  box-shadow: none;
+}
+body.studio-nuage .control-button {
+  border: 1px solid #d2ded5;
+  background: #f8faf7;
+  color: #294b3c;
+}
+body.studio-nuage .next-button {
+  border: 1px solid #297560;
+  background: #297560;
+  box-shadow: none;
+}
+body.studio-nuage .promenade {
+  background: #f7faf6;
+  border: 1px solid #dce8df;
+}
+body.studio-nuage .ending {
+  background: #eff5ed;
+  border: 1px solid #b9d4c6;
+}
+body.studio-nuage .below {
+  margin-top: 28px;
+  gap: 18px;
+}
+
+@media (max-width: 720px) {
+  body.studio-game :is(.topbar, .masthead) {
+    height: 68px;
+    min-height: 68px;
+  }
+  body.studio-game .studio-lockup {
+    font-size: 19px;
+  }
+  body.studio-game .studio-switcher {
+    margin-top: 28px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.studio-game *,
+  body.studio-game *::before,
+  body.studio-game *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+    animation: none !important;
+  }
+}

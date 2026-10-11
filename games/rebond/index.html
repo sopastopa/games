@@ -3,14 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f6f0e6" />
+    <meta name="theme-color" content="#f7f8f5" />
     <meta
       name="description"
       content="REBOND : un lancer, mille trajectoires. Vise, ajuste et fais ricocher une bille jusqu'à la cible."
     />
     <title>REBOND — Games</title>
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+    <link rel="stylesheet" href="../../studio.css" />
   </head>
-  <body>
+  <body class="studio-game studio-rebond">
+    <a class="studio-skip" href="#studio-main">Aller au jeu</a>
     <div class="page">
       <header class="topbar">
         <a class="back" data-testid="back-home" href="../../"
@@ -20,8 +23,13 @@
           ><span class="logo-symbol">◒</span> GAMES LAB</a
         >
         <span class="header-version">EXPÉRIENCE Nº04</span>
+
+        <a class="studio-lockup" href="../../" aria-label="GAMES — Accueil">
+          <span aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>games<span class="studio-dot">.</span></span>
+        </a>
       </header>
-      <main>
+      <main id="studio-main">
         <section class="intro">
           <div class="intro-copy">
             <div class="eyebrow">
@@ -184,6 +192,16 @@
           <span class="philosophy-icon">✳</span>
         </section>
       </main>
+      <nav class="studio-switcher" aria-label="Continuer dans la collection">
+        <span>Un autre jeu à découvrir ?</span>
+        <div>
+          <a href="../../">Toute la collection ↗</a>
+          <a href="../lisiere/" data-testid="studio-next"
+            >Jeu suivant : LISIÈRE →</a
+          >
+        </div>
+      </nav>
+
       <footer>
         REBOND <span>·</span> Fais confiance aux courbes.
         <a href="../../">Retour au catalogue ↗</a>

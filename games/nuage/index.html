@@ -3,14 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#21183e" />
+    <meta name="theme-color" content="#f7f8f5" />
     <meta
       name="description"
       content="NUAGE, la fabrique des aurores : une aventure de plateforme colorée en sept chapitres, avec une histoire qui se dévoile en jouant."
     />
     <title>NUAGE — La fabrique des aurores · Games</title>
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+    <link rel="stylesheet" href="../../studio.css" />
   </head>
-  <body>
+  <body class="studio-game studio-nuage">
+    <a class="studio-skip" href="#studio-main">Aller au jeu</a>
     <div class="grain" aria-hidden="true"></div>
     <div class="shell">
       <header class="masthead">
@@ -21,8 +24,13 @@
           n<span>u</span>age<span class="brand-spark">✳</span>
         </div>
         <span class="edition">UNE HISTOIRE À JOUER <span> / Nº 07</span></span>
+
+        <a class="studio-lockup" href="../../" aria-label="GAMES — Accueil">
+          <span aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>games<span class="studio-dot">.</span></span>
+        </a>
       </header>
-      <main>
+      <main id="studio-main">
         <section class="intro" aria-labelledby="intro-title">
           <div class="kicker">
             <span class="kicker-dot"></span> UNE AVENTURE EN SEPT COULEURS
@@ -208,6 +216,16 @@
             </label>
           </div>
         </section>
+        <nav class="studio-switcher" aria-label="Continuer dans la collection">
+          <span>Un autre jeu à découvrir ?</span>
+          <div>
+            <a href="../../">Toute la collection ↗</a>
+            <a href="../snake/" data-testid="studio-next"
+              >Jeu suivant : Snake →</a
+            >
+          </div>
+        </nav>
+
         <footer>
           <span
             >NUAGE © LA FABRIQUE DES AURORES · 7 CHAPITRES · ZÉRO PRESSION</span
