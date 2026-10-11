@@ -1,7 +1,19 @@
 export type Role = "scout" | "engineer" | "guardian";
-export type Terrain = "floor" | "wall" | "tide" | "core" | "battery" | "beacon" | "archive" | "exit";
+export type Terrain =
+  | "floor"
+  | "wall"
+  | "tide"
+  | "core"
+  | "battery"
+  | "beacon"
+  | "archive"
+  | "exit";
 export type Direction = "up" | "down" | "left" | "right";
-export type Action = { kind: "move" | "dash"; direction: Direction } | { kind: "scan" } | { kind: "pulse" } | { kind: "wait" };
+export type Action =
+  | { kind: "move" | "dash"; direction: Direction }
+  | { kind: "scan" }
+  | { kind: "pulse" }
+  | { kind: "wait" };
 export type Phase = "playing" | "won" | "lost";
 
 export interface Drone {

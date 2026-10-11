@@ -9,7 +9,9 @@ describe("browser progress adapter", () => {
     const values = new Map<string, string>();
     const storage = {
       getItem: vi.fn((key: string) => values.get(key) ?? null),
-      setItem: vi.fn((key: string, value: string) => { values.set(key, value); }),
+      setItem: vi.fn((key: string, value: string) => {
+        values.set(key, value);
+      }),
     };
     vi.stubGlobal("localStorage", storage);
     const progress = restoreCampaign(null);
@@ -20,13 +22,19 @@ describe("browser progress adapter", () => {
   it("survives disabled storage and corrupt JSON", () => {
     vi.stubGlobal("localStorage", {
       getItem: () => "{broken",
-      setItem: () => { throw new Error("quota"); },
+      setItem: () => {
+        throw new Error("quota");
+      },
     });
     expect(browserCampaign.load()).toBeNull();
     expect(() => browserCampaign.save(restoreCampaign(null))).not.toThrow();
     vi.stubGlobal("localStorage", {
-      getItem: () => { throw new Error("disabled"); },
-      setItem: () => { throw new Error("disabled"); },
+      getItem: () => {
+        throw new Error("disabled");
+      },
+      setItem: () => {
+        throw new Error("disabled");
+      },
     });
     expect(browserCampaign.load()).toBeNull();
     expect(() => browserCampaign.save(restoreCampaign(null))).not.toThrow();

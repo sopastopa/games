@@ -6,7 +6,7 @@ export const browserCampaign: CampaignStore = {
   load(): unknown {
     try {
       const value = localStorage.getItem(KEY);
-      return value === null ? null : JSON.parse(value) as unknown;
+      return value === null ? null : (JSON.parse(value) as unknown);
     } catch {
       return null;
     }

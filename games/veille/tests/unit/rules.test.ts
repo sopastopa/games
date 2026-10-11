@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { distance, shortestPath } from "../../src/domain/generation";
-import { actionAvailable, directionBetween, newExpedition, tideIsHigh, transition, validateExpedition } from "../../src/domain/rules";
+import {
+  actionAvailable,
+  directionBetween,
+  newExpedition,
+  tideIsHigh,
+  transition,
+  validateExpedition,
+} from "../../src/domain/rules";
 import { EXIT, START, type Expedition } from "../../src/domain/types";
 
 function followPath(run: Expedition, target: number): Expedition {
@@ -30,7 +37,9 @@ describe("expedition rules", () => {
 
   it("can actually complete the first mission by collecting cores and reaching the exit", () => {
     let game = newExpedition(0, 17, "guardian");
-    const cores = game.terrain.flatMap((tile, index) => tile === "core" ? [index] : []);
+    const cores = game.terrain.flatMap((tile, index) =>
+      tile === "core" ? [index] : [],
+    );
     for (const target of cores) game = followPath(game, target);
     expect(game.cores).toBe(game.required);
     game = followPath(game, EXIT);
@@ -56,15 +65,21 @@ describe("expedition rules", () => {
     const after = transition(run, { kind: "scan" });
     expect(after.energy).toBe(run.energy - 1);
     expect(after.turn).toBe(1);
-    expect(after.revealed.filter(Boolean).length).toBeGreaterThan(run.revealed.filter(Boolean).length);
+    expect(after.revealed.filter(Boolean).length).toBeGreaterThan(
+      run.revealed.filter(Boolean).length,
+    );
     expect(run.turn).toBe(0);
     const poor = { ...run, energy: 0 };
     expect(transition(poor, { kind: "scan" })).toBe(poor);
   });
 
   it("provides role-specific endurance and propulsion distances", () => {
-    expect(newExpedition(0, 1, "guardian").hull).toBeGreaterThan(newExpedition(0, 1, "scout").hull);
-    expect(newExpedition(0, 1, "engineer").energy).toBeGreaterThan(newExpedition(0, 1, "scout").energy);
+    expect(newExpedition(0, 1, "guardian").hull).toBeGreaterThan(
+      newExpedition(0, 1, "scout").hull,
+    );
+    expect(newExpedition(0, 1, "engineer").energy).toBeGreaterThan(
+      newExpedition(0, 1, "scout").energy,
+    );
     let found = false;
     for (let seed = 1; seed < 70; seed++) {
       const run = newExpedition(0, seed, "engineer");
@@ -87,14 +102,22 @@ describe("expedition rules", () => {
     expect(after.drones[0]!.position).toBe(enemy.home);
     expect(after.drones[0]!.stunned).toBeGreaterThan(0);
     expect(after.energy).toBe(run.energy - 2);
-    expect(transition({ ...ready, drones: [] }, { kind: "pulse" })).toEqual({ ...ready, drones: [] });
+    expect(transition({ ...ready, drones: [] }, { kind: "pulse" })).toEqual({
+      ...ready,
+      drones: [],
+    });
   });
 
   it("damages the hull on high tide and permits tactical waiting", () => {
     const base = newExpedition(2, 71, "guardian");
     const water = base.terrain.indexOf("tide");
     expect(water).toBeGreaterThan(0);
-    const game = { ...base, position: water, turn: 2, revealed: [...base.revealed] };
+    const game = {
+      ...base,
+      position: water,
+      turn: 2,
+      revealed: [...base.revealed],
+    };
     const after = transition(game, { kind: "wait" });
     expect(tideIsHigh(after.turn)).toBe(true);
     expect(after.hull).toBe(base.hull - 1);
@@ -118,7 +141,12 @@ describe("expedition rules", () => {
     const terrain = [...base.terrain];
     terrain[START + 1] = "floor";
     terrain[START + 2] = "floor";
-    const run = { ...base, terrain, turn: 1, drones: [{ position: START + 2, home: START + 2, stunned: 0 }] };
+    const run = {
+      ...base,
+      terrain,
+      turn: 1,
+      drones: [{ position: START + 2, home: START + 2, stunned: 0 }],
+    };
     const approached = transition(run, { kind: "wait" });
     expect(approached.drones[0]!.position).toBe(START + 1);
     expect(approached.hull).toBe(run.hull);

@@ -2,26 +2,59 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <meta name="theme-color" content="#f7f8f5" />
-    <meta name="description" content="VEILLE : exploration tactique, marées mouvantes et archives à retrouver au fil de douze expéditions." />
+    <meta
+      name="description"
+      content="VEILLE : exploration tactique, marées mouvantes et archives à retrouver au fil de douze expéditions."
+    />
     <title>VEILLE · Les archives englouties · Games</title>
   </head>
   <body>
     <div class="shell">
       <header class="masthead">
-        <a href="../../" class="back" data-testid="back-home">← Tous les jeux</a>
-        <a href="../../" class="brand" aria-label="Games, retour au catalogue"><span aria-hidden="true">◈</span> GAMES <span class="brand-suffix"> / VEILLE</span></a>
-        <button type="button" id="fullscreen" class="fullscreen-button" aria-pressed="false" data-testid="fullscreen-toggle">⛶ Plein écran</button>
+        <a href="../../" class="back" data-testid="back-home"
+          >← Tous les jeux</a
+        >
+        <a href="../../" class="brand" aria-label="Games, retour au catalogue"
+          ><span aria-hidden="true">◈</span> GAMES
+          <span class="brand-suffix"> / VEILLE</span></a
+        >
+        <button
+          type="button"
+          id="fullscreen"
+          class="fullscreen-button"
+          aria-pressed="false"
+          data-testid="fullscreen-toggle"
+        >
+          ⛶ Plein écran
+        </button>
       </header>
       <main>
         <section class="hero">
           <div class="hero-copy">
-            <p class="eyebrow"><span class="pulse-light"></span> TRANSMISSION 001 / LES ARCHIVES ENGLOUTIES</p>
-            <h1>Tout ce qui dort<br /><em>laisse une trace<span>.</span></em></h1>
-            <p>Une ville disparue. Douze secteurs. Aucune expédition identique. Explore, observe les marées et rassemble les voix que l'océan a gardées.</p>
+            <p class="eyebrow">
+              <span class="pulse-light"></span> TRANSMISSION 001 / LES ARCHIVES
+              ENGLOUTIES
+            </p>
+            <h1>
+              Tout ce qui dort<br /><em>laisse une trace<span>.</span></em>
+            </h1>
+            <p>
+              Une ville disparue. Douze secteurs. Aucune expédition identique.
+              Explore, observe les marées et rassemble les voix que l'océan a
+              gardées.
+            </p>
           </div>
-          <div class="hero-emblem" aria-hidden="true"><span class="ring ring-one"></span><span class="ring ring-two"></span><span class="emblem-core">V</span><span class="emblem-text">SIGNAL ACTIF</span></div>
+          <div class="hero-emblem" aria-hidden="true">
+            <span class="ring ring-one"></span
+            ><span class="ring ring-two"></span
+            ><span class="emblem-core">V</span
+            ><span class="emblem-text">SIGNAL ACTIF</span>
+          </div>
         </section>
         <div class="section-heading">
           <span class="section-index">01 / POSTE D'EXPLORATION</span>
@@ -29,40 +62,212 @@
         </div>
         <div class="game-layout">
           <section class="mission" aria-label="Zone de jeu VEILLE">
-            <div class="mission-head"><div><p class="mini-label" id="mission-region">LES ARCHIVES SOUS LA MER</p><h2 id="mission-title">Préparer une descente</h2></div><span class="live-sign">● EN DIRECT</span></div>
+            <div class="mission-head">
+              <div>
+                <p class="mini-label" id="mission-region">
+                  LES ARCHIVES SOUS LA MER
+                </p>
+                <h2 id="mission-title">Préparer une descente</h2>
+              </div>
+              <span class="live-sign">● EN DIRECT</span>
+            </div>
             <div class="status-row">
-              <div><span>FRAGMENTS</span><strong id="signal" data-testid="signal">0 / 2</strong></div>
-              <div><span>COQUE</span><strong id="hull" data-testid="hull">5 / 5</strong></div>
-              <div><span>ÉNERGIE</span><strong id="energy" data-testid="energy">5 / 7</strong></div>
-              <div><span>TOURS</span><strong id="turn" data-testid="turn">00</strong></div>
+              <div>
+                <span>FRAGMENTS</span
+                ><strong id="signal" data-testid="signal">0 / 2</strong>
+              </div>
+              <div>
+                <span>COQUE</span
+                ><strong id="hull" data-testid="hull">5 / 5</strong>
+              </div>
+              <div>
+                <span>ÉNERGIE</span
+                ><strong id="energy" data-testid="energy">5 / 7</strong>
+              </div>
+              <div>
+                <span>TOURS</span
+                ><strong id="turn" data-testid="turn">00</strong>
+              </div>
             </div>
             <div class="board-shell">
-              <div class="board-top"><span>◌ CARTE BATHYMÉTRIQUE</span><span id="tide">BASSE · passage possible</span></div>
-              <div id="board" class="board" role="group" aria-label="Carte tactique de neuf colonnes sur neuf lignes" data-testid="board"></div>
-              <div class="board-bottom"><span>◆ EXPLORATEUR</span><span>✦ SIGNAL</span><span>◇ ARCHIVE</span><span>✺ SENTINELLE</span></div>
+              <div class="board-top">
+                <span>◌ CARTE BATHYMÉTRIQUE</span
+                ><span id="tide">BASSE · passage possible</span>
+              </div>
+              <div
+                id="board"
+                class="board"
+                role="group"
+                aria-label="Carte tactique de neuf colonnes sur neuf lignes"
+                data-testid="board"
+              ></div>
+              <div class="board-bottom">
+                <span>◆ EXPLORATEUR</span><span>✦ SIGNAL</span
+                ><span>◇ ARCHIVE</span><span>✺ SENTINELLE</span>
+              </div>
             </div>
-            <p class="game-status" id="game-status" role="status" data-testid="game-status">Prêt à explorer</p>
+            <p
+              class="game-status"
+              id="game-status"
+              role="status"
+              data-testid="game-status"
+            >
+              Prêt à explorer
+            </p>
             <p class="sr-only" id="announce" aria-live="polite"></p>
-            <section id="launch-panel" class="launch-panel" aria-label="Préparer une expédition">
-              <div class="form-row"><label for="sector-select">Destination<select id="sector-select" data-testid="sector-select"></select></label><label for="role-select">Spécialité<select id="role-select"><option value="scout">Éclaireur</option><option value="engineer">Ingénieure</option><option value="guardian">Gardien</option></select></label></div>
-              <p class="role-hint" id="role-description">Voit plus loin · impulsion de 3 cases</p>
-              <div class="launch-row"><label for="seed">Graine facultative <span>(partage une carte)</span><input id="seed" type="number" min="1" max="999999999" step="1" placeholder="Carte surprise déterministe" /></label><button class="primary" id="launch" data-testid="launch">Commencer la descente ↗</button></div>
+            <section
+              id="launch-panel"
+              class="launch-panel"
+              aria-label="Préparer une expédition"
+            >
+              <div class="form-row">
+                <label for="sector-select"
+                  >Destination<select
+                    id="sector-select"
+                    data-testid="sector-select"
+                  ></select></label
+                ><label for="role-select"
+                  >Spécialité<select id="role-select">
+                    <option value="scout">Éclaireur</option>
+                    <option value="engineer">Ingénieure</option>
+                    <option value="guardian">Gardien</option>
+                  </select></label
+                >
+              </div>
+              <p class="role-hint" id="role-description">
+                Voit plus loin · impulsion de 3 cases
+              </p>
+              <div class="launch-row">
+                <label for="seed"
+                  >Graine facultative <span>(partage une carte)</span
+                  ><input
+                    id="seed"
+                    type="number"
+                    min="1"
+                    max="999999999"
+                    step="1"
+                    placeholder="Carte surprise déterministe" /></label
+                ><button class="primary" id="launch" data-testid="launch">
+                  Commencer la descente ↗
+                </button>
+              </div>
             </section>
-            <section id="gameplay-panel" class="game-controls" hidden aria-label="Commandes de l'expédition">
-              <div class="touch-pad" aria-label="Déplacements"><button data-direction="up" aria-label="Avancer vers le haut">↑</button><button data-direction="left" aria-label="Avancer vers la gauche">←</button><button data-direction="down" aria-label="Avancer vers le bas">↓</button><button data-direction="right" aria-label="Avancer vers la droite">→</button></div>
-              <div class="tool-set"><button id="scan" title="Révéler les alentours (touche 1)">⌕ Scanner <small>1</small></button><button id="pulse" title="Repousser une sentinelle proche (touche 2)">✳ Impulsion <small>2</small></button><button id="dash-toggle" aria-pressed="false" title="Prochaine direction : propulsion longue (Maj + flèche)">↗ Propulsion</button><button id="wait" title="Attendre un tour (touche point)">◷ Attendre</button></div>
-              <p class="control-hint">Flèches / WASD pour avancer · Maj + flèche pour propulser · 1 scanner · 2 impulsion. Sur mobile, touches et cases voisines.</p>
-              <button id="new-expedition" class="quiet-button">← Préparer une autre expédition</button>
+            <section
+              id="gameplay-panel"
+              class="game-controls"
+              hidden
+              aria-label="Commandes de l'expédition"
+            >
+              <div class="touch-pad" aria-label="Déplacements">
+                <button data-direction="up" aria-label="Avancer vers le haut">
+                  ↑</button
+                ><button
+                  data-direction="left"
+                  aria-label="Avancer vers la gauche"
+                >
+                  ←</button
+                ><button data-direction="down" aria-label="Avancer vers le bas">
+                  ↓</button
+                ><button
+                  data-direction="right"
+                  aria-label="Avancer vers la droite"
+                >
+                  →
+                </button>
+              </div>
+              <div class="tool-set">
+                <button id="scan" title="Révéler les alentours (touche 1)">
+                  ⌕ Scanner <small>1</small></button
+                ><button
+                  id="pulse"
+                  title="Repousser une sentinelle proche (touche 2)"
+                >
+                  ✳ Impulsion <small>2</small></button
+                ><button
+                  id="dash-toggle"
+                  aria-pressed="false"
+                  title="Prochaine direction : propulsion longue (Maj + flèche)"
+                >
+                  ↗ Propulsion</button
+                ><button id="wait" title="Attendre un tour (touche point)">
+                  ◷ Attendre
+                </button>
+              </div>
+              <p class="control-hint">
+                Flèches / WASD pour avancer · Maj + flèche pour propulser · 1
+                scanner · 2 impulsion. Sur mobile, touches et cases voisines.
+              </p>
+              <button id="new-expedition" class="quiet-button">
+                ← Préparer une autre expédition
+              </button>
             </section>
-            <section id="outcome" class="outcome" hidden data-testid="outcome"><span class="mini-label">JOURNAL DE BORD / FIN DE MISSION</span><h3 id="result-title"></h3><p id="result-text"></p><div class="outcome-actions"><button id="retry">↺ Rejouer cette carte</button><button id="next" class="primary">Secteur suivant →</button></div></section>
+            <section id="outcome" class="outcome" hidden data-testid="outcome">
+              <span class="mini-label">JOURNAL DE BORD / FIN DE MISSION</span>
+              <h3 id="result-title"></h3>
+              <p id="result-text"></p>
+              <div class="outcome-actions">
+                <button id="retry">↺ Rejouer cette carte</button
+                ><button id="next" class="primary">Secteur suivant →</button>
+              </div>
+            </section>
           </section>
           <aside class="sidebar" aria-label="Journal d'exploration">
-            <section class="story-card"><p class="mini-label">02 / MESSAGE CAPTÉ</p><div class="waveform" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p id="narrative">La cité de VEILLE ne répond plus. Des signaux circulent pourtant sous l'eau.</p></section>
-            <section class="guide-card"><p class="mini-label">PROTOCOLE D'EXPLORATION</p><div class="guide-step"><span>01</span><p>Recueille tous les <b>fragments ✦</b> pour activer le point de sortie ⬡.</p></div><div class="guide-step"><span>02</span><p>Anticipe la <b>marée</b> : les cases ≈ deviennent dangereuses trois tours sur six.</p></div><div class="guide-step"><span>03</span><p>Choisis entre <b>éclairer, fuir et repousser</b>. Les sentinelles avancent un tour sur deux.</p></div><div class="guide-step"><span>04</span><p>Les <b>archives ◇</b> sont facultatives : elles dévoilent l'histoire et restent acquises.</p></div></section>
-            <section class="chronicle"><div class="chronicle-head"><p class="mini-label">JOURNAL PERMANENT</p><span><strong id="archive">0</strong> / 36</span></div><ol id="archive-list"></ol><p class="best">Meilleure traversée <b id="best-score">—</b></p></section>
+            <section class="story-card">
+              <p class="mini-label">02 / MESSAGE CAPTÉ</p>
+              <div class="waveform" aria-hidden="true">
+                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i
+                ><i></i><i></i>
+              </div>
+              <p id="narrative">
+                La cité de VEILLE ne répond plus. Des signaux circulent pourtant
+                sous l'eau.
+              </p>
+            </section>
+            <section class="guide-card">
+              <p class="mini-label">PROTOCOLE D'EXPLORATION</p>
+              <div class="guide-step">
+                <span>01</span>
+                <p>
+                  Recueille tous les <b>fragments ✦</b> pour activer le point de
+                  sortie ⬡.
+                </p>
+              </div>
+              <div class="guide-step">
+                <span>02</span>
+                <p>
+                  Anticipe la <b>marée</b> : les cases ≈ deviennent dangereuses
+                  trois tours sur six.
+                </p>
+              </div>
+              <div class="guide-step">
+                <span>03</span>
+                <p>
+                  Choisis entre <b>éclairer, fuir et repousser</b>. Les
+                  sentinelles avancent un tour sur deux.
+                </p>
+              </div>
+              <div class="guide-step">
+                <span>04</span>
+                <p>
+                  Les <b>archives ◇</b> sont facultatives : elles dévoilent
+                  l'histoire et restent acquises.
+                </p>
+              </div>
+            </section>
+            <section class="chronicle">
+              <div class="chronicle-head">
+                <p class="mini-label">JOURNAL PERMANENT</p>
+                <span><strong id="archive">0</strong> / 36</span>
+              </div>
+              <ol id="archive-list"></ol>
+              <p class="best">Meilleure traversée <b id="best-score">—</b></p>
+            </section>
           </aside>
         </div>
-        <footer>VEILLE — Une exploration sans chronomètre, publicité, compte ni récompense quotidienne. Ta progression reste sur cet appareil.</footer>
+        <footer>
+          VEILLE — Une exploration sans chronomètre, publicité, compte ni
+          récompense quotidienne. Ta progression reste sur cet appareil.
+        </footer>
       </main>
     </div>
     <script type="module" src="/src/presentation/main.ts"></script>

@@ -66,8 +66,10 @@ export function installFullscreen(): void {
   if (!button) throw new Error("Missing fullscreen control");
   const control = createFullscreenControl(
     {
-      isNativeActive: () => document.fullscreenElement === document.documentElement,
-      supportsNative: () => typeof document.documentElement.requestFullscreen === "function",
+      isNativeActive: () =>
+        document.fullscreenElement === document.documentElement,
+      supportsNative: () =>
+        typeof document.documentElement.requestFullscreen === "function",
       enterNative: () => document.documentElement.requestFullscreen(),
       exitNative: () => document.exitFullscreen(),
       onNativeChange: (listener) => {
@@ -78,7 +80,9 @@ export function installFullscreen(): void {
     (active) => {
       document.documentElement.classList.toggle("game-fullscreen", active);
       button.setAttribute("aria-pressed", String(active));
-      button.textContent = active ? "⤢ Quitter le plein écran" : "⛶ Plein écran";
+      button.textContent = active
+        ? "⤢ Quitter le plein écran"
+        : "⛶ Plein écran";
       window.dispatchEvent(new Event("resize"));
     },
   );
@@ -90,8 +94,12 @@ export function installFullscreen(): void {
     void control.toggle();
   };
   document.addEventListener("keydown", onEscape, true);
-  window.addEventListener("pagehide", () => {
-    document.removeEventListener("keydown", onEscape, true);
-    control.dispose();
-  }, { once: true });
+  window.addEventListener(
+    "pagehide",
+    () => {
+      document.removeEventListener("keydown", onEscape, true);
+      control.dispose();
+    },
+    { once: true },
+  );
 }

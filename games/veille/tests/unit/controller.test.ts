@@ -1,21 +1,41 @@
 import { describe, expect, it, vi } from "vitest";
-import { CampaignController, restoreCampaign, type CampaignStore } from "../../src/application/CampaignController";
+import {
+  CampaignController,
+  restoreCampaign,
+  type CampaignStore,
+} from "../../src/application/CampaignController";
 import { shortestPath } from "../../src/domain/generation";
 import { directionBetween } from "../../src/domain/rules";
 import { EXIT, type Campaign } from "../../src/domain/types";
 
 function setup(value: unknown = null) {
   let current = value;
-  const save = vi.fn((data: Campaign) => { current = structuredClone(data); });
+  const save = vi.fn((data: Campaign) => {
+    current = structuredClone(data);
+  });
   const store: CampaignStore = { load: () => current, save };
-  return { game: new CampaignController(store), save, getStored: () => current };
+  return {
+    game: new CampaignController(store),
+    save,
+    getStored: () => current,
+  };
 }
 
 describe("campaign and persistence", () => {
   it("restores safely from missing and corrupt data", () => {
     expect(restoreCampaign(null).unlocked).toBe(0);
-    expect(restoreCampaign({ unlocked: 99, completed: [-1, 0, 0, 12], discoveries: ["0:1", "0:1", "XSS"], run: { hacked: true } })).toMatchObject({
-      unlocked: 1, completed: [0], discoveries: ["0:1"], run: null,
+    expect(
+      restoreCampaign({
+        unlocked: 99,
+        completed: [-1, 0, 0, 12],
+        discoveries: ["0:1", "0:1", "XSS"],
+        run: { hacked: true },
+      }),
+    ).toMatchObject({
+      unlocked: 1,
+      completed: [0],
+      discoveries: ["0:1"],
+      run: null,
     });
   });
 
@@ -39,7 +59,9 @@ describe("campaign and persistence", () => {
     }
     expect(game.view.campaign.discoveries).toContain("0:1");
     const snapshot = structuredClone(game.view.run!);
-    expect(new CampaignController({ load: getStored, save }).view.run).toEqual(snapshot);
+    expect(new CampaignController({ load: getStored, save }).view.run).toEqual(
+      snapshot,
+    );
     expect(save).toHaveBeenCalled();
     game.abandon();
     expect(game.view.run).toBeNull();
@@ -49,10 +71,16 @@ describe("campaign and persistence", () => {
   it("unlocks sector two only after a genuine extraction and saves the best turn count", () => {
     const { game } = setup();
     game.launch(0, "guardian", 17);
-    const targets = game.view.run!.terrain.flatMap((tile, index) => tile === "core" ? [index] : []);
+    const targets = game.view.run!.terrain.flatMap((tile, index) =>
+      tile === "core" ? [index] : [],
+    );
     targets.push(EXIT);
     for (const target of targets) {
-      const route = shortestPath(game.view.run!.terrain, game.view.run!.position, target);
+      const route = shortestPath(
+        game.view.run!.terrain,
+        game.view.run!.position,
+        target,
+      );
       for (const tile of route.slice(1)) {
         const direction = directionBetween(game.view.run!.position, tile)!;
         game.act({ kind: "move", direction });

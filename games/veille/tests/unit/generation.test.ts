@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { distance, generateMap, neighbors, randomSequence, shortestPath } from "../../src/domain/generation";
+import {
+  distance,
+  generateMap,
+  neighbors,
+  randomSequence,
+  shortestPath,
+} from "../../src/domain/generation";
 import { EXIT, SIZE, START } from "../../src/domain/types";
 
 describe("seeded expedition map generation", () => {
@@ -16,11 +22,19 @@ describe("seeded expedition map generation", () => {
         expect(terrain).toHaveLength(SIZE * SIZE);
         expect(terrain[START]).toBe("floor");
         expect(terrain[EXIT]).toBe("exit");
-        const objectives = terrain.flatMap((cell, index) => ["core", "archive", "beacon", "battery", "exit"].includes(cell) ? [index] : []);
-        expect(terrain.filter((cell) => cell === "core")).toHaveLength(2 + Math.floor(sector / 4));
+        const objectives = terrain.flatMap((cell, index) =>
+          ["core", "archive", "beacon", "battery", "exit"].includes(cell)
+            ? [index]
+            : [],
+        );
+        expect(terrain.filter((cell) => cell === "core")).toHaveLength(
+          2 + Math.floor(sector / 4),
+        );
         expect(terrain.filter((cell) => cell === "archive")).toHaveLength(3);
         for (const target of objectives) {
-          expect(shortestPath(terrain, START, target).length).toBeGreaterThan(0);
+          expect(shortestPath(terrain, START, target).length).toBeGreaterThan(
+            0,
+          );
         }
         for (const drone of drones) {
           expect(terrain[drone.position]).toBe("floor");
@@ -34,6 +48,8 @@ describe("seeded expedition map generation", () => {
     expect(neighbors(0)).toEqual([1, SIZE]);
     expect(neighbors(SIZE - 1)).not.toContain(SIZE);
     expect(distance(0, SIZE - 1)).toBe(SIZE - 1);
-    expect(shortestPath(Array(SIZE * SIZE).fill("wall"), START, EXIT)).toEqual([]);
+    expect(shortestPath(Array(SIZE * SIZE).fill("wall"), START, EXIT)).toEqual(
+      [],
+    );
   });
 });

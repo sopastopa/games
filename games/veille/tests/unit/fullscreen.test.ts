@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { createFullscreenControl, type FullscreenHost } from "../../src/presentation/fullscreen";
+import {
+  createFullscreenControl,
+  type FullscreenHost,
+} from "../../src/presentation/fullscreen";
 
 function setup(options: { supported?: boolean; rejects?: boolean } = {}) {
   let native = false;
@@ -23,8 +26,18 @@ function setup(options: { supported?: boolean; rejects?: boolean } = {}) {
       return unsubscribe;
     },
   };
-  const control = createFullscreenControl(host, (active) => states.push(active));
-  return { control, states, unsubscribe, nativeChange(value: boolean) { native = value; listener(); } };
+  const control = createFullscreenControl(host, (active) =>
+    states.push(active),
+  );
+  return {
+    control,
+    states,
+    unsubscribe,
+    nativeChange(value: boolean) {
+      native = value;
+      listener();
+    },
+  };
 }
 
 describe("fullscreen", () => {
