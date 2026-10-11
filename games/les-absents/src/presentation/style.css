@@ -1024,3 +1024,98 @@ select {
     padding-top: 40px;
   }
 }
+
+/* Browser fullscreen and full-viewport fallback for mobile browsers. */
+.fullscreen-button {
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid #bacdc0;
+  border-radius: 7px;
+  background: #e9f0e9;
+  color: #263b31;
+  font: 600 12px "DM Sans", system-ui, sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.fullscreen-button:hover {
+  background: #dcebe0;
+}
+.fullscreen-button:focus-visible {
+  outline: 3px solid #316a5b;
+  outline-offset: 3px;
+}
+html.game-fullscreen {
+  overflow: hidden;
+  background: #f7f8f5;
+}
+html.game-fullscreen:not(:fullscreen) {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  width: 100%;
+  height: 100dvh;
+}
+html.game-fullscreen body {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+html.game-fullscreen :is(.shell, .page, .page-shell) {
+  max-width: none;
+  width: 100%;
+  min-height: 100%;
+  padding-inline: clamp(10px, 2vw, 30px);
+}
+html.game-fullscreen :is(.topbar, .masthead) {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  min-height: 54px;
+  height: auto;
+  padding-block: 8px;
+  background: #f7f8f5;
+}
+@media (max-width: 620px) {
+  .fullscreen-button {
+    padding: 8px;
+    font-size: 11px;
+  }
+  :is(.topbar, .masthead) {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  html.game-fullscreen :is(.topbar, .masthead) > :is(.brand, .top-logo, .top-edition, .logo, .collection, .wordmark, .header-version, .masthead-label, .edition) {
+    display: none;
+  }
+}
+
+html.game-fullscreen .experience {
+  grid-template-columns: minmax(190px, 0.4fr) minmax(0, 1fr);
+  gap: 20px;
+  padding: 16px 0 32px;
+}
+html.game-fullscreen .story > :is(.kicker, h1, .introduction, .mission, .legend) {
+  display: none;
+}
+html.game-fullscreen .board {
+  width: min(100%, 69dvh);
+  margin-inline: auto;
+}
+@media (max-width: 740px) {
+  html.game-fullscreen .experience {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  html.game-fullscreen .story {
+    display: none;
+  }
+  html.game-fullscreen .play-space {
+    width: 100%;
+  }
+  html.game-fullscreen .board {
+    width: min(100%, 61dvh);
+  }
+}
