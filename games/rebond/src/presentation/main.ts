@@ -365,10 +365,7 @@ function render(value: Snapshot): void {
   ricochetsLabel.textContent = `${value.activated.length} / ${value.level.required.length}`;
   relayNextLabel.textContent = value.goalUnlocked
     ? "CIBLE DÉVERROUILLÉE"
-    : `REL AIS N°${value.activated.length + 1} À TOUCHER`.replace(
-        "REL AIS",
-        "RELAIS",
-      );
+    : `RELAIS N°${value.activated.length + 1} À TOUCHER`;
   angleInput.value = String(value.angle);
   powerInput.value = String(value.speed);
   angleValue.textContent = `${Math.round(value.angle)}°`;
