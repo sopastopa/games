@@ -1,6 +1,5 @@
-import { legalMoves, neighbors, opponent, play, points } from "./rules";
-import { HOMES } from "./stages";
-import type { Match, Side, Stage } from "./types";
+import { legalMoves, neighbors, play, points } from "./rules";
+import type { Match, Stage } from "./types";
 
 function evaluate(match: Match, stage: Stage): number {
   const tally = points(match, stage);
