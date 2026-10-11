@@ -234,7 +234,7 @@ export function generateArena(seed: number, zone: number): Arena {
     pickups.push({
       ...candidateRooms[index]!,
       id: index + 3,
-      kind: kinds[Math.floor(random() * kinds.length)]!,
+      kind: index === 0 ? "scatter" : index === 2 ? "rail" : kinds[Math.floor(random() * kinds.length)]!,
     });
   }
   // Placing enemies only on guaranteed open main corridors avoids stranded units.
