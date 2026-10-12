@@ -156,11 +156,31 @@ function renderWorld(
         ctx.fillStyle = wall.face;
         ctx.fillRect(px + 1.5, py + 1.5, scale - 3, scale - 3);
         ctx.fillStyle = wall.rim;
-        ctx.fillRect(px + inset, py + inset, scale - inset * 2, Math.max(3, scale * 0.13));
-        ctx.fillRect(px + inset, py + inset, Math.max(2, scale * 0.055), scale - inset * 2);
+        ctx.fillRect(
+          px + inset,
+          py + inset,
+          scale - inset * 2,
+          Math.max(3, scale * 0.13),
+        );
+        ctx.fillRect(
+          px + inset,
+          py + inset,
+          Math.max(2, scale * 0.055),
+          scale - inset * 2,
+        );
         ctx.fillStyle = wall.shadow;
-        ctx.fillRect(px + inset, py + scale * 0.76, scale - inset * 2, scale * 0.14);
-        ctx.fillRect(px + scale * 0.78, py + inset, scale * 0.12, scale - inset * 2);
+        ctx.fillRect(
+          px + inset,
+          py + scale * 0.76,
+          scale - inset * 2,
+          scale * 0.14,
+        );
+        ctx.fillRect(
+          px + scale * 0.78,
+          py + inset,
+          scale * 0.12,
+          scale - inset * 2,
+        );
       } else {
         // The map remembers rooms without making unexplored enemies visible.
         ctx.fillStyle = visible ? DISTRICTS[district]! : "#0b172b";

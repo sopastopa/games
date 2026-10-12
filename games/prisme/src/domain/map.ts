@@ -134,8 +134,11 @@ export function hasSight(
     const y = Math.round(from.y + ((to.y - from.y) * i) / steps);
     // The target surface may be an opaque wall: show its front face,
     // but never reveal cells or actors hidden behind it.
-    if ((x !== Math.round(to.x) || y !== Math.round(to.y)) &&
-        !passable(arena, x, y, opened)) return false;
+    if (
+      (x !== Math.round(to.x) || y !== Math.round(to.y)) &&
+      !passable(arena, x, y, opened)
+    )
+      return false;
   }
   return true;
 }
