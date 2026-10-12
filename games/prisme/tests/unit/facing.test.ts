@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { createGame, IDLE, stepGame, type GameState } from "../../src/domain/rules";
+import {
+  createGame,
+  IDLE,
+  stepGame,
+  type GameState,
+} from "../../src/domain/rules";
 
 describe("pilot visual orientation", () => {
   it("starts facing right and follows the last keyboard or joystick movement", () => {
