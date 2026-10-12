@@ -17,8 +17,8 @@ La structure des connexions entre salles est garantie ; les portes bloquent les 
 
 ## Exploration et stratégie
 
-- **Caméra** suivant le joueur : le Canvas occupe toute la surface disponible sans réduire l'ensemble du terrain en miniature.
-- **Brouillard de guerre** : visibilité actuelle basée sur la ligne de vue et les obstacles ; les cases déjà découvertes restent lisibles en sombre. Les ennemis hors de vue ne sont pas affichés, et l'IA n'attaque pas à travers les murs ou portes.
+- **Caméra** suivant le joueur : le Canvas occupe toute la surface disponible sans réduire l'ensemble du terrain en miniature. Le vaisseau pointe vers sa dernière direction de déplacement, sauf lors d'un tir où sa pointe suit la direction de visée effectivement utilisée.
+- **Brouillard de guerre** : visibilité actuelle basée sur la ligne de vue et les obstacles ; les cases déjà découvertes restent lisibles en sombre. Les faces des murs visibles et mémorisés restent clairement contrastées et les murs ne dévoilent jamais la pièce derrière eux. Les ennemis hors de vue ne sont pas affichés, et l'IA n'attaque pas à travers les murs ou portes.
 - **Radar R** : découvre un cercle supplémentaire de terrain, mais ne révèle pas magiquement les adversaires derrière les murs. Charges limitées, recharge aux relais et sur bonus.
 - **Plan M** : met intégralement la simulation en pause et affiche les lieux découverts. Cliquer sur une case reconnue place un repère à suivre ; revenir au jeu ne fait perdre aucun progrès.
 - **Portes E** : ouvrir un sas adjacent si le badge correspondant est trouvé (rose, cyan) ou si les deux premiers relais alimentent les portes or. Aucun consommable n'est dépensé, aucun blocage définitif possible.
