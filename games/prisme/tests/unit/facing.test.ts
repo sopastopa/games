@@ -22,7 +22,10 @@ describe("pilot visual orientation", () => {
   });
 
   it("uses the firing direction only while actively firing", () => {
-    let state: GameState = { ...createGame(8675309), phase: "playing" as const };
+    let state: GameState = {
+      ...createGame(8675309),
+      phase: "playing" as const,
+    };
     state = stepGame(state, { ...IDLE, moveY: -1 });
     state = stepGame(state, {
       ...IDLE,
