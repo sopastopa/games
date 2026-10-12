@@ -1,4 +1,6 @@
 import { expect, test } from "@playwright/test";
+import { generateArena, SIZE, START, visibleCells } from "../../games/prisme/src/domain/map";
+import { cameraFor } from "../../games/prisme/src/presentation/renderer";
 
 test("catalogue → seeded assault → pause → resume → portal", async ({
   page,
@@ -183,4 +185,49 @@ test("twin stick input is playable on portrait and landscape screens", async ({
     expect(right).toBe(true);
     await expect(page.getByTestId("board")).toBeVisible();
   }
+});
+
+test("PRISME paints visible wall blocks with contrast against the floor", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const seed = 48271;
+  const arena = generateArena(seed, 1);
+  const visible = visibleCells(arena, START);
+  const wall = arena.walls
+    .map((isWall, index) => ({ isWall, x: index % SIZE, y: Math.floor(index / SIZE), index }))
+    .filter(({ isWall, x, y, index }) =>
+      isWall && visible[index] && Math.hypot(x - START.x, y - START.y) < 6)
+    .sort((a, b) =>
+      Math.hypot(a.x - START.x, a.y - START.y) -
+      Math.hypot(b.x - START.x, b.y - START.y))[0];
+  expect(wall).toBeDefined();
+
+  await page.goto("/games/play/prisme/");
+  await page.getByTestId("seed-input").fill(String(seed));
+  await page.getByTestId("primary").click();
+  await expect(page.getByTestId("overlay")).toBeHidden();
+  await page.waitForTimeout(160);
+
+  const board = page.getByTestId("board");
+  const dimensions = await board.evaluate((canvas: HTMLCanvasElement) => ({
+    width: canvas.clientWidth,
+    height: canvas.clientHeight,
+  }));
+  const camera = cameraFor(dimensions.width, dimensions.height, START);
+  const samples = await board.evaluate((canvas: HTMLCanvasElement, data) => {
+    const ctx = canvas.getContext("2d")!;
+    const ratio = canvas.width / canvas.clientWidth;
+    const sample = (x: number, y: number) => {
+      const px = Math.round((x - data.camera.x + 0.5) * data.camera.scale * ratio);
+      const py = Math.round((y - data.camera.y + 0.5) * data.camera.scale * ratio);
+      return Array.from(ctx.getImageData(px, py, 1, 1).data).slice(0, 3);
+    };
+    return {
+      wall: sample(data.wall.x, data.wall.y),
+      floor: sample(5, 7),
+    };
+  }, { camera, wall: { x: wall!.x, y: wall!.y } });
+  expect(samples.wall[0]!).toBeGreaterThan(samples.floor[0]! + 35);
+  expect(samples.wall[1]!).toBeGreaterThan(samples.floor[1]! + 35);
 });
