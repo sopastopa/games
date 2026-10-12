@@ -59,6 +59,6 @@ describe("clear combat silhouettes", () => {
     expect(pilotRotation({ x: 0, y: -1 })).toBeCloseTo(0);
     expect(pilotRotation({ x: 1, y: 0 })).toBeCloseTo(Math.PI / 2);
     expect(pilotRotation({ x: 0, y: 1 })).toBeCloseTo(Math.PI);
-    expect(pilotRotation({ x: -1, y: 0 })).toBeCloseTo(-Math.PI / 2);
+    expect(pilotRotation({ x: -1, y: 0 })).toBeCloseTo((3 * Math.PI) / 2);
   });
 });
