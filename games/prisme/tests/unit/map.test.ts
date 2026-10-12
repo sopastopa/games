@@ -77,6 +77,21 @@ describe("seeded district generation", () => {
     expect(nextStep(arena, START, START)).toBeNull();
   });
 
+  it("reveals the face of an adjacent opaque wall, but not the floor behind it", () => {
+    const arena = generateArena(771, 1);
+    const walls = [...arena.walls];
+    const obstacle = { x: START.x + 1, y: START.y };
+    const behind = { x: START.x + 2, y: START.y };
+    walls[cell(obstacle)] = true;
+    const blocked = { ...arena, walls };
+    const vision = visibleCells(blocked, START);
+
+    expect(hasSight(blocked, START, obstacle)).toBe(true);
+    expect(vision[cell(obstacle)]).toBe(true);
+    expect(hasSight(blocked, START, behind)).toBe(false);
+    expect(vision[cell(behind)]).toBe(false);
+  });
+
   it("vision reveals terrain near the player without revealing behind a wall", () => {
     const arena = generateArena(44, 1);
     const vision = visibleCells(arena, START);

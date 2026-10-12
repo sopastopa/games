@@ -1,6 +1,5 @@
 import { SIZE, type Pickup, type Point } from "../domain/map";
 import {
-  bestAim,
   isEnemyVisible,
   objectiveReady,
   type GameState,
@@ -113,6 +112,11 @@ function coloredPickup(kind: Pickup["kind"]): [string, string] {
   }
 }
 
+export const WALL_PALETTE = {
+  visible: { face: "#547fa3", rim: "#b1e1ff", shadow: "#2c4c6c" },
+  explored: { face: "#344e69", rim: "#86a9c2", shadow: "#1b2f49" },
+} as const;
+
 function renderWorld(
   ctx: CanvasRenderingContext2D,
   state: GameState,
@@ -135,23 +139,56 @@ function renderWorld(
       const px = worldX(camera, x) - scale / 2;
       const py = worldY(camera, y) - scale / 2;
       if (!state.explored[index]) {
-        ctx.fillStyle = "#080d1d";
+        ctx.fillStyle = "#070b1b";
         ctx.fillRect(px, py, scale + 0.5, scale + 0.5);
         continue;
       }
+
+      const visible = state.visible[index] === true;
       const district = Number(x >= 20) + 2 * Number(y >= 20);
-      ctx.fillStyle = DISTRICTS[district]!;
-      ctx.fillRect(px, py, scale + 0.5, scale + 0.5);
       if (state.arena.walls[index]) {
-        ctx.fillStyle = "#385278";
-        ctx.fillRect(px + 1, py + 1, scale - 2, scale - 2);
-        ctx.fillStyle = COLORS[district % 3]! + "38";
-        ctx.fillRect(px + 2, py + 2, scale - 4, scale * 0.13);
+        // High-contrast, raised blocks. Remembered walls keep a distinct
+        // silhouette even after leaving the player's line of sight.
+        const wall = visible ? WALL_PALETTE.visible : WALL_PALETTE.explored;
+        const inset = Math.max(2, scale * 0.08);
+        ctx.fillStyle = "#060f26";
+        ctx.fillRect(px, py, scale + 0.5, scale + 0.5);
+        ctx.fillStyle = wall.face;
+        ctx.fillRect(px + 1.5, py + 1.5, scale - 3, scale - 3);
+        ctx.fillStyle = wall.rim;
+        ctx.fillRect(
+          px + inset,
+          py + inset,
+          scale - inset * 2,
+          Math.max(3, scale * 0.13),
+        );
+        ctx.fillRect(
+          px + inset,
+          py + inset,
+          Math.max(2, scale * 0.055),
+          scale - inset * 2,
+        );
+        ctx.fillStyle = wall.shadow;
+        ctx.fillRect(
+          px + inset,
+          py + scale * 0.76,
+          scale - inset * 2,
+          scale * 0.14,
+        );
+        ctx.fillRect(
+          px + scale * 0.78,
+          py + inset,
+          scale * 0.12,
+          scale - inset * 2,
+        );
       } else {
-        ctx.strokeStyle = "#b8dcff19";
+        // The map remembers rooms without making unexplored enemies visible.
+        ctx.fillStyle = visible ? DISTRICTS[district]! : "#0b172b";
+        ctx.fillRect(px, py, scale + 0.5, scale + 0.5);
+        ctx.strokeStyle = visible ? "#b8dcff24" : "#4e688420";
         ctx.lineWidth = 1;
         ctx.strokeRect(px + 0.5, py + 0.5, scale - 1, scale - 1);
-        if ((x * 11 + y * 7 + state.seed) % 9 === 0) {
+        if (visible && (x * 11 + y * 7 + state.seed) % 9 === 0) {
           ctx.fillStyle = "#c4f5ff40";
           ctx.fillRect(
             px + scale * 0.44,
@@ -160,10 +197,6 @@ function renderWorld(
             scale * 0.07,
           );
         }
-      }
-      if (!state.visible[index]) {
-        ctx.fillStyle = "#040818bf";
-        ctx.fillRect(px, py, scale + 0.5, scale + 0.5);
       }
     }
   }
@@ -251,12 +284,16 @@ function decorations(
   }
 }
 
+/** SVG-like north-pointing ship rotation for a world-space heading. */
+export function pilotRotation(facing: Point): number {
+  return Math.atan2(facing.y, facing.x) + Math.PI / 2;
+}
+
 function actors(
   ctx: CanvasRenderingContext2D,
   state: GameState,
   camera: Camera,
   frame: number,
-  aim?: Point,
 ): void {
   const s = camera.scale;
   for (const enemy of state.enemies) {
@@ -329,8 +366,8 @@ function actors(
   const { player } = state;
   const x = worldX(camera, player.x);
   const y = worldY(camera, player.y);
-  const heading = aim ?? bestAim(state);
-  const angle = Math.atan2(heading.y, heading.x) + Math.PI / 2;
+  const heading = player.facing;
+  const angle = pilotRotation(heading);
   circle(ctx, x, y, s * 0.57, "#75fbe72c");
   if (player.armor > 0) {
     ctx.strokeStyle = "#9cc8ff";
@@ -369,7 +406,6 @@ export function renderArena(
   canvas: HTMLCanvasElement,
   state: GameState,
   frame: number,
-  aim?: Point,
 ): void {
   const ctx = context(canvas);
   if (!ctx) return;
@@ -378,7 +414,7 @@ export function renderArena(
   ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
   renderWorld(ctx, state, camera);
   decorations(ctx, state, camera, frame);
-  actors(ctx, state, camera, frame, aim);
+  actors(ctx, state, camera, frame);
 }
 
 export function renderMap(

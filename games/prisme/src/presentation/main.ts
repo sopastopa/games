@@ -496,12 +496,7 @@ function render(now: number): void {
     steps++;
   }
   frame++;
-  renderArena(
-    canvas,
-    game.state,
-    reducedMotion.matches ? 0 : frame,
-    joystickAim ?? pointerAim ?? undefined,
-  );
+  renderArena(canvas, game.state, reducedMotion.matches ? 0 : frame);
   if (frame % 6 === 0) renderMap(minimap, game.state);
   if (game.state.phase === "planning" && frame % 12 === 0)
     renderMap(planMap, game.state, true);

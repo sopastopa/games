@@ -22,6 +22,8 @@ export interface Pilot extends Point {
   hp: number;
   armor: number;
   weapon: Weapon;
+  /** Last movement direction, or the actual firing direction while shooting. */
+  facing: Point;
   heat: number;
   cooldown: number;
   dashCooldown: number;
@@ -118,6 +120,7 @@ export function createGame(seed: number, zone = 1): GameState {
       hp: 6,
       armor: 0,
       weapon: "pulse",
+      facing: { x: 1, y: 0 },
       heat: 0,
       cooldown: 0,
       dashCooldown: 0,
@@ -489,6 +492,12 @@ export function stepGame(state: GameState, input: Controls): GameState {
     player.dashCooldown = 120;
   }
   const axis = unit(input.moveX, input.moveY);
+  const aimDirection = unit(input.aimX, input.aimY);
+  if (input.shoot && (aimDirection.x !== 0 || aimDirection.y !== 0)) {
+    player.facing = aimDirection;
+  } else if (axis.x !== 0 || axis.y !== 0) {
+    player.facing = axis;
+  }
   const speed = player.dashTime > 0 ? 0.18 : 0.072;
   if (player.dashTime > 0) {
     player.invulnerable = Math.max(player.invulnerable, 2);
