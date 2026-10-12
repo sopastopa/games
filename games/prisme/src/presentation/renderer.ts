@@ -264,6 +264,11 @@ function decorations(
   }
 }
 
+/** SVG-like north-pointing ship rotation for a world-space heading. */
+export function pilotRotation(facing: Point): number {
+  return Math.atan2(facing.y, facing.x) + Math.PI / 2;
+}
+
 function actors(
   ctx: CanvasRenderingContext2D,
   state: GameState,
@@ -342,7 +347,7 @@ function actors(
   const x = worldX(camera, player.x);
   const y = worldY(camera, player.y);
   const heading = player.facing;
-  const angle = Math.atan2(heading.y, heading.x) + Math.PI / 2;
+  const angle = pilotRotation(heading);
   circle(ctx, x, y, s * 0.57, "#75fbe72c");
   if (player.armor > 0) {
     ctx.strokeStyle = "#9cc8ff";
